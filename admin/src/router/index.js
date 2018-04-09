@@ -77,6 +77,27 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/courses',
+    component: Layout,
+    redirect: '/courses/courses_edit',
+    name: 'Courses',
+    meta: { title: '课程管理', icon: 'tree' },
+    children: [
+      {
+        path: 'courses_edit',
+        name: 'courses_edit',
+        component: () => import('@/views/courses/index'),
+        meta: { title: '课程编辑', icon: 'table' }
+      },
+      {
+        path: 'courses_class',
+        name: 'courses_class',
+        component: () => import('@/views/courses_class/index'),
+        meta: { title: '课程分类编辑', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/list',
     component: Layout,
     children: [
@@ -85,7 +106,7 @@ export const constantRouterMap = [
         name: 'Form',
         component: () => import('@/views/table3/index'),
         meta: { title: '订单列表', icon: 'form' }
-      },
+      }
     ]
   },
 
@@ -93,7 +114,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  mode: 'history', //后端支持可开
+  mode: 'history', // 后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })

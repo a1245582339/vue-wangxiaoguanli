@@ -8,6 +8,8 @@ function setup(db, cb) {
   require('./admin_user')(orm, db);
   require('./token')(orm, db);
   require('./roles')(orm, db);
+  require('./courses')(orm, db);
+  require('./course_class')(orm, db);
 
   return cb(null, db);
 }

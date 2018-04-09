@@ -7,6 +7,7 @@ var User = require('../controller/admin_user')
 var Getdata = require('../controller/getdata')
 var Choosedata = require('../controller/changedata')
 var Order = require('../controller/order')
+var Courses = require('../controller/course')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
@@ -24,8 +25,12 @@ router.get('/alldata', Getdata.Alldata);
 router.get('/basedata', Getdata.Basedata);
 // 获取可选列表
 router.get('/choosedata', Getdata.Choosedata);
-// 获取独立列表
-router.get('/owndata', Getdata.Owndata);
+// 获取课程类型列表
+router.get('/courseClassList', Courses.CourseClass);
+// 获取课程列表
+router.get('/courseList', Courses.CourseList);
+// 删除课程
+router.post('/delCourse', Courses.DelCourse);
 
 
 // ********************************订单相关**********************************************

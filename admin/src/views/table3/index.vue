@@ -148,7 +148,7 @@ export default {
        })
     },
     doprint() {
-            let _this = this
+            //let _this = this
             
             html2Canvas(document.querySelector("#pdf-order")).then(canvas => {
                 // document.body.appendChild(canvas)

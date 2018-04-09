@@ -16,9 +16,9 @@ export function update(data) {
   })
 }
 // 删除模块
-export function dellist(data) {
+export function delCourse(data) {
   return request({
-    url: '/del',
+    url: '/delCourse',
     method: 'post',
     data: { data }
   })

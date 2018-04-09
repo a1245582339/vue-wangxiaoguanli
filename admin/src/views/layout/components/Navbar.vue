@@ -8,7 +8,7 @@
     <!-- 右侧的退出按钮 -->
     <div class="avatar-container">
       <div class="avatar-wrapper" >
-        <span style="margin-right: 20px" @click="showf">添加模块</span>
+        <!-- <span style="margin-right: 20px" @click="showf">添加模块</span> -->
         <span @click="logout">退出</span>
       </div>
     </div>

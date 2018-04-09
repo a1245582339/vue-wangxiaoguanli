@@ -1,21 +1,26 @@
 <template>
     <div>
  <!-- 弹出框***************************************************** -->
-    <el-dialog title="编辑模块" :visible.sync="dialogFormVisible" center>
+    <el-dialog title="编辑" :visible.sync="dialogFormVisible" center>
        <el-form :model="form" label-width="30px" class="dialog-form" :rules="rules">
          <!-- <el-form-item label="修改模块" :label-width="formLabelWidth">
            <el-input v-model="form.oldname" auto-complete="off" :disabled="true"></el-input>
          </el-form-item> -->
-         <el-form-item label="模块名称" :label-width="formLabelWidth" prop="name">
+         <el-form-item v-if="label.moduleName" :label="label.moduleName" :label-width="formLabelWidth" prop="name">
            <el-input v-model="form.name" auto-complete="off"></el-input>
          </el-form-item>
-         <el-form-item   label="模块介绍" :label-width="formLabelWidth" prop="desp">
+         <el-form-item   v-if="label.moduleDesp" :label="label.moduleDesp" :label-width="formLabelWidth" prop="desp">
            <el-input type="textarea" autosize  v-model="form.desp" auto-complete="off"></el-input>
          </el-form-item>
-         <el-form-item label="模块价格" :label-width="formLabelWidth" prop="price">
+         <el-form-item v-if="label.moudlePrice" :label="label.moudlePrice" :label-width="formLabelWidth" prop="price">
            <el-input v-model.number="form.price" auto-complete="off"></el-input>
          </el-form-item>
-         <el-form-item label="模块系数" :label-width="formLabelWidth" prop="coefficient">
+         <el-form-item v-if="label.moudleType" :label="label.moudleType" :label-width="formLabelWidth" prop="coefficient">
+           <el-select v-model.number="form.moudleType" auto-complete="off">
+             <el-option v-for="item in type" :key="item.id" :label="item" :value="item"></el-option>  
+           </el-select>
+         </el-form-item>
+         <el-form-item v-if="label.moudleCoefficient" :label="label.moudleCoefficient" :label-width="formLabelWidth" prop="coefficient">
            <el-input v-model.number="form.coefficient" auto-complete="off"></el-input>
          </el-form-item>
          
@@ -32,7 +37,9 @@
 <script>
     export default {
         props: {
-           form: Object
+           form: Object,
+           label: Object,
+           type: Array
         },
       
         data() {

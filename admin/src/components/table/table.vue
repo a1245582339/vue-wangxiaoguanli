@@ -1,32 +1,38 @@
 <template>
   <div class="app-container">
-    <el-table :data="list"   border fit highlight-current-row >
-     <!-- ID列表 -->
-      <el-table-column align="center" label='ID' width="95">
+    <el-table :data="list"  border fit highlight-current-row >
+     <!-- 序列号 -->
+      <el-table-column align="center" label='序号' width="95">
         <template slot-scope="scope">
           {{scope.$index}}
         </template>
       </el-table-column>
+      <!-- 模块ID -->
+      <el-table-column v-if="label.moudleId" :label="label.moudleId" width="110">
+        <template slot-scope="scope">
+          {{scope.row.id}}
+        </template>
+      </el-table-column>
       <!-- 模块名称 -->
-      <el-table-column label="模块名称" width="110">
+      <el-table-column v-if="label.moduleName" :label="label.moduleName" width="110">
         <template slot-scope="scope">
           {{scope.row.name}}
         </template>
       </el-table-column>
       <!-- 模块描述 -->
-      <el-table-column label="模块描述"  align="center">
+      <el-table-column v-if="label.moduleDesp" :label="label.moduleDesp"  align="center">
         <template slot-scope="scope">
           <span>{{scope.row.desp}}</span>
         </template>
       </el-table-column>
       <!-- 价格 -->
-      <el-table-column label="价格" width="110" align="center">
+      <el-table-column v-if="label.moudlePrice" :label="label.moudlePrice" width="110" align="center">
         <template slot-scope="scope">
           {{scope.row.price}}
         </template>
       </el-table-column>
       <!-- 模块系数 -->
-     <el-table-column label="模块系数" width="110" align="center">
+     <el-table-column v-if="label.moudleClass" :label="label.moudleCoefficient" width="110" align="center">
         <template slot-scope="scope">
           {{scope.row.coefficient}}
         </template>
@@ -49,35 +55,35 @@
       </template>
       </el-table-column>
       <!-- 类型 -->
-      <!-- <el-table-column align="center" prop="created_at" label="类型">
-        <template slot-scope="scope"> -->
-          <!-- <i class="el-icon-time"></i> -->
-          <!-- <span>{{type}}</span>
+      <el-table-column align="center" prop="created_at" :label="label.moudleType">
+        <template slot-scope="scope">
+          <span>{{scope.row.type}}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
-
   </div>
 </template>
 
 
 <script>
-    export default {
-        props: {
-                list: Array,
-                form: Object,
-                updateRow: Function,
-                deleteRow: Function,
-                dialogFormVisible: Boolean
-        },
-        data() {
-            return {
-                type: '手机',
-                formLabelWidth: '120px'
-            }
-        }
-
-    }
+export default {
+  props: {
+    list: Array,
+    form: Object,
+    label: Object,
+    updateRow: Function,
+    deleteRow: Function,
+    dialogFormVisible: Boolean
+  },
+  data() {
+    return {
+      formLabelWidth: "120px",
+    };
+  },
+  mounted() {
+    console.log("list=====>",list)
+  }
+};
 </script>
 
 <style scoped>
