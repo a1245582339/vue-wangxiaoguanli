@@ -1,102 +1,132 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
+   <el-button type="primary" plain @click="addCourse">添加课程类型</el-button>
+   <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow' ></Moduletable>
+   <Dialogtable :list="list"  :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
 
-   <Moduletable :list="list"  :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
-   <Dialogtable  :form="form" ref="dial" @commitform='commitForm'></Dialogtable>
   
   </div>
 
 </template>
 
 <script>
-import { getOList,getAll } from '@/api/table'
-import { update , dellist} from '@/api/do'
-import Moduletable from '@/components/table/table'
-import Dialogtable from '@/components/tabledialog'
+import { getCourseList, getAll, getCourseClass } from "@/api/table";
+import { updateCourse, delCourse, delCourseClass ,updateCourseClass} from "@/api/do";
+import Moduletable from "@/components/table/table";
+import Dialogtable from "@/components/tabledialog";
 export default {
   components: {
-     Moduletable,
-     Dialogtable
+    Moduletable,
+    Dialogtable
   },
   data() {
     return {
-      list: null,
+      list: [],
+      courseCount: [],
       listLoading: true,
-      type: '手机',
+      currentType: "",
+      label: {
+        moudleId: "课程类型ID",
+        moduleName: "类型名称",
+        moduleCount: "课程数量"
+      },
+      delMassage: "该条记录将被删除，是否确定删除？",
+
       form: {
-        name: '',
-        price: '',
-        coefficient: '',
-        desp: '',
-        oldname: ''
-       }
-    }
+        id: "",
+        name: "",
+        count: ""
+      }
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
+    //this.getClass();
   },
   methods: {
+    // 添加新类型
+    addCourse() {
+      this.$refs.add.noshow();
+    },
+
     // 获取数据
     fetchData() {
-      this.listLoading = true
-      getOList().then(response => {
-        console.log(response)
-        this.list = response.data
-        this.listLoading = false
-      })
+      var vm = this;
+      this.listLoading = true;
+      var data = [];
+      getCourseClass().then(response => {
+        response.data.map((item, index) => {
+          data[index] = {
+            id: item.id,
+            name: item.course_class_name,
+            count: item.count
+          };
+        });
+        vm.list = data;
+        this.listLoading = false;
+      });
+    },
+    openDelMassage(data, rows, index) {
+      var vm = this;
+      this.$confirm(vm.delMassage, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        delCourseClass(data).then(response => {
+          console.log(response);
+          if (response.code == 20000) {
+            rows.splice(index, 1);
+            this.$message({
+              message: "删除成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "删除失败",
+              type: "success"
+            });
+          }
+        })
+      }).catch(()=>{
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });  
+        })
     },
     // 删除模块
     deleteRow(index, rows) {
-      let data = rows[index].name;
-      console.log("要删除的模块name:",data)
-      dellist(data).then(response => {
-        console.log(response)
-        if(response.code == 20000) {
-              rows.splice(index, 1);
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              });
-        }else{
-              this.$message({
-                  message: '删除失败',
-                  type: 'success'
-              });
-        } 
-    }).catch(err => {
-       this.$message({
-          message: '删除失败',
-          type: 'success'
-        });
-    })
+      let data = rows[index].id; //根据课程id删除课程
+      console.log("要删除的模块name:", data);
+      if (rows[index].count != 0) {
+        this.delMassage = "该分组下有多个课程，将被一起删除，是否确认删除？";
+      }
+      this.openDelMassage(data, rows,index);
     },
     // 修改
-    updateRow(index,rows) {
+    updateRow(index, rows) {
       // 获取当前行的内容  rows[index]
-        // console.log(rows[index])
-         this.form.name = rows[index].name;
-         this.form.oldname = rows[index].name;
-         this.form.price = rows[index].price;
-         this.form.coefficient = rows[index].coefficient;
-         this.form.desp = rows[index].desp;
-         this.form.category_id = rows[index].category_id;
-         this.$refs.dial.noshow();
-         console.log('执行更改程序')
+      // console.log(rows[index])
+      this.form.id = rows[index].id;
+      this.form.name = rows[index].name;
+      this.$refs.dial.noshow();
+      console.log("执行更改程序");
     },
-    commitForm(){
+    commitForm() {
       // 更改模块的表单提交
-        console.log(this.form);
-        let data = this.form;
-        update(data).then(response => {
-           this.$refs.dial.noshow();
-           this.fetchData()
-           this.$message({
-              message: '修改成功',
-              type: 'success'
-           });
-        })
+      console.log(JSON.stringify(this.form));
+      let data = this.form;
 
+      updateCourseClass(data).then(response => {
+        this.$refs.dial.noshow();
+        this.fetchData();
+        this.$message({
+          message: "修改成功",
+          type: "success"
+        });
+      });
     }
   }
-}
+};
 </script>

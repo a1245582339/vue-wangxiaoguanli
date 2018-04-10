@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* Layout */
 import Layout from '../views/layout/Layout'
@@ -22,7 +22,11 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
@@ -31,10 +35,12 @@ export const constantRouterMap = [
     redirect: '/dashboard',
     name: 'Dashboard',
     hidden: true,
-    children: [{
-      path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
-    }]
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/dashboard/index')
+      }
+    ]
   },
 
   {
@@ -98,6 +104,21 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/student',
+    component: Layout,
+    redirect: '/student/student',
+    name: 'Student',
+    meta: { title: '学生信息管理', icon: 'tree' },
+    children: [
+      {
+        path: 'student',
+        name: 'student',
+        component: () => import('@/views/student/index'),
+        meta: { title: '学生信息', icon: 'table' }
+      }
+    ]
+  },
+  {
     path: '/list',
     component: Layout,
     children: [
@@ -110,8 +131,7 @@ export const constantRouterMap = [
     ]
   },
 
-  { path: '*', redirect: '/404', hidden: true }
-]
+];
 
 export default new Router({
   mode: 'history', // 后端支持可开
@@ -119,3 +139,22 @@ export default new Router({
   routes: constantRouterMap
 })
 
+// 异步挂载的路由
+// 动态需要根据权限加载的路由表
+// export const asyncRouterMap = [
+//   {
+//     path: '/permission',
+//     component: Layout,
+//     name: '权限测试',
+//     meta: { role: ['admin', 'super_editor'] }, // 页面需要的权限
+//     children: [
+//       {
+//         path: 'index',
+//         component: Permission,
+//         name: '权限测试页',
+//         meta: { role: ['s_admin'] } // 页面需要的权限
+//       }
+//     ]
+//   },
+//   { path: '*', redirect: '/404', hidden: true }
+// ];

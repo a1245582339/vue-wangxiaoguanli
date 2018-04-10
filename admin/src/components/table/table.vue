@@ -25,6 +25,12 @@
           <span>{{scope.row.desp}}</span>
         </template>
       </el-table-column>
+      <!-- 模块数量 -->
+      <el-table-column v-if="label.moduleCount" :label="label.moduleCount" width="110" align="center">
+        <template slot-scope="scope">
+          {{scope.row.count}}
+        </template>
+      </el-table-column>
       <!-- 价格 -->
       <el-table-column v-if="label.moudlePrice" :label="label.moudlePrice" width="110" align="center">
         <template slot-scope="scope">
@@ -32,9 +38,20 @@
         </template>
       </el-table-column>
       <!-- 模块系数 -->
-     <el-table-column v-if="label.moudleClass" :label="label.moudleCoefficient" width="110" align="center">
+     <el-table-column v-if="label.moudleCoefficient" :label="label.moudleCoefficient" width="110" align="center">
         <template slot-scope="scope">
           {{scope.row.coefficient}}
+        </template>
+      </el-table-column>
+      <!-- 预览 -->
+      <el-table-column  v-if="label.canPreview" label="预览" width="110" align="center">
+        <template slot-scope="scope">
+          <el-button
+          @click="preview(scope.row.coefficient)"
+          type="text"
+          size="small">
+          预览
+        </el-button>
         </template>
       </el-table-column>
       <!-- 修改 -->
@@ -55,9 +72,26 @@
       </template>
       </el-table-column>
       <!-- 类型 -->
-      <el-table-column align="center" prop="created_at" :label="label.moudleType">
+      <el-table-column v-if="label.moudleType" align="center" :label="label.moudleType">
         <template slot-scope="scope">
-          <span>{{scope.row.type}}</span>
+          <span  :value="scope.row.typeVal">{{scope.row.type}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if="label.moudleCreatTime" align="center" :label="label.moudleCreatTime">
+        <template slot-scope="scope">
+          <span>{{scope.row.reg_time}}</span>
+        </template>
+      </el-table-column>
+
+       <el-table-column v-if="label.moudleCheck" align="center"  :label="label.moudleCheck">
+        <template slot-scope="scope">
+          <el-button
+          @click="check(scope.$index, list)"
+          type="text"
+          size="small">
+          {{scope.row.ischecked}}
+        </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,6 +107,8 @@ export default {
     label: Object,
     updateRow: Function,
     deleteRow: Function,
+    preview:Function,
+    check:Function,
     dialogFormVisible: Boolean
   },
   data() {
@@ -81,7 +117,6 @@ export default {
     };
   },
   mounted() {
-    console.log("list=====>",list)
   }
 };
 </script>

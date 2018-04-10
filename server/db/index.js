@@ -10,6 +10,7 @@ function setup(db, cb) {
   require('./roles')(orm, db);
   require('./courses')(orm, db);
   require('./course_class')(orm, db);
+  require('./student')(orm, db);
 
   return cb(null, db);
 }

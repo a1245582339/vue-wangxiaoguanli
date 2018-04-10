@@ -8,6 +8,7 @@ var Getdata = require('../controller/getdata')
 var Choosedata = require('../controller/changedata')
 var Order = require('../controller/order')
 var Courses = require('../controller/course')
+var Student = require('../controller/student')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
@@ -16,7 +17,7 @@ router.get('/user/info', User.Userinfo);
 
 
 
-// **********************************获取模块数据****************************************
+// **********************************课程相关****************************************
 
 
 // 获取全部模块列表
@@ -29,8 +30,14 @@ router.get('/choosedata', Getdata.Choosedata);
 router.get('/courseClassList', Courses.CourseClass);
 // 获取课程列表
 router.get('/courseList', Courses.CourseList);
+// 删除课程类型
+router.post('/delCourseClass', Courses.DelCourseClass);
 // 删除课程
 router.post('/delCourse', Courses.DelCourse);
+// 修改／新增课程
+router.post('/updateCourse', Courses.UpdateCourse);
+// 修改／新增课程类型
+router.post('/updateCourseClass', Courses.UpdateCourseClass);
 
 
 // ********************************订单相关**********************************************
@@ -45,13 +52,14 @@ router.post('/orderPrint',Order.OrderPrint)
 // ****************************更改模块接口***************************
 
 
-// 添加模块
-router.post('/add', Choosedata.Add);
-// 更改模块
-router.post('/update', Choosedata.Update);
-// 更改模块
-router.post('/del', Choosedata.Del);
-
+// 获取学生列表
+router.get('/studentList', Student.StudentList);
+// 审核学生
+router.post('/checkStudent', Student.CheckStudent);
+// 删除学生
+router.post('/delStudent', Student.DelStudent);
+// 更改学生
+router.post('/updateStudent', Student.UpdateStudent);
 
 
 

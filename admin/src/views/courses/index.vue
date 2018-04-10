@@ -1,7 +1,9 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
-   <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
-   <Dialogtable :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+   <el-button type="primary" plain @click="addCourse">添加课程</el-button>
+   <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow' :preview='preview'></Moduletable>
+   <Dialogtable :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+   <Vediodialog :vedioUrl="vedioUrl" ref="vedio"></Vediodialog>
   
   </div>
 
@@ -9,27 +11,30 @@
 
 <script>
 import { getCourseList, getAll, getCourseClass } from "@/api/table";
-import { update, delCourse } from "@/api/do";
+import { updateCourse, delCourse } from "@/api/do";
 import Moduletable from "@/components/table/table";
 import Dialogtable from "@/components/tabledialog";
+import Vediodialog from "@/components/vediodialog";
 export default {
   components: {
     Moduletable,
-    Dialogtable
+    Dialogtable,
+    Vediodialog
   },
   data() {
     return {
       list: [],
       type: [],
       listLoading: true,
-      type: "手机",
+      currentType:'',
+      vedioUrl:'',
       label: {
         moudleId:"课程ID",
         moduleName: "课程名称",
         moduleDesp: "课程描述",
         moudlePrice: "课程价格",
-        moudleCoefficient: "课程视频",
-        moudleType: "课程类型"
+        moudleType: "课程类型",
+        canPreview:true
       },
 
       form: {
@@ -46,17 +51,24 @@ export default {
     this.getClass();
   },
   methods: {
+    // 添加新课程
+    addCourse(){
+      this.$refs.dial.noshow();
+    },
     // 获取课程类型
     getClass() {
       var vm = this;
       this.listLoading = true;
-      var data = [];
+      var arr = [];
       getCourseClass().then(response => {
         response.data.map((item,index)=>{
-          data[index]=item.course_class_name
+          arr[index]={
+            id:item.id,
+            name:item.course_class_name
+          }
         })
       });
-      this.type=data;
+      this.type=arr;
     },
     // 获取数据
     fetchData() {
@@ -71,7 +83,8 @@ export default {
             price: item.course_price,
             desp: item.course_desp,
             coefficient: item.video_url,
-            type: item.course_class_name
+            type: item.course_class_name,
+            typeVal: item.course_class_id
           };
         });
         vm.list=data;
@@ -84,7 +97,6 @@ export default {
       console.log("要删除的模块name:", data);
       delCourse(data)
         .then(response => {
-          console.log(response);
           if (response.code == 20000) {
             rows.splice(index, 1);
             this.$message({
@@ -109,8 +121,11 @@ export default {
     updateRow(index, rows) {
       // 获取当前行的内容  rows[index]
       // console.log(rows[index])
+      this.form.id = rows[index].id;
       this.form.name = rows[index].name;
       this.form.oldname = rows[index].name;
+      this.form.typeName = rows[index].type;
+      this.form.type = rows[index].typeVal;
       this.form.price = rows[index].price;
       this.form.coefficient = rows[index].coefficient;
       this.form.desp = rows[index].desp;
@@ -120,9 +135,10 @@ export default {
     },
     commitForm() {
       // 更改模块的表单提交
-      console.log(this.form);
+      console.log(JSON.stringify(this.form) );
       let data = this.form;
-      update(data).then(response => {
+
+      updateCourse(data).then(response => {
         this.$refs.dial.noshow();
         this.fetchData();
         this.$message({
@@ -130,6 +146,11 @@ export default {
           type: "success"
         });
       });
+    },
+    preview(url){
+      this.vedioUrl=url
+      console.log('url',url)
+      this.$refs.vedio.noshow();
     }
   }
 };
