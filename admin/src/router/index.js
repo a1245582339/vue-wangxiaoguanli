@@ -180,14 +180,14 @@ export const asyncRouterMap = [
   {
     path: '/admin',
     component: Layout,
-    name: 'Admin',
-    meta: { title: '管理员管理', icon: 'form', role: ['超级管理员', '管理员'] }, // 页面需要的权限
+    redirect: '/admin/index',
+    meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员','管理员'] }, // 页面需要的权限
     children: [
       {
         path: 'index',
         component: () => import('@/views/admin/index'),
         name: 'admin_change',
-        meta: { title: '管理员管理', icon: 'form', role: ['超级管理员'] }
+        meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员'] }
       },
       {
         path: 'me',

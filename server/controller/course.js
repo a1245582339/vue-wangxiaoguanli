@@ -55,7 +55,7 @@ exports.UpdateCourse = function(req, res, next) {
         course_price: req.body.price,
         course_desp: req.body.desp,
         course_class_id: req.body.type,
-        video_url: req.body.coefficient,
+        video_url: req.body.url,
         isDel: 0
       },
       function(err) {
@@ -73,13 +73,13 @@ exports.UpdateCourse = function(req, res, next) {
         list.course_price = req.body.price;
         list.course_desp = req.body.desp;
         list.course_class_id = req.body.type;
-        list.video_url = req.body.coefficient;
+        list.video_url = req.body.url;
       })
       .save(function(err) {
         if (err) {
           res.json({ code: -1 });
         }
-        res.json({ code: 20000 });
+        res.json({ code: 20000, title: "修改成功" });
       });
   }
 };
