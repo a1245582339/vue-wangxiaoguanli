@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import Router from 'vue-router'
 
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
 
-Vue.use(Router);
+Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
@@ -55,33 +55,33 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/example/table1',
-    name: 'Example',
-    meta: { title: '模块分类', icon: 'tree' },
-    children: [
-      {
-        path: 'table1',
-        name: 'Tablebase',
-        component: () => import('@/views/table/index'),
-        meta: { title: '平台基础模块', icon: 'table' }
-      },
-      {
-        path: 'table2',
-        name: 'Tablechoose',
-        component: () => import('@/views/table1/index'),
-        meta: { title: '可选模块组件', icon: 'table' }
-      },
-      {
-        path: 'table3',
-        name: 'Tableown',
-        component: () => import('@/views/table2/index'),
-        meta: { title: '独立子产品', icon: 'table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/table',
+  //   component: Layout,
+  //   redirect: '/example/table1',
+  //   name: 'Example',
+  //   meta: { title: '模块分类', icon: 'tree' },
+  //   children: [
+  //     {
+  //       path: 'table1',
+  //       name: 'Tablebase',
+  //       component: () => import('@/views/table/index'),
+  //       meta: { title: '平台基础模块', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'table2',
+  //       name: 'Tablechoose',
+  //       component: () => import('@/views/table1/index'),
+  //       meta: { title: '可选模块组件', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'table3',
+  //       name: 'Tableown',
+  //       component: () => import('@/views/table2/index'),
+  //       meta: { title: '独立子产品', icon: 'table' }
+  //     }
+  //   ]
+  // },
   {
     path: '/courses',
     component: Layout,
@@ -117,21 +117,20 @@ export const constantRouterMap = [
         meta: { title: '学生信息', icon: 'table' }
       }
     ]
-  },
-  {
-    path: '/list',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/table3/index'),
-        meta: { title: '订单列表', icon: 'form' }
-      }
-    ]
-  },
-
-];
+  }
+  // {
+  //   path: '/list',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: () => import('@/views/table3/index'),
+  //       meta: { title: '订单列表', icon: 'form' }
+  //     }
+  //   ]
+  // }
+]
 
 export default new Router({
   mode: 'history', // 后端支持可开
@@ -141,20 +140,26 @@ export default new Router({
 
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
-// export const asyncRouterMap = [
-//   {
-//     path: '/permission',
-//     component: Layout,
-//     name: '权限测试',
-//     meta: { role: ['admin', 'super_editor'] }, // 页面需要的权限
-//     children: [
-//       {
-//         path: 'index',
-//         component: Permission,
-//         name: '权限测试页',
-//         meta: { role: ['s_admin'] } // 页面需要的权限
-//       }
-//     ]
-//   },
-//   { path: '*', redirect: '/404', hidden: true }
-// ];
+export const asyncRouterMap = [
+  {
+    path: '/admin',
+    component: Layout,
+    name: 'Admin',
+    meta: { title: '管理员管理', icon: 'form', role: ['超级管理员', '管理员'] }, // 页面需要的权限
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/admin/index'),
+        name: 'admin_change',
+        meta: { title: '管理员管理', icon: 'form', role: ['超级管理员'] }
+      },
+      {
+        path: 'me',
+        component: () => import('@/views/me/index'),
+        name: 'Me',
+        meta: { title: '个人管理', icon: 'form' }
+      }
+    ]
+  },
+  { path: '*', redirect: '/404', hidden: true }
+]

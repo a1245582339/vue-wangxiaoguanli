@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-// 获取课程列表
+// 获取学生列表
 export function getStudentList(params) {
   return request({
     url: '/studentList',

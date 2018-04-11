@@ -15,14 +15,20 @@
          <el-form-item v-if="label.moudlePrice" :label="label.moudlePrice" :label-width="formLabelWidth" prop="price">
            <el-input v-model="form.price" auto-complete="off"></el-input>
          </el-form-item>
-         <el-form-item v-if="label.moudleType" :label="label.moudleType" :label-width="formLabelWidth" prop="coefficient">
+         <el-form-item v-if="label.moudleType" :label="label.moudleType" :label-width="formLabelWidth" prop="moudleType">
            <span>{{form.typeName}}</span>
-           <el-select @change="changeType" v-model="typeValue" auto-complete="off">
+           <el-select v-if="!isMe" @change="changeType" v-model="typeValue" auto-complete="off">
              <el-option v-for="item in type" :key="item.id" :label="item.name" :value="item.id"></el-option>  
            </el-select>
          </el-form-item>
          <el-form-item v-if="label.moudleCoefficient" :label="label.moudleCoefficient" :label-width="formLabelWidth" prop="coefficient">
            <el-input v-model="form.coefficient" auto-complete="off"></el-input>
+         </el-form-item>
+         <el-form-item v-if="label.moudleTel" :label="label.moudleTel" :label-width="formLabelWidth" prop="tel">
+           <el-input v-model="form.tel" auto-complete="off"></el-input>
+         </el-form-item>
+          <el-form-item v-if="label.moudlePassword" :label="label.moudlePassword" :label-width="formLabelWidth" prop="password">
+           <el-input v-model="form.password" auto-complete="off"></el-input>
          </el-form-item>
          
        </el-form>
@@ -41,7 +47,8 @@ export default {
     form: Object,
     label: Object,
     type: Array,
-    list: Array
+    list: Array,
+    isMe:Boolean
   },
 
   data() {
@@ -117,6 +124,7 @@ export default {
       this.$emit("commitform");
     },
     changeType() {
+      console.log(this.typeValue)
       this.form.type = this.typeValue;
     }
   },

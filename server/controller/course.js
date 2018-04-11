@@ -153,7 +153,6 @@ exports.UpdateCourseClass = function(req, res, next) {
       }
     );
   } else {
-    console.log('asdsadsad',id)
     req.models.course_class
       .find({ id: id })
       .each(function(list) {

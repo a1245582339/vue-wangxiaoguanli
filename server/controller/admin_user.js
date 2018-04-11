@@ -36,41 +36,21 @@ exports.Userinfo = function(req, res, next) {
         if(err){
             throw err
         }else{
-            var roles_id,roles,name,avatar,tel,sex;
+            var roles_id,roles,name,avatar,tel;
             req.models.admin_user.find({id: list[0].admin_id}, function(err,_list){
                 roles_id= _list[0].roles_id;
+                id= _list[0].id;
                 name= _list[0].name;
                 tel= _list[0].tel;
-                sex= _list[0].sex;
+                password=_list[0].password
                 avatar: "";
                 req.models.roles.find({id: roles_id},function(err,__list){
                     roles=__list[0].roles;
-                    res.json({code: 20000, data: {roles: roles,name: name, avatar: avatar, tel:tel, sex:sex}})
+                    res.json({code: 20000, data: {id: id,roles: roles,name: name, avatar: avatar, tel:tel}})
                 })
                 
             })
         }
     })
-//   res.json({
-//     code: 20000,
-//     data: { roles: ["admin"], role: ["admin"], name: "admin", avatar: "" }
-//   });
 };
 
-// router.post('/user/login',function(req,res,next){
-//     console.log(req.body)
-//     let username = req.body.username,
-//         password = req.body.password;
-//     res.json({code: 20000,data: {token: "admin"}})
-// })
-// 退出*******************
-// router.post('/user/logout',function(req,res,next){
-//   res.json({code: 20000})
-// })
-// 获取个人信息************
-// router.get('/user/info',function(req,res,next){
-//     res.json({ code: 20000,data: {roles: ['admin'],role: ['admin'],name: 'admin',avatar: ''}
-//     })
-// })
-
-// {"code":20000,"data":{"roles":["admin"],"role":["admin"],"name":"admin","avatar":"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"}}

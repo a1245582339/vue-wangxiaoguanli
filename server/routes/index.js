@@ -9,6 +9,7 @@ var Choosedata = require('../controller/changedata')
 var Order = require('../controller/order')
 var Courses = require('../controller/course')
 var Student = require('../controller/student')
+var Admin = require('../controller/change_admin')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
@@ -49,7 +50,9 @@ router.post('/addorder',Order.Addorder)
 router.post('/delorder', Order.Delorder);
 //获取订单详情
 router.post('/orderPrint',Order.OrderPrint)
-// ****************************更改模块接口***************************
+
+
+// ****************************更改学生接口***************************
 
 
 // 获取学生列表
@@ -61,7 +64,19 @@ router.post('/delStudent', Student.DelStudent);
 // 更改学生
 router.post('/updateStudent', Student.UpdateStudent);
 
+// ****************************更改学生接口***************************
 
+
+// 获取管理员列表
+router.get('/adminList', Admin.AdminList);
+// 删除管理员
+router.post('/delAdmin', Admin.DelAdmin);
+// 更改管理员
+router.post('/updateAdmin', Admin.UpdateAdmin);
+// 获取管理员类型
+router.get('/adminRoles', Admin.AdminRoles);
+// 获取当前管理员
+router.get('/personalAdmin', Admin.PersonalAdmin);
 
 // 添加模块项*****************************
 

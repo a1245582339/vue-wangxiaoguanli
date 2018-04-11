@@ -29,7 +29,7 @@ export default {
         moduleName: "学生用户名",
         moudleType: "学生性别",
         moudlePrice: "学生剩余积分",
-        moudleCoefficient: "学生手机号",
+        moudleTel: "学生手机号",
         moudleCreatTime: "创建时间",
         moudleCheck: "审核"
       },
@@ -78,7 +78,7 @@ export default {
             id: item.id,
             name: item.stu_name,
             price: item.balance,
-            coefficient: item.tel,
+            tel: item.tel,
             ischecked: ischecked,
             reg_time: create_time,
             type: item.sex
@@ -127,6 +127,7 @@ export default {
       this.form.type = rows[index].typeVal;
       this.form.price = rows[index].price;
       this.form.coefficient = rows[index].coefficient;
+      this.form.tel = rows[index].tel;
       this.form.desp = rows[index].desp;
       this.form.category_id = rows[index].category_id;
       this.$refs.dial.noshow();

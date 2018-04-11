@@ -6,7 +6,8 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    id: ''
   },
 
   mutations: {
@@ -25,8 +26,8 @@ const user = {
     SET_TEL: (state, tel) => {
       state.tel = tel
     },
-    SET_SEX: (state, sex) => {
-      state.sex = sex
+    SET_ID: (state, id) => {
+      state.id = id
     }
   },
 
@@ -51,11 +52,11 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
           const data = response.data
+          commit('SET_ID', data.id)
           commit('SET_ROLES', data.roles)
           commit('SET_NAME', data.name)
           commit('SET_AVATAR', data.avatar)
           commit('SET_TEL', data.tel)
-          commit('SET_SEX', data.sex)
           resolve(response)
         }).catch(error => {
           reject(error)

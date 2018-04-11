@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-table :data="list"  border fit highlight-current-row >
      <!-- 序列号 -->
-      <el-table-column align="center" label='序号' width="95">
+      <el-table-column v-if="!isMe" align="center" label='序号' width="95">
         <template slot-scope="scope">
           {{scope.$index}}
         </template>
@@ -43,6 +43,18 @@
           {{scope.row.coefficient}}
         </template>
       </el-table-column>
+      <!-- 模块手机号 -->
+     <el-table-column v-if="label.moudleTel" :label="label.moudleTel" width="110" align="center">
+        <template slot-scope="scope">
+          {{scope.row.tel}}
+        </template>
+      </el-table-column>
+      <!-- 模块密码 -->
+     <el-table-column v-if="label.moudlePassword" :label="label.moudlePassword" width="110" align="center">
+        <template slot-scope="scope">
+          {{scope.row.password}}
+        </template>
+      </el-table-column>
       <!-- 预览 -->
       <el-table-column  v-if="label.canPreview" label="预览" width="110" align="center">
         <template slot-scope="scope">
@@ -63,7 +75,7 @@
           size="small">
           编辑
         </el-button>
-         <el-button
+         <el-button v-if="currentId!=scope.row.id"
         @click.prevent="deleteRow(scope.$index, list)"
           type="text"
           size="small">
@@ -109,7 +121,9 @@ export default {
     deleteRow: Function,
     preview:Function,
     check:Function,
-    dialogFormVisible: Boolean
+    dialogFormVisible: Boolean,
+    currentId:Number,
+    isMe:Boolean
   },
   data() {
     return {

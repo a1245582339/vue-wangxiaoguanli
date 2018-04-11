@@ -5,8 +5,8 @@ module.exports = function(orm, db) {
     name: String,
     roles_id: String,
     tel: String,
-    //created_time: String,
-    sex: String,
-    password:String
+    password:String,
+    isDel:Number,
+    create_time:Number
   });
 };

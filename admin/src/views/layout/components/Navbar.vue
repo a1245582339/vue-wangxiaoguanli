@@ -49,7 +49,6 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import { addlist } from '@/api/do'
 export default {
   data() {
             const checkName = (rule,value,callback) => {

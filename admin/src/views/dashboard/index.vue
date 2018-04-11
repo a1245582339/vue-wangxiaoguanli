@@ -4,7 +4,6 @@
     <div class="dashboard-text">用户名:{{name}}</div>
     <div class="dashboard-text">角色:<span v-for='role in roles' :key='role'>{{role}}</span></div>
      <div class="dashboard-text">手机:{{tel}}</div>
-      <div class="dashboard-text">性别:{{sex}}</div>
   </div>
 </template>
 
