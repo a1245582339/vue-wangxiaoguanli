@@ -165,7 +165,7 @@ CREATE TABLE `student` (
   `stu_name` varchar(50) CHARACTER SET utf8 NOT NULL,
   `tel` varchar(13) NOT NULL,
   `balance` int(20) NOT NULL COMMENT '余额',
-  `reg_time` bigint(20) NOT NULL,
+  `create_time` bigint(20) NOT NULL,
   `ischecked` int(1) NOT NULL DEFAULT '0' COMMENT '是否被审核',
   `sex` varchar(255) CHARACTER SET utf8 NOT NULL,
   `isDel` int(11) NOT NULL,

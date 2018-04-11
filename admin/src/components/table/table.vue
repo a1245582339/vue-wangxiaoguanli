@@ -69,7 +69,7 @@
       <!-- 修改 -->
       <el-table-column class-name="status-col" label="操作" width="110" align="center">
       <template slot-scope="scope">
-        <el-button
+        <el-button v-if="!cannotEdit"
           @click="updateRow(scope.$index, list)"
           type="text"
           size="small">
@@ -92,7 +92,7 @@
 
       <el-table-column v-if="label.moudleCreatTime" align="center" :label="label.moudleCreatTime">
         <template slot-scope="scope">
-          <span>{{scope.row.reg_time}}</span>
+          <span>{{scope.row.create_time}}</span>
         </template>
       </el-table-column>
 
@@ -123,7 +123,8 @@ export default {
     check:Function,
     dialogFormVisible: Boolean,
     currentId:Number,
-    isMe:Boolean
+    isMe:Boolean,
+    cannotEdit:Boolean
   },
   data() {
     return {

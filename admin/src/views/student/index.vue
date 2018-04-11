@@ -72,7 +72,7 @@ export default {
           } else {
             ischecked = "待审核";
           }
-          create_time=vm.timestampToTime(item.reg_time)
+          var create_time=vm.timestampToTime(item.create_time)
 
           data[index] = {
             id: item.id,
@@ -80,7 +80,7 @@ export default {
             price: item.balance,
             tel: item.tel,
             ischecked: ischecked,
-            reg_time: create_time,
+            create_time: create_time,
             type: item.sex
           };
         });

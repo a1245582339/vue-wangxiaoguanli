@@ -43,11 +43,11 @@ router.post('/updateCourseClass', Courses.UpdateCourseClass);
 
 // ********************************订单相关**********************************************
 // 获取订单
-router.get('/order',Order.Getorder)
+router.get('/orderList',Order.Getorder)
 // 添加订单
 router.post('/addorder',Order.Addorder)
 // 删除订单
-router.post('/delorder', Order.Delorder);
+router.post('/delOrder', Order.DelOrder);
 //获取订单详情
 router.post('/orderPrint',Order.OrderPrint)
 

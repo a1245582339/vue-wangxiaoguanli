@@ -78,7 +78,7 @@ export default {
             id: item.id,
             name: item.name,
             tel: item.tel,
-            reg_time: create_time,
+            create_time: create_time,
             type: item.roles_name,
             typeVal: item.roles_id,
             password: item.password

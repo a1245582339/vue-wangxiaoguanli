@@ -5,7 +5,7 @@ module.exports = function(orm, db) {
       stu_name: String,
       tel: String,
       balance: Number,
-      reg_time: Number,
+      create_time: Number,
       ischecked:Number,
       sex: String,
       isDel: Number

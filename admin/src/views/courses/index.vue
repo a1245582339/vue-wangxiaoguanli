@@ -93,10 +93,13 @@ export default {
     },
     // 删除模块
     deleteRow(index, rows) {
-      let data = rows[index].id; //根据课程id删除课程
-      console.log("要删除的模块name:", data);
-      delCourse(data)
-        .then(response => {
+      let data = rows[index].id; //删除管理员
+      this.$confirm("是否确定将该课程删除？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        delAdmin(data).then(response => {
           if (response.code == 20000) {
             rows.splice(index, 1);
             this.$message({
@@ -109,13 +112,13 @@ export default {
               type: "success"
             });
           }
-        })
-        .catch(err => {
-          this.$message({
-            message: "删除失败",
-            type: "success"
-          });
         });
+      }).catch(()=>{
+        this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });  
+      })
     },
     // 修改
     updateRow(index, rows) {

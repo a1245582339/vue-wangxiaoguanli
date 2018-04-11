@@ -55,33 +55,21 @@ export const constantRouterMap = [
       }
     ]
   },
-  // {
-  //   path: '/table',
-  //   component: Layout,
-  //   redirect: '/example/table1',
-  //   name: 'Example',
-  //   meta: { title: '模块分类', icon: 'tree' },
-  //   children: [
-  //     {
-  //       path: 'table1',
-  //       name: 'Tablebase',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: '平台基础模块', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'table2',
-  //       name: 'Tablechoose',
-  //       component: () => import('@/views/table1/index'),
-  //       meta: { title: '可选模块组件', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'table3',
-  //       name: 'Tableown',
-  //       component: () => import('@/views/table2/index'),
-  //       meta: { title: '独立子产品', icon: 'table' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/order',
+    name: 'Order',
+    meta: { title: '订单管理', icon: 'tree' },
+    children: [
+      {
+        path: 'order',
+        name: 'Order',
+        component: () => import('@/views/order/index'),
+        meta: { title: '订单管理', icon: 'table' }
+      }
+    ]
+  },
   {
     path: '/courses',
     component: Layout,
@@ -118,6 +106,33 @@ export const constantRouterMap = [
       }
     ]
   }
+  // {
+  //   path: '/table',
+  //   component: Layout,
+  //   redirect: '/example/table1',
+  //   name: 'Example',
+  //   meta: { title: '模块分类', icon: 'tree' },
+  //   children: [
+  //     {
+  //       path: 'table1',
+  //       name: 'Tablebase',
+  //       component: () => import('@/views/table/index'),
+  //       meta: { title: '平台基础模块', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'table2',
+  //       name: 'Tablechoose',
+  //       component: () => import('@/views/table1/index'),
+  //       meta: { title: '可选模块组件', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'table3',
+  //       name: 'Tableown',
+  //       component: () => import('@/views/table2/index'),
+  //       meta: { title: '独立子产品', icon: 'table' }
+  //     }
+  //   ]
+  // },
   // {
   //   path: '/list',
   //   component: Layout,

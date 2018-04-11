@@ -92,13 +92,13 @@ export default {
       var data = [];
       getAdminList().then(response => {
         response.data.map((item, index) => {
-          create_time = vm.timestampToTime(item.create_time);
+          var create_time = vm.timestampToTime(item.create_time);
 
           data[index] = {
             id: item.id,
             name: item.name,
             tel: item.tel,
-            reg_time: create_time,
+            create_time: create_time,
             type: item.roles_name,
             typeVal: item.roles_name,
             password: item.password
@@ -120,12 +120,12 @@ export default {
           if (response.code == 20000) {
             rows.splice(index, 1);
             this.$message({
-              message: "更改成功",
+              message: "删除成功",
               type: "success"
             });
           } else {
             this.$message({
-              message: "更改失败",
+              message: "删除失败",
               type: "success"
             });
           }
