@@ -82,7 +82,7 @@ export default {
             name: item.course_name,
             price: item.course_price,
             desp: item.course_desp,
-            coefficient: item.video_url,
+            url: item.video_url,
             type: item.course_class_name,
             typeVal: item.course_class_id
           };
@@ -99,7 +99,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        delAdmin(data).then(response => {
+        delCourse(data).then(response => {
           if (response.code == 20000) {
             rows.splice(index, 1);
             this.$message({
@@ -130,7 +130,7 @@ export default {
       this.form.typeName = rows[index].type;
       this.form.type = rows[index].typeVal;
       this.form.price = rows[index].price;
-      this.form.coefficient = rows[index].coefficient;
+      this.form.url = rows[index].url;
       this.form.desp = rows[index].desp;
       this.form.category_id = rows[index].category_id;
       this.$refs.dial.noshow();

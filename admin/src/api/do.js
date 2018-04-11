@@ -1,12 +1,4 @@
 import request from '@/utils/request'
-// 添加课程
-// export function addlist(data) {
-//   return request({
-//     url: '/add',
-//     method: 'post',
-//     data
-//   })
-// }
 // 修改课程
 export function updateCourse(data) {
   return request({
@@ -15,7 +7,7 @@ export function updateCourse(data) {
     data
   })
 }
-// 修改课程
+// 修改课程类型
 export function updateCourseClass(data) {
   return request({
     url: '/updateCourseClass',
@@ -35,14 +27,6 @@ export function delCourse(data) {
 export function delCourseClass(data) {
   return request({
     url: '/delCourseClass',
-    method: 'post',
-    data: { data }
-  })
-}
-// 删除订单
-export function delorder(data) {
-  return request({
-    url: '/delorder',
     method: 'post',
     data: { data }
   })

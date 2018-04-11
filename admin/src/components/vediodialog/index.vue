@@ -1,7 +1,7 @@
 <template>
     <div>
  <!-- 弹出框***************************************************** -->
-    <el-dialog title="预览" :visible.sync="dialogFormVisible" center>
+    <el-dialog :before-close="handleClose" title="预览" :visible.sync="dialogFormVisible" center>
        
          <video-player v-cloak class="video-player vjs-custom-skin"
      ref="videoPlayer"
@@ -9,9 +9,6 @@
      :options="playerOptions"
       ></video-player>
 
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="noshow()">取 消</el-button>
-      </div>
     </el-dialog>
   
     </div>
@@ -20,15 +17,13 @@
 <script>
 import VideoPlayer from "vue-video-player";
 
-
 export default {
   props: {
     vedioUrl: String
   },
-  computed:{
-    
-    playerOptions(){
-      var vm=this
+  computed: {
+    playerOptions() {
+      var vm = this;
       return {
         playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
         autoplay: false, //如果true,浏览器准备好时开始回放。
@@ -53,24 +48,28 @@ export default {
           remainingTimeDisplay: false,
           fullscreenToggle: true //全屏按钮
         }
-      }
+      };
     }
   },
   data() {
-    var vm=this
-    console.log('vm.vedioUrl',vm.url)
+    var vm = this;
+    console.log("vm.vedioUrl", vm.url);
     return {
-      dialogFormVisible: false,
+      dialogFormVisible: false
     };
   },
   methods: {
     noshow() {
       this.dialogFormVisible = !this.dialogFormVisible;
+    },
+    handleClose(done) {
+     console.log('关闭了')
+     document.getElementsByTagName('video')[0].pause()
+     //TODO vue中一般不直接做dom操作，此处不规范，后期想办法优化
+     done()
     }
   },
-  mounted() {
-    
-  }
+  mounted() {}
 };
 </script>
 

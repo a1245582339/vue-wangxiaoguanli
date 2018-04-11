@@ -43,6 +43,12 @@
           {{scope.row.coefficient}}
         </template>
       </el-table-column>
+      <!-- 访问量 -->
+     <el-table-column v-if="label.PageView" :label="label.PageView" width="110" align="center">
+        <template slot-scope="scope">
+          {{scope.row.pageView}}
+        </template>
+      </el-table-column>
       <!-- 模块手机号 -->
      <el-table-column v-if="label.moudleTel" :label="label.moudleTel" width="110" align="center">
         <template slot-scope="scope">
@@ -59,7 +65,7 @@
       <el-table-column  v-if="label.canPreview" label="预览" width="110" align="center">
         <template slot-scope="scope">
           <el-button
-          @click="preview(scope.row.coefficient)"
+          @click="preview(scope.row.url)"
           type="text"
           size="small">
           预览

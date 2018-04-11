@@ -81,13 +81,34 @@ export const constantRouterMap = [
         path: 'courses_edit',
         name: 'courses_edit',
         component: () => import('@/views/courses/index'),
-        meta: { title: '课程编辑', icon: 'table' }
+        meta: { title: '课程管理', icon: 'table' }
       },
       {
         path: 'courses_class',
         name: 'courses_class',
         component: () => import('@/views/courses_class/index'),
-        meta: { title: '课程分类编辑', icon: 'table' }
+        meta: { title: '课程分类管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/news',
+    component: Layout,
+    redirect: '/news/news_edit',
+    name: 'News',
+    meta: { title: '资讯管理', icon: 'tree' },
+    children: [
+      {
+        path: 'news_edit',
+        name: 'news_edit',
+        component: () => import('@/views/news/index'),
+        meta: { title: '资讯管理', icon: 'table' }
+      },
+      {
+        path: 'news_type',
+        name: 'news_type',
+        component: () => import('@/views/news_type/index'),
+        meta: { title: '资讯分类管理', icon: 'table' }
       }
     ]
   },

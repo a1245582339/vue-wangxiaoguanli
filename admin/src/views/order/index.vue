@@ -69,7 +69,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        delAdmin(data).then(response => {
+        delOrder(data).then(response => {
           if (response.code == 20000) {
             rows.splice(index, 1);
             this.$message({

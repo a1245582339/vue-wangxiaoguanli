@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { getCourseList, getAll, getCourseClass } from "@/api/table";
-import { updateCourse, delCourse, delCourseClass ,updateCourseClass} from "@/api/do";
+import { getCourseClass } from "@/api/table";
+import { delCourseClass ,updateCourseClass} from "@/api/do";
 import Moduletable from "@/components/table/table";
 import Dialogtable from "@/components/tabledialog";
 export default {
@@ -30,7 +30,7 @@ export default {
         moduleName: "类型名称",
         moduleCount: "课程数量"
       },
-      delMassage: "该条记录将被删除，是否确定删除？",
+      delMassage: "",
 
       form: {
         id: "",
@@ -46,7 +46,7 @@ export default {
   methods: {
     // 添加新类型
     addCourse() {
-      this.$refs.add.noshow();
+      this.$refs.dial.noshow();
     },
 
     // 获取数据
@@ -101,6 +101,8 @@ export default {
       console.log("要删除的模块name:", data);
       if (rows[index].count != 0) {
         this.delMassage = "该分组下有多个课程，将被一起删除，是否确认删除？";
+      }else{
+        this.delMassage = "该条记录将被删除，是否确定删除？";
       }
       this.openDelMassage(data, rows,index);
     },

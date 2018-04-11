@@ -10,6 +10,7 @@ var Order = require('../controller/order')
 var Courses = require('../controller/course')
 var Student = require('../controller/student')
 var Admin = require('../controller/change_admin')
+var News = require('../controller/news')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
@@ -20,13 +21,6 @@ router.get('/user/info', User.Userinfo);
 
 // **********************************课程相关****************************************
 
-
-// 获取全部模块列表
-router.get('/alldata', Getdata.Alldata);
-// 获取基本列表
-router.get('/basedata', Getdata.Basedata);
-// 获取可选列表
-router.get('/choosedata', Getdata.Choosedata);
 // 获取课程类型列表
 router.get('/courseClassList', Courses.CourseClass);
 // 获取课程列表
@@ -39,6 +33,23 @@ router.post('/delCourse', Courses.DelCourse);
 router.post('/updateCourse', Courses.UpdateCourse);
 // 修改／新增课程类型
 router.post('/updateCourseClass', Courses.UpdateCourseClass);
+
+// **********************************资讯相关****************************************
+
+// 获取资讯类型列表
+router.get('/getNewsType', News.GetNewsType);
+// 获取文章
+router.get('/getHTML', News.GetHTML);
+// 获取资讯列表
+router.get('/getNewsList', News.GetNewsList);
+// 删除资讯类型
+router.post('/delNewsType', News.DelNewsType);
+// 删除资讯
+router.post('/delNews', News.DelNews);
+// 修改／新增资讯
+router.post('/updateNews', News.UpdateNews);
+// 修改／新增资讯类型
+router.post('/updateNewsType', News.UpdateNewsType);
 
 
 // ********************************订单相关**********************************************

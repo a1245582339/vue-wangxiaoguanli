@@ -11,6 +11,8 @@ function setup(db, cb) {
   require('./courses')(orm, db);
   require('./course_class')(orm, db);
   require('./student')(orm, db);
+  require('./news')(orm, db);
+  require('./news_type')(orm, db);
 
   return cb(null, db);
 }
