@@ -79,7 +79,7 @@
         </template>
       </el-table-column>
       <!-- 修改 -->
-      <el-table-column class-name="status-col" label="操作" width="110" align="center">
+      <el-table-column v-if="!cannotEdit||!cannotDel" class-name="status-col" label="操作" width="110" align="center">
       <template slot-scope="scope">
         <el-button v-if="!cannotEdit"
           @click="updateRow(scope.$index, list)"
@@ -87,7 +87,7 @@
           size="small">
           编辑
         </el-button>
-         <el-button v-if="currentId!=scope.row.id"
+         <el-button v-if="currentId!=scope.row.id&&!cannotDel"
         @click.prevent="deleteRow(scope.$index, list)"
           type="text"
           size="small">
@@ -136,7 +136,8 @@ export default {
     dialogFormVisible: Boolean,
     currentId:Number,
     isMe:Boolean,
-    cannotEdit:Boolean
+    cannotEdit:Boolean,
+    cannotDel:Boolean
   },
   data() {
     return {

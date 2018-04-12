@@ -1,7 +1,7 @@
 <template>
     <div>
  <!-- 弹出框***************************************************** -->
-    <el-dialog @open="open" title="编辑" :visible.sync="dialogFormVisible" center>
+    <el-dialog @open="open" @close="close" title="编辑" :visible.sync="dialogFormVisible" center>
        <el-form :model="form" label-width="30px" class="dialog-form" :rules="rules">
          <!-- <el-form-item label="修改模块" :label-width="formLabelWidth">
            <el-input v-model="form.oldname" auto-complete="off" :disabled="true"></el-input>
@@ -166,6 +166,12 @@ export default {
     open() {
       this.imageUrl=this.form.avatar
       this.imageChange=false // 打开dialog，回到false
+    },
+    close(){
+      var obj=this.form
+      for(var key in obj){
+        obj[key]=''   // 
+      }
     },
     AvatarChange(file){const name=file.name
       const isJPG = (name.indexOf('.jpg')> -1)||(name.indexOf('.jpeg')> -1)||(name.indexOf('.JPEG')> -1)||(name.indexOf('.JPG')> -1)

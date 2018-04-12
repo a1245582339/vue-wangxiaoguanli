@@ -3,7 +3,7 @@ exports.Getorder = function(req, res, next) {
   req.models.order.find({ isDel: 0 }, function(err, list) {
     var findcourse = params =>
       new Promise((resolve, reject) =>
-        req.models.courses.find(params, function(err, result) {
+        req.models.course.find(params, function(err, result) {
           err ? reject(err) : resolve(result);
         })
       );

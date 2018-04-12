@@ -4,13 +4,12 @@ var orm = require('orm')
 var router = express.Router();
 
 var User = require('../controller/admin_user')
-var Getdata = require('../controller/getdata')
-var Choosedata = require('../controller/changedata')
 var Order = require('../controller/order')
 var Course = require('../controller/course')
 var Student = require('../controller/student')
 var Admin = require('../controller/change_admin')
 var News = require('../controller/news')
+var Favorites = require('../controller/favorite')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
@@ -21,7 +20,7 @@ router.get('/user/info', User.Userinfo);
 
 // **********************************课程相关****************************************
 
-// 获取课程类型列表
+// 获取课程列表
 router.get('/courseClassList', Course.CourseClass);
 // 获取课程列表
 router.get('/courseList', Course.CourseList);
@@ -93,6 +92,15 @@ router.get('/adminRoles', Admin.AdminRoles);
 router.get('/personalAdmin', Admin.PersonalAdmin);
 // 上传头像
 router.post('/updateAdminAvatar', Admin.UpdateAdminAvatar);
+
+// ****************************收藏夹接口***************************
+
+
+// 获取课程收藏夹列表
+router.get('/courseFavorite', Favorites.CourseFavorite);
+// 获取资讯收藏夹列表
+router.get('/newsFavorite', Favorites.NewsFavorite);
+
 
 // 添加模块项*****************************
 

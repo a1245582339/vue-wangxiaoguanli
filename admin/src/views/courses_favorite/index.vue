@@ -1,12 +1,13 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
    <Moduletable :cannotEdit="cannotEdit" :cannotDel="cannotDel" :list="list" :label="label"></Moduletable>
-</div>
+  
+  </div>
 
 </template>
 
 <script>
-import { getNewsFavorite} from "@/api/favorite";
+import { getCourseFavorite} from "@/api/favorite";
 import Moduletable from "@/components/table/table";
 export default {
   components: {
@@ -21,7 +22,7 @@ export default {
       label: {
         moudleId: "收藏夹ID",
         moduleName: "学生用户名",
-        moduleDesp: "资讯",
+        moduleDesp: "课程",
         moudleCreatTime: "创建时间",
       }
     };
@@ -46,7 +47,7 @@ export default {
       var vm = this;
       this.listLoading = true;
       var data = [];
-      getNewsFavorite().then(response => {
+      getCourseFavorite().then(response => {
         response.data.map((item, index) => {
 
           var create_time=vm.timestampToTime(item.create_time)
@@ -54,7 +55,7 @@ export default {
           data[index] = {
             id: item.id,
             name: item.stu_name,
-            desp: item.news_name,
+            desp: item.course_name,
             create_time: create_time
           };
         });

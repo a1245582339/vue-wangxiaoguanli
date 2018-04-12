@@ -126,6 +126,27 @@ export const constantRouterMap = [
         meta: { title: '学生信息', icon: 'table' }
       }
     ]
+  },
+  {
+    path: '/favorite',
+    component: Layout,
+    redirect: '/favorite/courses_favorite',
+    name: 'Favorite',
+    meta: { title: '收藏夹管理', icon: 'tree' },
+    children: [
+      {
+        path: 'courses_favorite',
+        name: 'courses_favorite',
+        component: () => import('@/views/courses_favorite/index'),
+        meta: { title: '课程收藏夹', icon: 'table' }
+      },
+      {
+        path: 'news_favorite',
+        name: 'news_favorite',
+        component: () => import('@/views/news_favorite/index'),
+        meta: { title: '资讯收藏夹', icon: 'table' }
+      }
+    ]
   }
   // {
   //   path: '/table',
