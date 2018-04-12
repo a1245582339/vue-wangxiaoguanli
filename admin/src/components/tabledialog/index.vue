@@ -10,8 +10,9 @@
          <el-form-item v-if="label.avatar" :label="label.avatar" :label-width="formLabelWidth">
            <el-upload
               class="avatar-uploader"
-              :auto-upload="true"
-              action="http://127.0.0.1:3000/updateStuAvatar"
+              ref="image"
+              :auto-upload="false"
+              :action="actionUrl"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :on-change="AvatarChange">
@@ -50,8 +51,8 @@
           <el-form-item v-if="label.moudlePassword" :label="label.moudlePassword" :label-width="formLabelWidth" prop="password">
            <el-input v-model="form.password" auto-complete="off"></el-input>
          </el-form-item>
-
-          </el-form-item>
+        <!-- ***********************富文本编辑器****************************** -->
+        
           <el-form-item v-if="label.content" :label="label.content" :label-width="formLabelWidth">
             <div v-html="form.content"></div>
            <tinymce :height="300" v-model="form.content"></tinymce>
@@ -76,7 +77,8 @@ export default {
     label: Object,
     type: Array,
     list: Array,
-    isMe: Boolean
+    isMe: Boolean,
+    actionUrl:String
   },
 
   data() {
@@ -136,7 +138,8 @@ export default {
       formLabelWidth: "80px",
       typeValue: "",
       isdisabled: true,
-      imageUrl: "",
+      imageUrl: '',
+      imageChange:false,
       rules: {
         name: [{ validator: checkName, trigger: "change" }],
         desp: [{ validator: checkDesp, trigger: "change" }],
@@ -150,18 +153,24 @@ export default {
       this.dialogFormVisible = !this.dialogFormVisible;
     },
     commitForm() {
-      this.$emit("commitform");
+      if(this.imageChange){
+        this.$refs.image.submit();  // 如果图片有更改，则在上传成功的回调中
+      }else{
+        this.$emit("commitform");
+      }
+      
     },
     changeType() {
-      console.log(this.typeValue);
       this.form.type = this.typeValue;
     },
-    open() {},
-    AvatarChange(file){
-      const name=file.name
-      const isJPG = name.indexOf('.jpg')> -1
-      const isPNG = name.indexOf('.png')> -1
-      const isGIF = name.indexOf('.gif')> -1
+    open() {
+      this.imageUrl=this.form.avatar
+      this.imageChange=false // 打开dialog，回到false
+    },
+    AvatarChange(file){const name=file.name
+      const isJPG = (name.indexOf('.jpg')> -1)||(name.indexOf('.jpeg')> -1)||(name.indexOf('.JPEG')> -1)||(name.indexOf('.JPG')> -1)
+      const isPNG = (name.indexOf('.png')> -1)||(name.indexOf('.PNG')> -1)
+      const isGIF = (name.indexOf('.gif')> -1)||(name.indexOf('.GIF')> -1)
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG&&!isPNG&&!isGIF) {
@@ -173,9 +182,13 @@ export default {
         return isLt2M
       }
       this.imageUrl = file.url
+      this.imageChange=true // 如果图片发生更改，将它改为true
     },
     handleAvatarSuccess(res, file) {
       this.form.avatar=res.data.path
+      
+      console.log(this.imageChange)
+      this.$emit("commitform");
     }
     
   },

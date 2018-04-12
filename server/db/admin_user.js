@@ -6,6 +6,7 @@ module.exports = function(orm, db) {
     roles_id: String,
     tel: String,
     password:String,
+    avatar:String,
     isDel:Number,
     create_time:Number
   });

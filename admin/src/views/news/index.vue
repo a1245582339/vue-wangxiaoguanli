@@ -1,8 +1,8 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
    <el-button type="primary" plain @click="addNews">添加资讯</el-button>
-   <Moduletable  :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
-   <Dialogtable :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+   <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
+   <Dialogtable :actionUrl="actionUrl" :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
   </div>
 
 </template>
@@ -25,14 +25,15 @@ export default {
       listLoading: true,
       currentType:'',
       articleUrl:'',
-      vedioUrl:'',
+      actionUrl:"http://127.0.0.1:3000/updateNewsCover",
       label: {
         moudleId:"资讯ID",
         moduleName: "资讯标题名称",
         moduleDesp: "资讯描述",
-        moudleType: "课程类型",
+        moudleType: "资讯类型",
         PageView: "访问量",
-        content:"文章内容"
+        content:"文章内容",
+        avatar:"封面",
       },
 
       form: {
@@ -49,11 +50,11 @@ export default {
     this.getClass();
   },
   methods: {
-    // 添加新课程
+    // 添加新资讯
     addNews(){
       this.$refs.dial.noshow();
     },
-    // 获取课程类型
+    // 获取资讯类型
     getClass() {
       var vm = this;
       this.listLoading = true;
@@ -83,7 +84,8 @@ export default {
             url: item.article_url,
             type: item.news_type_name,
             typeVal: item.news_type_id,
-            content:item.content  // TODO这里传到后台是一堆html标签，应该要去掉空格，需要正则表达式，以此节省后台资源空间
+            content:item.content,  // TODO这里传到后台是一堆html标签，应该要去掉空格，需要正则表达式，以此节省后台资源空间
+            avatar: item.cover
           };
         });
         vm.list=data;
@@ -134,6 +136,7 @@ export default {
       this.form.desp = rows[index].desp;
       this.form.category_id = rows[index].category_id;
       this.form.content = rows[index].content;
+      this.form.avatar = rows[index].avatar;
       this.$refs.dial.noshow();
       console.log("执行更改程序");
     },

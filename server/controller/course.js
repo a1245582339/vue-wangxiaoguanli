@@ -1,6 +1,9 @@
+var formidable = require("formidable");
+var fs = require("fs");
+
 // 获取课程列表
 exports.CourseList = function(req, res, next) {
-  req.models.courses.find({ isDel: 0 }, function(err, list) {
+  req.models.course.find({ isDel: 0 }, function(err, list) {
     if (err) {
       throw err;
     } else {
@@ -20,7 +23,7 @@ exports.CourseList = function(req, res, next) {
           result.map((item, index) => {
             list[index].course_class_name = item[0].course_class_name;
           });
-          res.json({ title: "coursesList", code: 20000, data: list });
+          res.json({ title: "courseList", code: 20000, data: list });
         }
       );
     }
@@ -31,7 +34,7 @@ exports.CourseList = function(req, res, next) {
 exports.DelCourse = function(req, res, next) {
   var id = req.body.data;
 
-  req.models.courses
+  req.models.course
     .find({ id: id })
     .each(function(list) {
       list.isDel = 1;
@@ -49,13 +52,14 @@ exports.DelCourse = function(req, res, next) {
 exports.UpdateCourse = function(req, res, next) {
   var id = req.body.id;
   if (!id) {
-    req.models.courses.create(
+    req.models.course.create(
       {
         course_name: req.body.name,
         course_price: req.body.price,
         course_desp: req.body.desp,
         course_class_id: req.body.type,
         video_url: req.body.url,
+        cover: req.body.avatar,
         isDel: 0
       },
       function(err) {
@@ -66,7 +70,7 @@ exports.UpdateCourse = function(req, res, next) {
       }
     );
   } else {
-    req.models.courses
+    req.models.course
       .find({ id: id })
       .each(function(list) {
         list.course_name = req.body.name;
@@ -74,6 +78,7 @@ exports.UpdateCourse = function(req, res, next) {
         list.course_desp = req.body.desp;
         list.course_class_id = req.body.type;
         list.video_url = req.body.url;
+        list.cover = req.body.avatar;
       })
       .save(function(err) {
         if (err) {
@@ -92,7 +97,7 @@ exports.CourseClass = function(req, res, next) {
     } else {
       var findPro = params =>
         new Promise((resolve, reject) =>
-          req.models.courses.find(params, function(err, result) {
+          req.models.course.find(params, function(err, result) {
             err ? reject(err) : resolve(result);
           })
         ); // find的promise操作
@@ -117,7 +122,7 @@ exports.DelCourseClass=function(req,res,next){
   console.log(id)
   var findPro = params =>
       new Promise((resolve, reject) =>
-          req.models.courses.find(params).each(function(list){
+          req.models.course.find(params).each(function(list){
             list.isDel=1;
           }).save(function(err){
             err ? reject(err) : resolve();
@@ -165,4 +170,34 @@ exports.UpdateCourseClass = function(req, res, next) {
         res.json({ code: 20000 });
       });
   }
+};
+
+// 上传封面
+exports.UpdateCourseCover = function(req, res, next) {
+  var form = new formidable.IncomingForm(); //创建上传表单
+  form.encoding = "utf-8"; //设置编辑
+  form.uploadDir = "public/course_cover"; //设置上传目录
+  form.keepExtensions = true; //保留后缀
+  form.maxFieldsSize = 20 * 1024 * 1024; //文件大小 k
+  form.parse(req,function(err, fields, files){ 
+    if(err) {  
+        res.send(err);  
+        return;  
+    }  
+    
+    var extraName='.'+files.file.path.split('.')[1]
+    var randomName = 'course_cover'+(new Date()).getTime()+ parseInt(Math.random() * 8999 +10000);
+
+    var newName=randomName+extraName
+    var newpath =  'public/course_cover/'+newName;
+    var oldpath =  files.file.path
+    fs.rename(oldpath,newpath,function(err){
+      if(err){
+            console.error("改名失败"+err);
+      }
+      var resPath = 'http://localhost:3000/course_cover/'+newName
+      res.json({ code: 20000, title: "上传成功",data:{path:resPath} });
+    });
+    
+  });  
 };

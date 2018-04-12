@@ -7,7 +7,7 @@ var User = require('../controller/admin_user')
 var Getdata = require('../controller/getdata')
 var Choosedata = require('../controller/changedata')
 var Order = require('../controller/order')
-var Courses = require('../controller/course')
+var Course = require('../controller/course')
 var Student = require('../controller/student')
 var Admin = require('../controller/change_admin')
 var News = require('../controller/news')
@@ -22,17 +22,19 @@ router.get('/user/info', User.Userinfo);
 // **********************************课程相关****************************************
 
 // 获取课程类型列表
-router.get('/courseClassList', Courses.CourseClass);
+router.get('/courseClassList', Course.CourseClass);
 // 获取课程列表
-router.get('/courseList', Courses.CourseList);
+router.get('/courseList', Course.CourseList);
 // 删除课程类型
-router.post('/delCourseClass', Courses.DelCourseClass);
+router.post('/delCourseClass', Course.DelCourseClass);
 // 删除课程
-router.post('/delCourse', Courses.DelCourse);
+router.post('/delCourse', Course.DelCourse);
 // 修改／新增课程
-router.post('/updateCourse', Courses.UpdateCourse);
+router.post('/updateCourse', Course.UpdateCourse);
 // 修改／新增课程类型
-router.post('/updateCourseClass', Courses.UpdateCourseClass);
+router.post('/updateCourseClass', Course.UpdateCourseClass);
+// 上传课程封面
+router.post('/updateCourseCover', Course.UpdateCourseCover);
 
 // **********************************资讯相关****************************************
 
@@ -48,6 +50,8 @@ router.post('/delNews', News.DelNews);
 router.post('/updateNews', News.UpdateNews);
 // 修改／新增资讯类型
 router.post('/updateNewsType', News.UpdateNewsType);
+// 上传资讯封面
+router.post('/updateNewsCover', News.UpdateNewsCover);
 
 
 // ********************************订单相关**********************************************
@@ -87,6 +91,8 @@ router.post('/updateAdmin', Admin.UpdateAdmin);
 router.get('/adminRoles', Admin.AdminRoles);
 // 获取当前管理员
 router.get('/personalAdmin', Admin.PersonalAdmin);
+// 上传头像
+router.post('/updateAdminAvatar', Admin.UpdateAdminAvatar);
 
 // 添加模块项*****************************
 

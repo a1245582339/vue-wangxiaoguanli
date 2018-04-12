@@ -2,7 +2,7 @@
   <div class="app-container" v-loading.body="listLoading">
     <el-button type="primary" plain @click="addAdmin">添加管理员</el-button>
    <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow' :currentId="currentId"></Moduletable>
-   <Dialogtable :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+   <Dialogtable :actionUrl="actionUrl" :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
   
   </div>
 
@@ -28,13 +28,15 @@ export default {
       type: [],
       listLoading: true,
       currentId:"",
+      actionUrl:"http://127.0.0.1:3000/updateAdminAvatar",
       label: {
         moudleId: "管理员ID",
         moduleName: "管理员用户名",
         moudleTel: "管理员手机号",
         moudleCreatTime: "创建时间",
         moudleType: "管理员身份",
-        moudlePassword: "管理员密码"
+        moudlePassword: "管理员密码",
+        avatar:"头像"
       },
 
       form: {
@@ -100,8 +102,9 @@ export default {
             tel: item.tel,
             create_time: create_time,
             type: item.roles_name,
-            typeVal: item.roles_name,
-            password: item.password
+            typeVal: item.roles_id,
+            password: item.password,
+            avatar:item.avatar
           };
         });
         vm.list = data;
@@ -148,6 +151,8 @@ export default {
       this.form.type = rows[index].typeVal;
       this.form.tel = rows[index].tel;
       this.form.password = rows[index].password;
+      this.form.avatar = rows[index].avatar;
+      console.log(this.form.avatar)
       this.$refs.dial.noshow();
       console.log("执行更改程序");
     },

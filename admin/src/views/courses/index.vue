@@ -2,7 +2,7 @@
   <div class="app-container" v-loading.body="listLoading">
    <el-button type="primary" plain @click="addCourse">添加课程</el-button>
    <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow' :preview='preview'></Moduletable>
-   <Dialogtable :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+   <Dialogtable :actionUrl="actionUrl" :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
    <Vediodialog :vedioUrl="vedioUrl" ref="vedio"></Vediodialog>
   
   </div>
@@ -28,12 +28,14 @@ export default {
       listLoading: true,
       currentType:'',
       vedioUrl:'',
+      actionUrl:"http://127.0.0.1:3000/updateCourseCover",
       label: {
         moudleId:"课程ID",
         moduleName: "课程名称",
         moduleDesp: "课程描述",
         moudlePrice: "课程价格",
         moudleType: "课程类型",
+        avatar:"封面",
         canPreview:true
       },
 
@@ -84,7 +86,8 @@ export default {
             desp: item.course_desp,
             url: item.video_url,
             type: item.course_class_name,
-            typeVal: item.course_class_id
+            typeVal: item.course_class_id,
+            avatar: item.cover
           };
         });
         vm.list=data;
@@ -132,7 +135,7 @@ export default {
       this.form.price = rows[index].price;
       this.form.url = rows[index].url;
       this.form.desp = rows[index].desp;
-      this.form.category_id = rows[index].category_id;
+      this.form.avatar = rows[index].avatar;
       this.$refs.dial.noshow();
       console.log("执行更改程序");
     },

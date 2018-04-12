@@ -69,7 +69,7 @@ exports.UpdateStudent = function(req, res, next) {
     });
 };
 
-// 修改学生头像
+// 上传头像
 exports.UpdateStuAvatar = function(req, res, next) {
   var form = new formidable.IncomingForm(); //创建上传表单
   form.encoding = "utf-8"; //设置编辑
@@ -82,7 +82,6 @@ exports.UpdateStuAvatar = function(req, res, next) {
         return;  
     }  
     
-    console.log(fields,"-------------",files.file.path.split('.')[1]);  
     var extraName='.'+files.file.path.split('.')[1]
     var randomName = 'stu_avatar'+(new Date()).getTime()+ parseInt(Math.random() * 8999 +10000);
 
