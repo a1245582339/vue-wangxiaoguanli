@@ -13,6 +13,12 @@
           {{scope.row.id}}
         </template>
       </el-table-column>
+       <!-- 模块ID -->
+      <el-table-column v-if="label.avatar" :label="label.avatar" width="110">
+        <template slot-scope="scope">
+          <img style="height:80px;width:80px" :src="scope.row.avatar" alt="">
+        </template>
+      </el-table-column>
       <!-- 模块名称 -->
       <el-table-column v-if="label.moduleName" :label="label.moduleName" width="110">
         <template slot-scope="scope">

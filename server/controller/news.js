@@ -29,18 +29,6 @@ exports.GetNewsList = function(req, res, next) {
   });
 };
 
-// 获取文章html
-exports.GetHTML = function(req, res, next) {
-  var url=(req.query[0])
-  console.log(url)
-//   fs.readFile(url, function (err, data) {
-//     if (err) {
-//         return console.error('异步读取',err);
-//     }
-//     console.log("异步读取: " + data.toString());
-//  });
-
-};
 
 // 删除资讯
 exports.DelNews = function(req, res, next) {
@@ -63,14 +51,15 @@ exports.DelNews = function(req, res, next) {
 // 修改资讯(新增和修改用的同一个接口，通过id判断)
 exports.UpdateNews = function(req, res, next) {
   var id = req.body.id;
+  console.log(JSON.stringify(req.body))
   if (!id) {
     req.models.news.create(
       {
-        course_name: req.body.name,
-        course_price: req.body.price,
-        course_desp: req.body.desp,
+        news_name: req.body.name,
         news_type_id: req.body.type,
-        video_url: req.body.coefficient,
+        news_desp: req.body.desp,
+        content: req.body.content,
+        page_view:0,
         isDel: 0
       },
       function(err) {
@@ -84,11 +73,10 @@ exports.UpdateNews = function(req, res, next) {
     req.models.news
       .find({ id: id })
       .each(function(list) {
-        list.course_name = req.body.name;
-        list.course_price = req.body.price;
-        list.course_desp = req.body.desp;
+        list.news_name = req.body.name;
         list.news_type_id = req.body.type;
-        list.video_url = req.body.coefficient;
+        list.news_desp = req.body.desp;
+        list.content = req.body.content;
       })
       .save(function(err) {
         if (err) {

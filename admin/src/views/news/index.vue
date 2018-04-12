@@ -1,9 +1,8 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
    <el-button type="primary" plain @click="addNews">添加资讯</el-button>
-   <Moduletable  :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow' :preview='preview'></Moduletable>
+   <Moduletable  :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
    <Dialogtable :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
-   <Articledialog :articleUrl="articleUrl" ref="article"></Articledialog>
   </div>
 
 </template>
@@ -12,13 +11,11 @@
 import { getNewsList, getNewsType, updateNews, delNews ,getHTML} from "@/api/news";
 import Moduletable from "@/components/table/table";
 import Dialogtable from "@/components/tabledialog";
-import Articledialog from "@/components/articledialog";
 import Vediodialog from "@/components/vediodialog";
 export default {
   components: {
     Moduletable,
     Dialogtable,
-    Articledialog,
     Vediodialog
   },
   data() {
@@ -35,7 +32,7 @@ export default {
         moduleDesp: "资讯描述",
         moudleType: "课程类型",
         PageView: "访问量",
-        //canPreview:true
+        content:"文章内容"
       },
 
       form: {
@@ -85,7 +82,8 @@ export default {
             desp: item.news_desp,
             url: item.article_url,
             type: item.news_type_name,
-            typeVal: item.news_type_id
+            typeVal: item.news_type_id,
+            content:item.content  // TODO这里传到后台是一堆html标签，应该要去掉空格，需要正则表达式，以此节省后台资源空间
           };
         });
         vm.list=data;
@@ -135,12 +133,12 @@ export default {
       this.form.url = rows[index].url;
       this.form.desp = rows[index].desp;
       this.form.category_id = rows[index].category_id;
+      this.form.content = rows[index].content;
       this.$refs.dial.noshow();
       console.log("执行更改程序");
     },
     commitForm() {
-      // 更改模块的表单提交
-      console.log(JSON.stringify(this.form) );
+      // 更改模块的表单提交;
       let data = this.form;
 
       updateNews(data).then(response => {
@@ -152,11 +150,6 @@ export default {
         });
       });
     },
-    preview(url){
-      this.articleUrl=url
-      this.$refs.article.noshow();
-      getHTML(url)
-    }
   }
 };
 </script>

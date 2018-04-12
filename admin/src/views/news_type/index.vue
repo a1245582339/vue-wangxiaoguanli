@@ -45,7 +45,7 @@ export default {
   methods: {
     // 添加新类型
     addType() {
-      this.$refs.dial.noshow();
+      this.$refs.add.noshow();
     },
 
     // 获取数据
@@ -57,7 +57,7 @@ export default {
         response.data.map((item, index) => {
           data[index] = {
             id: item.id,
-            name: item.course_class_name,
+            name: item.news_type_name,
             count: item.count
           };
         });
@@ -99,7 +99,7 @@ export default {
       let data = rows[index].id; //根据课程id删除课程
       console.log("要删除的模块name:", data);
       if (rows[index].count != 0) {
-        this.delMassage = "该分组下有多个课程，将被一起删除，是否确认删除？";
+        this.delMassage = "该分组下有多个资讯，将被一起删除，是否确认删除？";
       }else{
         this.delMassage = "该条记录将被删除，是否确定删除？";
       }

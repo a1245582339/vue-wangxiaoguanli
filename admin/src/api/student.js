@@ -34,3 +34,12 @@ export function updateStudent(data) {
     data
   })
 }
+
+// 上传头像
+export function updateStuAvatar(data) {
+  return request({
+    url: '/updateStuAvatar',
+    method: 'post',
+    data
+  })
+}

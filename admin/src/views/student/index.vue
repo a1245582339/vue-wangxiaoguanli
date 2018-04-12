@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getStudentList, checkStudent ,delStudent, updateStudent} from "@/api/student";
+import { getStudentList, checkStudent ,delStudent, updateStudent, updateStuAvatar} from "@/api/student";
 import Moduletable from "@/components/table/table";
 import Dialogtable from "@/components/tabledialog";
 import Vediodialog from "@/components/vediodialog";
@@ -31,7 +31,9 @@ export default {
         moudlePrice: "学生剩余积分",
         moudleTel: "学生手机号",
         moudleCreatTime: "创建时间",
-        moudleCheck: "审核"
+        moudleCheck: "审核",
+        moudlePassword:"密码",
+        avatar:"头像"
       },
 
       form: {
@@ -81,7 +83,9 @@ export default {
             tel: item.tel,
             ischecked: ischecked,
             create_time: create_time,
-            type: item.sex
+            type: item.sex,
+            avatar:item.avatar,
+            password:item.password
           };
         });
         vm.type = [{ id: "男", name: "男" }, { id: "女", name: "女" }];
@@ -129,7 +133,8 @@ export default {
       this.form.coefficient = rows[index].coefficient;
       this.form.tel = rows[index].tel;
       this.form.desp = rows[index].desp;
-      this.form.category_id = rows[index].category_id;
+      this.form.password = rows[index].password;
+      this.form.avatar = rows[index].avatar;
       this.$refs.dial.noshow();
       console.log("执行更改程序");
     },

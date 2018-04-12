@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var orm = require('orm')
 var models = require('./db')
 var Router = require('./routes/index');
+var fs = require("fs");
+
 
 
 var app = express();

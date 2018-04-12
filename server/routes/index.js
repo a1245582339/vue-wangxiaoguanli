@@ -38,8 +38,6 @@ router.post('/updateCourseClass', Courses.UpdateCourseClass);
 
 // 获取资讯类型列表
 router.get('/getNewsType', News.GetNewsType);
-// 获取文章
-router.get('/getHTML', News.GetHTML);
 // 获取资讯列表
 router.get('/getNewsList', News.GetNewsList);
 // 删除资讯类型
@@ -74,7 +72,8 @@ router.post('/checkStudent', Student.CheckStudent);
 router.post('/delStudent', Student.DelStudent);
 // 更改学生
 router.post('/updateStudent', Student.UpdateStudent);
-
+// 上传头像
+router.post('/updateStuAvatar', Student.UpdateStuAvatar);
 // ****************************更改学生接口***************************
 
 
