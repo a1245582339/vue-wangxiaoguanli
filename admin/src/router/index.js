@@ -84,6 +84,12 @@ export const constantRouterMap = [
         meta: { title: '课程管理', icon: 'table' }
       },
       {
+        path: 'banner',
+        name: 'banner',
+        component: () => import('@/views/banner/index'),
+        meta: { title: '首页轮播课程', icon: 'table' }
+      },
+      {
         path: 'courses_class',
         name: 'courses_class',
         component: () => import('@/views/courses_class/index'),
