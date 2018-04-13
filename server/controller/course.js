@@ -30,6 +30,19 @@ exports.CourseList = function(req, res, next) {
   });
 };
 
+// 获取首页课程列表
+exports.GetIndexCourse = function(req, res, next) {
+  req.models.course.find({ isDel: 0 }, function(err, list) {
+    if (err) {
+      throw err;
+    } else {
+      var length=list.length
+      var data=[list[length-1],list[length-2],list[length-3]]
+      res.json({ title: "courseList", code: 20000, data: data });
+    }
+  });
+};
+
 // 删除课程
 exports.DelCourse = function(req, res, next) {
   var id = req.body.data;

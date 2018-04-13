@@ -10,6 +10,7 @@ var Student = require('../controller/student')
 var Admin = require('../controller/change_admin')
 var News = require('../controller/news')
 var Favorites = require('../controller/favorite')
+var Banner = require('../controller/banner')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
@@ -20,8 +21,10 @@ router.get('/user/info', User.Userinfo);
 
 // **********************************课程相关****************************************
 
-// 获取课程列表
+// 获取课程类型列表
 router.get('/courseClassList', Course.CourseClass);
+// 获取首页课程列表
+router.get('/getIndexCourse', Course.GetIndexCourse);
 // 获取课程列表
 router.get('/courseList', Course.CourseList);
 // 删除课程类型
@@ -41,6 +44,8 @@ router.post('/updateCourseCover', Course.UpdateCourseCover);
 router.get('/getNewsType', News.GetNewsType);
 // 获取资讯列表
 router.get('/getNewsList', News.GetNewsList);
+// 获取首页资讯列表
+router.get('/getIndexNews', News.GetIndexNews);
 // 删除资讯类型
 router.post('/delNewsType', News.DelNewsType);
 // 删除资讯
@@ -51,6 +56,13 @@ router.post('/updateNews', News.UpdateNews);
 router.post('/updateNewsType', News.UpdateNewsType);
 // 上传资讯封面
 router.post('/updateNewsCover', News.UpdateNewsCover);
+
+// **********************************首页轮播相关****************************************
+
+// 获取轮播列表
+router.get('/getBanner', Banner.GetBanner);
+// 修改轮播
+router.post('/UpdataBanner', Banner.UpdataBanner);
 
 
 // ********************************订单相关**********************************************

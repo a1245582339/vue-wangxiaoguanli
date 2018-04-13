@@ -30,6 +30,19 @@ exports.GetNewsList = function(req, res, next) {
   });
 };
 
+// 获取首页资讯列表
+exports.GetIndexNews = function(req, res, next) {
+  req.models.news.find({ isDel: 0 }, function(err, list) {
+    if (err) {
+      throw err;
+    } else {
+      var length=list.length
+      var data=[list[length-1],list[length-2],list[length-3]]
+      res.json({ title: "newsList", code: 20000, data: data });
+    }
+  });
+};
+
 
 // 删除资讯
 exports.DelNews = function(req, res, next) {

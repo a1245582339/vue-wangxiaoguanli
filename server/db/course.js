@@ -8,6 +8,7 @@ module.exports = function(orm, db) {
     video_url: String,
     cover:String,
     course_desp:String,
-    isDel: Number
+    isDel: Number,
+    isBanner: Number
   })
 };
