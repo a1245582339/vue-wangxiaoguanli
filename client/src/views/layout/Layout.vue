@@ -30,7 +30,6 @@ export default {
   methods:{
     listenActiveIndex(data){
      this.headerIndex=data;
-     console.log('aaa',this.headerIndex)
     }
   }
 }
