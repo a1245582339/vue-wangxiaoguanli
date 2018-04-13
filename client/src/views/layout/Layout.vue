@@ -2,8 +2,8 @@
   <div class="app-wrapper">
     <div class="main-container">
       <navbar></navbar>
-      <nav-head></nav-head>
-      <app-main style="margin:50px auto 0;width:1126px"></app-main>
+      <nav-head :headerIndex="headerIndex"></nav-head>
+      <app-main @listenActiveIndex="listenActiveIndex" style="margin:50px auto 0;width:1126px"></app-main>
       <footer-bar style="margin-top:50px"></footer-bar>
     </div>
   </div>
@@ -20,7 +20,17 @@ export default {
     NavHead,
     FooterBar
   },
+  data(){
+    return{
+      headerIndex:'2t'
+    }
+  },
   computed: {
+  },
+  methods:{
+    listenActiveIndex(data){
+     this.headerIndex=data;
+    }
   }
 }
 </script>

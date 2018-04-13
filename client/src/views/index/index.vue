@@ -65,7 +65,7 @@ import { getBanner } from "@/api/banner";
 import { getIndexCourse } from "@/api/course";
 import { getIndexNews } from "@/api/news";
 export default {
-  name: "welcome",
+  name: "index",
   data() {
     return {
       banner: [],
@@ -75,6 +75,7 @@ export default {
   },
   computed: {},
   created() {
+    this.$emit('listenActiveIndex','1')
     this.fetchBanner();
     this.fetchIndexCourse();
     this.fetchIndexNews();

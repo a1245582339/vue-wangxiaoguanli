@@ -16,7 +16,7 @@ import { getCourse } from "@/api/course";
 import { courseClassList } from "@/api/type";
 
 export default {
-  name: "welcome",
+  name: "course",
   data() {
     return {
       course: [],
@@ -42,6 +42,7 @@ export default {
   },
   computed: {},
   created() {
+    this.$emit('listenActiveIndex','2')
     this.fetchCourse();
     this.fetchCourseClass();
   },
@@ -49,13 +50,11 @@ export default {
     fetchCourse() {
       getCourse().then(response => {
         this.course = response.data;
-        console.log(JSON.stringify(this.course));
       });
     },
     fetchCourseClass() {
       courseClassList().then(response => {
         this.courseClass = response.data;
-        console.log(JSON.stringify(this.courseClass));
       });
     }
   },

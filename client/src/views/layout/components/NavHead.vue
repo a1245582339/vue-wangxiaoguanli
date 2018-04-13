@@ -1,8 +1,8 @@
 <template>
 <div>
-  <el-menu :default-active="activeIndex" class="nav" mode="horizontal" @select="handleSelect">
+  <el-menu router :default-active="activeIndex" class="nav" mode="horizontal" @select="handleSelect">
   
-  <el-menu-item index="1"><router-link to='/index'>首页</router-link></el-menu-item>
+  <el-menu-item index="/index">首页</el-menu-item>
   
   <el-submenu index="2">
 
@@ -10,7 +10,7 @@
         课程列表
       </template>
  
-    <el-menu-item class="navitem" index="2t"><router-link to='/courselist'>全部课程</router-link></el-menu-item>
+    <el-menu-item class="navitem" index="/courselist">全部课程</el-menu-item>
     <el-menu-item class="navitem" v-for="(item,index) in courseClass" :key="item.id" :index="index+'2'">{{item.course_class_name}}</el-menu-item>
   </el-submenu>
 
@@ -29,15 +29,19 @@
 <script>
 import { courseClassList, getNewsType } from "@/api/type";
 export default {
+  props:{
+    headerIndex:String
+  },
   data() {
     return {
-      activeIndex: "1",
+      activeIndex: '1',
       courseClass: [],
       newsType: []
     };
   },
   components: {},
   created() {
+    this.activeIndex=this.headerIndex // 传给activeIndex的值必须是子组件的index
     this.fetchCourseClass();
     this.fetchNewsType();
   },
