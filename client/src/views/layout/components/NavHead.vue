@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-menu router :default-active="activeIndex" class="nav" mode="horizontal" @select="handleSelect">
+  <el-menu router :default-active="headerIndex" class="nav" mode="horizontal" @select="handleSelect">
   
   <el-menu-item index="/index">首页</el-menu-item>
   
@@ -34,14 +34,13 @@ export default {
   },
   data() {
     return {
-      activeIndex: '1',
+      activeIndex: '',  // 传给activeIndex的值必须是子组件的index,值动态绑定到组件里
       courseClass: [],
       newsType: []
     };
   },
   components: {},
   created() {
-    this.activeIndex=this.headerIndex // 传给activeIndex的值必须是子组件的index
     this.fetchCourseClass();
     this.fetchNewsType();
   },

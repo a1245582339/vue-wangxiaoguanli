@@ -75,7 +75,7 @@ export default {
   },
   computed: {},
   created() {
-    this.$emit('listenActiveIndex','1')
+    this.$emit('listenActiveIndex','/index')
     this.fetchBanner();
     this.fetchIndexCourse();
     this.fetchIndexNews();

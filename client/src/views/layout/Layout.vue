@@ -22,7 +22,7 @@ export default {
   },
   data(){
     return{
-      headerIndex:'2t'
+      headerIndex:''
     }
   },
   computed: {
@@ -30,6 +30,7 @@ export default {
   methods:{
     listenActiveIndex(data){
      this.headerIndex=data;
+     console.log('aaa',this.headerIndex)
     }
   }
 }

@@ -42,7 +42,7 @@ export default {
   },
   computed: {},
   created() {
-    this.$emit('listenActiveIndex','2')
+    this.$emit('listenActiveIndex','/courselist')
     this.fetchCourse();
     this.fetchCourseClass();
   },
