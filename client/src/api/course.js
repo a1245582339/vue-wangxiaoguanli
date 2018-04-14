@@ -15,3 +15,12 @@ export function getCourse(params) {
     params
   })
 }
+
+// 根据课程类型id获取课程
+export function getCourseByclass(params) {
+  return request({
+    url: '/getCourseByclass',
+    method: 'get',
+    params
+  })
+}

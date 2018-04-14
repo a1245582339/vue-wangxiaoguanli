@@ -27,6 +27,8 @@ router.get('/courseClassList', Course.CourseClass);
 router.get('/getIndexCourse', Course.GetIndexCourse);
 // 获取课程列表
 router.get('/courseList', Course.CourseList);
+// 根据课程类型获取课程
+router.get('/getCourseByclass', Course.GetCourseByclass);
 // 删除课程类型
 router.post('/delCourseClass', Course.DelCourseClass);
 // 删除课程

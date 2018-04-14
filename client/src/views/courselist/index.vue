@@ -1,18 +1,20 @@
 <template>
   <div>
-      <el-select v-model="value" clearable placeholder="请选择课程类型">
-    <el-option
-      v-for="item in courseClass"
-      :key="item.id"
-      :label="item.course_class_name"
-      :value="item.id">
-    </el-option>
-  </el-select>
+
+   <div>
+    <el-radio-group @change="classChange" v-model="radio">
+      <el-radio-button label=-1>全部课程</el-radio-button>
+      <el-radio-button v-for="(item, index) in courseClass" :key="index" :label="item.id">{{item.course_class_name}}</el-radio-button>
+    </el-radio-group>
+  </div>
 
   <el-card class="course">
       <div slot="header" class="clearfix">
       </div>
-      <el-row  v-for="(item,i) in courseRow" :key="i+'row'">
+      <el-row>
+        <el-col v-if="courseRow.length==0" style="height:325px;line-height:326px;text-align:center;margin-bottom: 30px;" :span="24">{{'很抱歉>__< 暂无数据'}}</el-col>
+      </el-row>
+      <el-row v-for="(item,i) in courseRow" :key="i+'row'">
         <el-col :span="7" v-for="(o, index) in courseRow[i]" :key="o.id" :offset="index > 0 ? 2 : 0">
           <el-card class="course-card" :body-style="{ padding: '0px' }">
             <img :src="o.cover" class="image">
@@ -32,7 +34,7 @@
 </template>
 
 <script>
-import { getCourse } from "@/api/course";
+import { getCourse, getCourseByclass } from "@/api/course";
 import { courseClassList } from "@/api/type";
 
 export default {
@@ -41,22 +43,23 @@ export default {
     return {
       course: [],
       courseClass: [],
-      courseRow:[],
-      value:'1'
+      courseRow: [],
+      radio: -1
     };
   },
   computed: {},
   created() {
-    this.$emit('listenActiveIndex','/courselist')
+    this.$emit("listenActiveIndex", "/courselist");
     this.fetchCourse();
     this.fetchCourseClass();
   },
   methods: {
     fetchCourse() {
       getCourse().then(response => {
+        this.courseRow = [];
         this.course = response.data;
-        for(let i=0;i<this.course.length;i+=3){
-          this.courseRow.push(this.course.slice(i,i+3))
+        for (let i = 0; i < this.course.length; i += 3) {
+          this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
         }
       });
     },
@@ -64,6 +67,24 @@ export default {
       courseClassList().then(response => {
         this.courseClass = response.data;
       });
+    },
+    classChange(id) {
+      if (id == -1) {
+        console.log("选中的全部课程");
+        this.fetchCourse();
+      } else {
+        getCourseByclass({ id: id }).then(response => {
+          if (response.data.length == 0) {
+            this.courseRow = [];
+          } else {
+            this.course = response.data;
+            for (let i = 0; i < this.course.length; i += 3) {
+              this.courseRow = [];
+              this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
+            }
+          }
+        });
+      }
     }
   },
   mounted() {}
@@ -151,7 +172,9 @@ export default {
   }
 }
 .el-col-offset-2 {
-  margin-bottom: 30px;
   margin-left: 65px;
+}
+.el-col-7{
+  margin-bottom: 30px;
 }
 </style>

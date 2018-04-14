@@ -5,7 +5,7 @@ var fs = require("fs");
 exports.CourseList = function(req, res, next) {
   req.models.course.find({ isDel: 0 }, function(err, list) {
     if (err) {
-      throw err;
+      res.json({ title: "请求异常", code: -1});
     } else {
       var classIdArr = [];
       var classArr = [];
@@ -34,11 +34,23 @@ exports.CourseList = function(req, res, next) {
 exports.GetIndexCourse = function(req, res, next) {
   req.models.course.find({ isDel: 0 }, function(err, list) {
     if (err) {
-      throw err;
+      res.json({ title: "请求异常", code: -1});
     } else {
       var length=list.length
       var data=[list[length-1],list[length-2],list[length-3]]
       res.json({ title: "courseList", code: 20000, data: data });
+    }
+  });
+};
+
+// 根据课程类型获取课程
+exports.GetCourseByclass = function(req, res, next) {
+  var id=req.query.id
+  req.models.course.find({ course_class_id: id }, function(err, list) {
+    if (err) {
+      res.json({ title: "请求异常", code: -1});
+    } else {
+      res.json({ title: "courseList", code: 20000, data: list });
     }
   });
 };
@@ -77,7 +89,7 @@ exports.UpdateCourse = function(req, res, next) {
       },
       function(err) {
         if (err) {
-          throw err;
+          res.json({ title: "请求异常", code: -1});
         }
         res.json({ code: 20000, title: "添加成功" });
       }
@@ -106,7 +118,7 @@ exports.UpdateCourse = function(req, res, next) {
 exports.CourseClass = function(req, res, next) {
   req.models.course_class.find({ isDel: 0 }, function(err, list) {
     if (err) {
-      throw err;
+      res.json({ title: "请求异常", code: -1});
     } else {
       var findPro = params =>
         new Promise((resolve, reject) =>
@@ -165,7 +177,7 @@ exports.UpdateCourseClass = function(req, res, next) {
       },
       function(err) {
         if (err) {
-          throw err;
+          res.json({ title: "请求异常", code: -1});
         }
         res.json({ code: 20000, title: "添加成功" });
       }
