@@ -8,6 +8,26 @@
       :value="item.id">
     </el-option>
   </el-select>
+
+  <el-card class="course">
+      <div slot="header" class="clearfix">
+      </div>
+      <el-row  v-for="(item,i) in courseRow" :key="i+'row'">
+        <el-col :span="7" v-for="(o, index) in courseRow[i]" :key="o.id" :offset="index > 0 ? 2 : 0">
+          <el-card class="course-card" :body-style="{ padding: '0px' }">
+            <img :src="o.cover" class="image">
+            <div style="padding: 14px;">
+              <p class="card-title">{{o.course_name}}</p>
+              <p class="card-desp">{{o.course_desp}}</p>
+              <div class="bottom clearfix">
+                <time class="time"></time>
+                <el-button type="text" class="button">查看详情</el-button>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+  </el-card>
   </div>
 </template>
 
@@ -21,23 +41,8 @@ export default {
     return {
       course: [],
       courseClass: [],
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: ''
+      courseRow:[],
+      value:'1'
     };
   },
   computed: {},
@@ -50,6 +55,9 @@ export default {
     fetchCourse() {
       getCourse().then(response => {
         this.course = response.data;
+        for(let i=0;i<this.course.length;i+=3){
+          this.courseRow.push(this.course.slice(i,i+3))
+        }
       });
     },
     fetchCourseClass() {
@@ -143,6 +151,7 @@ export default {
   }
 }
 .el-col-offset-2 {
+  margin-bottom: 30px;
   margin-left: 65px;
 }
 </style>
