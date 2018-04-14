@@ -43,7 +43,7 @@
 				<dl>
 					<dt>开发者社交</dt>
 					<dd>
-						<a href="https://weibo.com/u/5210290149?refer_flag=1001030201_">微博</a>
+						<a href="https://weibo.com/u/5210290149?refer_flag=1001030201_">新浪微博</a>
 					</dd>
                     <dd>
 						<a href="http://1245582339.qzone.qq.com">QQ空间</a>

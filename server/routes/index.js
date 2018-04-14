@@ -11,12 +11,20 @@ var Admin = require('../controller/change_admin')
 var News = require('../controller/news')
 var Favorites = require('../controller/favorite')
 var Banner = require('../controller/banner')
+var Client = require('../controller/client_login_reg')
 // **********************************用户方面**************************************
 
 router.post('/user/login',User.Login);
 router.post('/user/logout', User.Logout);
 router.get('/user/info', User.Userinfo);
 
+
+// **********************************客户端登录注册**************************************
+
+router.get('/checkNameExist', Client.CheckNameExist);
+router.post('/login',Client.Login);
+router.post('/register', Client.Register);
+router.get('/getInfo', Client.GetInfo);
 
 
 // **********************************课程相关****************************************
