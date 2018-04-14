@@ -23,9 +23,21 @@ exports.GetNewsList = function(req, res, next) {
           result.map((item, index) => {
             list[index].news_type_name = item[0].news_type_name;
           });
-          res.json({ title: "newsList", code: 20000, data: list });
+          res.json({ title: "newsList", code: 20000, data: list.reverse() });
         }
       );
+    }
+  });
+};
+
+// 根据资讯类型获取资讯
+exports.GetNewsBytype = function(req, res, next) {
+  var id=req.query.id
+  req.models.news.find({ news_type_id: id }, function(err, list) {
+    if (err) {
+      res.json({ title: "请求异常", code: -1});
+    } else {
+      res.json({ title: "newsList", code: 20000, data: list.reverse() });
     }
   });
 };

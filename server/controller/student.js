@@ -6,7 +6,7 @@ exports.StudentList = function(req, res, next) {
     if (err) {
       res.json({ code: -1 });
     } else {
-      res.json({ title: "学生列表", code: 20000, data: list });
+      res.json({ title: "学生列表", code: 20000, data: list.reverse() });
     }
   });
 };

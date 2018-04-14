@@ -45,39 +45,44 @@ export default {
       courseClass: [],
       courseRow: [],
       radio: -1,
-      listLoading:false
+      listLoading: false
     };
   },
   computed: {},
   created() {
-    this.$emit("listenActiveIndex", "/courselist");
-    this.fetchCourse();
     this.fetchCourseClass();
+    this.$emit("listenActiveIndex", "course");
+    if (this.$route.params.classid) {
+      this.radio=this.$route.params.classid
+      this.classChange(this.$route.params.classid);
+    } else {
+      this.fetchCourse();
+    }
   },
   methods: {
     fetchCourse() {
-      var vm=this
-      vm.listLoading=true
+      var vm = this;
+      vm.listLoading = true;
       getCourse().then(response => {
         this.courseRow = [];
         this.course = response.data;
         for (let i = 0; i < this.course.length; i += 3) {
           this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
         }
-        vm.listLoading=false
+        vm.listLoading = false;
       });
     },
     fetchCourseClass() {
-      var vm=this
-      vm.listLoading=true
+      var vm = this;
+      vm.listLoading = true;
       courseClassList().then(response => {
         this.courseClass = response.data;
-        vm.listLoading=false
+        vm.listLoading = false;
       });
     },
     classChange(id) {
-      var vm=this
-      vm.listLoading=true
+      var vm = this;
+      vm.listLoading = true;
       if (id == -1) {
         console.log("选中的全部课程");
         this.fetchCourse();
@@ -92,7 +97,7 @@ export default {
               this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
             }
           }
-          vm.listLoading=false
+          vm.listLoading = false;
         });
       }
     }
@@ -184,7 +189,7 @@ export default {
 .el-col-offset-2 {
   margin-left: 65px;
 }
-.el-col-7{
+.el-col-7 {
   margin-bottom: 30px;
 }
 </style>

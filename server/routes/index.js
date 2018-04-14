@@ -48,6 +48,8 @@ router.get('/getNewsType', News.GetNewsType);
 router.get('/getNewsList', News.GetNewsList);
 // 获取首页资讯列表
 router.get('/getIndexNews', News.GetIndexNews);
+// 获取资讯列表
+router.get('/getNewsBytype', News.GetNewsBytype);
 // 删除资讯类型
 router.post('/delNewsType', News.DelNewsType);
 // 删除资讯

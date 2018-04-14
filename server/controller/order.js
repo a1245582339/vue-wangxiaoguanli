@@ -34,10 +34,11 @@ exports.Getorder = function(req, res, next) {
       result[1].map((item, index) => {
         list[index].stu_name = item[0].stu_name;
       });
-      res.json({ code: 20000, title: "订单列表", data: list });
+      res.json({ code: 20000, title: "订单列表", data: list.reverse() });
     });
   });
 };
+
 // 提交订单
 exports.Addorder = function(req, res, next) {
   console.log(req.body);

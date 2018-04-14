@@ -23,7 +23,7 @@ exports.CourseList = function(req, res, next) {
           result.map((item, index) => {
             list[index].course_class_name = item[0].course_class_name;
           });
-          res.json({ title: "courseList", code: 20000, data: list });
+          res.json({ title: "courseList", code: 20000, data: list.reverse() });
         }
       );
     }
@@ -50,7 +50,7 @@ exports.GetCourseByclass = function(req, res, next) {
     if (err) {
       res.json({ title: "请求异常", code: -1});
     } else {
-      res.json({ title: "courseList", code: 20000, data: list });
+      res.json({ title: "courseList", code: 20000, data: list.reverse() });
     }
   });
 };

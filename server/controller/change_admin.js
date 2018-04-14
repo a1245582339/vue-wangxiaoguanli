@@ -33,7 +33,7 @@ exports.AdminList = function(req, res, next) {
               result.map((item, index) => {
                 list[index].roles_name = item[0].roles;
               });
-              res.json({ title: "管理员列表", code: 20000, data: list });
+              res.json({ title: "管理员列表", code: 20000, data: list.reverse() });
             }
           );
       }

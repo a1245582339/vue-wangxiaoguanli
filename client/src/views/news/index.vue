@@ -1,158 +1,197 @@
 <template>
-  <div class="app-container" v-loading.body="listLoading">
-   <el-button type="primary" plain @click="addNews">添加资讯</el-button>
-   <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
-   <Dialogtable :actionUrl="actionUrl" :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+  <div v-loading="listLoading">
+
+   <div>
+    <el-radio-group @change="typeChange" v-model="radio">
+      <el-radio-button label=-1>全部资讯</el-radio-button>
+      <el-radio-button v-for="(item, index) in newsType" :key="index" :label="item.id">{{item.news_type_name}}</el-radio-button>
+    </el-radio-group>
   </div>
 
+  <el-card class="course">
+      <div slot="header" class="clearfix">
+      </div>
+      <el-row>
+        <el-col v-if="newsRow.length==0" style="height:325px;line-height:326px;text-align:center;margin-bottom: 30px;" :span="24">{{'很抱歉>__< 暂无数据'}}</el-col>
+      </el-row>
+      <el-row v-for="(item,i) in newsRow" :key="i+'row'">
+        <el-col :span="7" v-for="(o, index) in newsRow[i]" :key="o.id" :offset="index > 0 ? 2 : 0">
+          <el-card class="course-card" :body-style="{ padding: '0px' }">
+            <img :src="o.cover" class="image">
+            <div style="padding: 14px;">
+              <p class="card-title">{{o.news_name}}</p>
+              <p class="card-desp">{{o.news_desp}}</p>
+              <div class="bottom clearfix">
+                <time class="time"></time>
+                <el-button type="text" class="button">查看详情</el-button>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+  </el-card>
+  </div>
 </template>
 
 <script>
-import { getNewsList, getNewsType, updateNews, delNews ,getHTML} from "@/api/news";
-import Moduletable from "@/components/table/table";
-import Dialogtable from "@/components/tabledialog";
-import Vediodialog from "@/components/vediodialog";
+import { getCourse, getCourseByclass } from "@/api/course";
+import { getNewsList, getNewsBytype } from "@/api/news";
+import { getNewsType } from "@/api/type";
+
 export default {
-  components: {
-    Moduletable,
-    Dialogtable,
-    Vediodialog
-  },
+  name: "news",
   data() {
     return {
-      list: [],
-      type: [],
-      listLoading: true,
-      currentType:'',
-      articleUrl:'',
-      actionUrl:"http://127.0.0.1:3000/updateNewsCover",
-      label: {
-        moudleId:"资讯ID",
-        moduleName: "资讯标题名称",
-        moduleDesp: "资讯描述",
-        moudleType: "资讯类型",
-        PageView: "访问量",
-        content:"文章内容",
-        avatar:"封面",
-      },
-
-      form: {
-        name: "",
-        price: "",
-        coefficient: "",
-        desp: "",
-        oldname: ""
-      }
+      newsType: [],
+      news: [],
+      newsRow: [],
+      radio: -1,
+      listLoading: false
     };
   },
+  computed: {},
   created() {
-    this.fetchData();
-    this.getClass();
+    this.fetchNewsType();
+    this.$emit("listenActiveIndex", "news");
+    if (this.$route.params.typeid) {
+      this.radio=this.$route.params.typeid
+      this.typeChange(this.$route.params.typeid);
+    } else {
+      this.fetchNews();
+    }
   },
   methods: {
-    // 添加新资讯
-    addNews(){
-      this.$refs.dial.noshow();
-    },
-    // 获取资讯类型
-    getClass() {
+    fetchNews() {
       var vm = this;
-      this.listLoading = true;
-      var arr = [];
-      getNewsType().then(response => {
-        response.data.map((item,index)=>{
-          arr[index]={
-            id:item.id,
-            name:item.news_type_name
-          }
-        })
-      });
-      this.type=arr;
-    },
-    // 获取数据
-    fetchData() {
-      var vm = this;
-      this.listLoading = true;
-      var data = [];
+      vm.listLoading = true;
       getNewsList().then(response => {
-        response.data.map((item, index) => {
-          data[index] = {
-            id: item.id,
-            name: item.news_name,
-            pageView: item.page_view,
-            desp: item.news_desp,
-            url: item.article_url,
-            type: item.news_type_name,
-            typeVal: item.news_type_id,
-            content:item.content,  // TODO这里传到后台是一堆html标签，应该要去掉空格，需要正则表达式，以此节省后台资源空间
-            avatar: item.cover
-          };
-        });
-        vm.list=data;
-        this.listLoading = false;
+        this.newsRow = [];
+        this.news = response.data;
+        for (let i = 0; i < this.news.length; i += 3) {
+          this.newsRow.push(this.news.slice(i, i + 3)); // 每三个一组，放到同一行
+        }
+        vm.listLoading = false;
       });
     },
-    // 删除模块
-    deleteRow(index, rows) {
-      let data = rows[index].id; //删除新闻
-      this.$confirm("是否确定将该条资讯删除？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        delNews(data).then(response => {
-          if (response.code == 20000) {
-            rows.splice(index, 1);
-            this.$message({
-              message: "删除成功",
-              type: "success"
-            });
+    fetchNewsType() {
+      var vm = this;
+      vm.listLoading = true;
+      getNewsType().then(response => {
+        this.newsType = response.data;
+        console.log(JSON.stringify(this.newsType))
+        vm.listLoading = false;
+      });
+    },
+    typeChange(id) {
+      var vm = this;
+      vm.listLoading = true;
+      if (id == -1) {
+        console.log("选中的全部资讯");
+        this.fetchNews();
+      } else {
+        getNewsBytype({ id: id }).then(response => {
+          if (response.data.length == 0) {
+            this.newsRow = [];
           } else {
-            this.$message({
-              message: "删除失败",
-              type: "success"
-            });
+            this.news = response.data;
+            for (let i = 0; i < this.news.length; i += 3) {
+              this.newsRow = [];
+              this.newsRow.push(this.news.slice(i, i + 3)); // 每三个一组，放到同一行
+            }
           }
+          vm.listLoading = false;
         });
-      }).catch(()=>{
-        this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });  
-      })
-    },
-    // 修改
-    updateRow(index, rows) {
-      // 获取当前行的内容  rows[index]
-      // console.log(rows[index])
-      this.form.id = rows[index].id;
-      this.form.name = rows[index].name;
-      this.form.oldname = rows[index].name;
-      this.form.typeName = rows[index].type;
-      this.form.type = rows[index].typeVal;
-      this.form.price = rows[index].price;
-      this.form.coefficient = rows[index].coefficient;
-      this.form.url = rows[index].url;
-      this.form.desp = rows[index].desp;
-      this.form.category_id = rows[index].category_id;
-      this.form.content = rows[index].content;
-      this.form.avatar = rows[index].avatar;
-      this.$refs.dial.noshow();
-      console.log("执行更改程序");
-    },
-    commitForm() {
-      // 更改模块的表单提交;
-      let data = this.form;
-
-      updateNews(data).then(response => {
-        this.$refs.dial.noshow();
-        this.fetchData();
-        this.$message({
-          message: "修改成功",
-          type: "success"
-        });
-      });
-    },
-  }
+      }
+    }
+  },
+  mounted() {}
 };
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.block {
+  width: 1126px;
+  margin: 0 auto;
+}
+.banner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  .banner-title {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    text-align: center;
+    h3 {
+      margin: 0;
+      color: #fff;
+      line-height: 30px;
+    }
+  }
+}
+.read-more {
+  float: right;
+  color: #0366d6;
+}
+.course {
+  width: 1126px;
+  margin: 30px auto 0;
+  .time {
+    font-size: 13px;
+    color: #999;
+  }
+
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .button {
+    padding: 0;
+    float: right;
+  }
+
+  .image {
+    width: 100%;
+    height: 200px;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
+  .card-title {
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+  }
+  .card-desp {
+    font-size: 14px;
+    color: #999;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+  }
+}
+.el-col-offset-2 {
+  margin-left: 65px;
+}
+.el-col-7 {
+  margin-bottom: 30px;
+}
+</style>

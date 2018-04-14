@@ -32,12 +32,21 @@ export const constantRouterMap = [
     hidden: true,
     children: [
       {
+        name: 'index',
         path: 'index',
         component: () => import('@/views/index/index')
       },
       {
+        name: 'courselist',
         path: 'courselist',
-        component: () => import('@/views/courselist/index')
+        params: {classid:'classid'},
+        component: () => import('@/views/courselist/index'),
+      },
+      {
+        name: 'news',
+        path: 'news',
+        params: {typeid:'typeid'},
+        component: () => import('@/views/news/index'),
       }
     ]
   },

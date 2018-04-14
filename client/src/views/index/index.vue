@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="block">
-      <el-carousel trigger="click" height="300px">
+      <el-carousel trigger="click" height="633px">
         <el-carousel-item v-for="item in banner" :key="item.id">
           <router-link class="banner" to='/a'>
             <img :src="item.cover" alt="">
@@ -16,7 +16,7 @@
     <el-card class="course">
       <div slot="header" class="clearfix">
         <span>最新课程</span>
-        <router-link class="read-more" to="/a">查看更多>></router-link>
+        <router-link class="read-more" :to="{name:'courselist'}">查看更多>></router-link>
       </div>
       <el-row>
         <el-col :span="7" v-for="(o, index) in course" :key="o.id" :offset="index > 0 ? 2 : 0">
@@ -75,7 +75,7 @@ export default {
   },
   computed: {},
   created() {
-    this.$emit('listenActiveIndex','/index')
+    this.$emit('listenActiveIndex','index')
     this.fetchBanner();
     this.fetchIndexCourse();
     this.fetchIndexNews();
