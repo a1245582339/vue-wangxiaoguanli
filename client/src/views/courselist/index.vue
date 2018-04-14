@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="listLoading">
 
    <div>
     <el-radio-group @change="classChange" v-model="radio">
@@ -44,7 +44,8 @@ export default {
       course: [],
       courseClass: [],
       courseRow: [],
-      radio: -1
+      radio: -1,
+      listLoading:false
     };
   },
   computed: {},
@@ -55,20 +56,28 @@ export default {
   },
   methods: {
     fetchCourse() {
+      var vm=this
+      vm.listLoading=true
       getCourse().then(response => {
         this.courseRow = [];
         this.course = response.data;
         for (let i = 0; i < this.course.length; i += 3) {
           this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
         }
+        vm.listLoading=false
       });
     },
     fetchCourseClass() {
+      var vm=this
+      vm.listLoading=true
       courseClassList().then(response => {
         this.courseClass = response.data;
+        vm.listLoading=false
       });
     },
     classChange(id) {
+      var vm=this
+      vm.listLoading=true
       if (id == -1) {
         console.log("选中的全部课程");
         this.fetchCourse();
@@ -83,6 +92,7 @@ export default {
               this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
             }
           }
+          vm.listLoading=false
         });
       }
     }
