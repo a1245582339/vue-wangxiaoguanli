@@ -4,12 +4,19 @@
       <!-- 侧边栏折叠按钮 -->
       <div style="width:1126px;margin:0 auto">
         <img style="height:40px;width:40px" :src="logo" alt="">
-        <el-dropdown v-if="isLogin" class="avatar-container" trigger="click">
+        <el-dropdown v-if="isLogin" class="avatar-container" trigger="hover">
           <div class="avatar-wrapper">
-            <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-            <i class="el-icon-caret-bottom"></i>
+            <span style="color:#fff;font-size:20px;padding-right:10px;float:left">{{userInfo.stu_name}}</span>
+            <img class="user-avatar" :src="userInfo.avatar">
           </div>
+
           <el-dropdown-menu class="user-dropdown" slot="dropdown">
+            <img :src="userInfo.avatar">
+
+
+          </el-dropdown-menu>
+
+          <!-- <el-dropdown-menu class="user-dropdown" slot="dropdown">
             <router-link class="inlineBlock" to="/">
               <el-dropdown-item>
                 返回首页
@@ -18,7 +25,7 @@
             <el-dropdown-item divided>
               <span @click="logout" style="display:block;">退出登录</span>
             </el-dropdown-item>
-          </el-dropdown-menu>
+          </el-dropdown-menu> -->
         </el-dropdown>
         <!-- 右侧的退出按钮 -->
         <div v-else class="avatar-container">
@@ -98,7 +105,7 @@
 <script>
 import logo from "@/assets/vue.png";
 import { checkNameExist, register, login, getInfo } from "@/api/loginAndReg";
-import { setToken, removeToken } from "@/utils/auth";
+import { setToken, removeToken, getToken } from "@/utils/auth";
 export default {
   data() {
     var vm = this;
@@ -201,7 +208,7 @@ export default {
       logo, // 顶部logo
       loginVisible: false, // login模态框
       regVisible: false, // 注册模态框
-      isLogin: false, // 是否为已登录状态
+      //isLogin: this.$store.state.isLogin, // 是否为已登录状态
       user_name: "", // 当前用户名
       nameCanReg: 0, // 输入的用户名是否已注册,1是可以注册，2是已被占用
       checkNameDisabled: true, // 检查用户名按钮，没填东西不能点
@@ -264,14 +271,38 @@ export default {
             trigger: "change"
           }
         ],
-        sex: [{ required: true, message: "请选择性别", trigger: "change" }]
+        sex: [
+          {
+            required: true,
+            message: "请选择性别",
+            trigger: "change"
+          }
+        ]
       }
     };
   },
   components: {},
-  computed: {},
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin;
+    },
+    userInfo() {
+      return this.$store.state.user_info;
+    }
+  },
   created() {
-    console.log()
+    var token = getToken();
+    var vm = this;
+    getInfo({
+      token: token
+    }).then(res => {
+      this.$message({
+        message: "自动登录",
+        type: "success"
+      });
+      vm.loginVisible = false;
+      vm.$store.commit("toLogin", res.data[0]);
+    });
   },
   methods: {
     checkNameIfExist() {
@@ -304,13 +335,15 @@ export default {
           login(vm.log)
             .then(response => {
               var token = response.data.token;
-              getInfo({ token: token }).then(res => {
-                //console.log(vm.$store.modules.user);
+              getInfo({
+                token: token
+              }).then(res => {
                 this.$message({
                   message: "登录成功",
                   type: "success"
                 });
                 vm.loginVisible = false;
+                vm.$store.commit("toLogin", res.data[0]);
               });
             })
             .catch(err => {
@@ -392,6 +425,15 @@ export default {
         font-size: 12px;
       }
     }
+  }
+}
+.user-dropdown {
+  width: 300px;
+  img {
+    border-radius: 50%;
+    border: 1px solid #333333;
+    width: 50px;
+    height: 50px;
   }
 }
 </style>
