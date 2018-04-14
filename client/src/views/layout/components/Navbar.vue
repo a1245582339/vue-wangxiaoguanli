@@ -13,7 +13,7 @@
           <el-dropdown-menu class="user-dropdown" slot="dropdown">
             <img :src="userInfo.avatar">
 
-
+            <span @click="logout" style="display:block;">退出登录</span>
           </el-dropdown-menu>
 
           <!-- <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -51,6 +51,9 @@
           <el-input type="password" v-model="log.password" auto-complete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
 
+        <el-form-item label="自动登录" :label-width="formLabelWidth">
+          <el-switch v-model="log.autoLogin"></el-switch>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="loginVisible = false">取 消</el-button>
@@ -103,337 +106,335 @@
 </template>
 
 <script>
-import logo from "@/assets/vue.png";
-import { checkNameExist, register, login, getInfo } from "@/api/loginAndReg";
-import { setToken, removeToken, getToken } from "@/utils/auth";
-export default {
-  data() {
-    var vm = this;
-    var validateRegUserName = (rule, value, callback) => {
-      var value = vm.reg.user_name;
-      if (value === "") {
-        vm.checkNameDisabled = true;
-        callback(new Error("请输入用户名"));
-      } else if (value.length > 16 || value.length < 4) {
-        vm.checkNameDisabled = true;
-        callback(new Error("用户名长度应在5-16字符之间"));
-      } else if (
-        !/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)
-      ) {
-        vm.checkNameDisabled = true;
-        callback(new Error("用户名只能以汉字、字母开头"));
-      } else {
-        vm.checkNameDisabled = false;
-        callback();
-      }
-    };
-    var validatePass = (rule, value, callback) => {
-      var value = vm.reg.password;
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else if (!/^[a-zA-Z]\w{5,17}$/.test(value)) {
-        callback(
-          new Error(
-            "密码须以字母开头，长度在6~18之间，只能包含字母、数字和下划线"
-          )
-        );
-      } else {
-        if (this.reg.checkPass !== "") {
-          this.$refs.reg.validateField("checkPass");
+  import logo from "@/assets/vue.png";
+  import {
+    checkNameExist,
+    register,
+    login,
+    getInfo
+  } from "@/api/loginAndReg";
+  import {
+    setToken,
+    removeToken,
+    getToken
+  } from "@/utils/auth";
+  export default {
+    data() {
+      var vm = this;
+      var validateRegUserName = (rule, value, callback) => {
+        var value = vm.reg.user_name;
+        if (value === "") {
+          vm.checkNameDisabled = true;
+          callback(new Error("请输入用户名"));
+        } else if (value.length > 16 || value.length < 4) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名长度应在5-16字符之间"));
+        } else if (!/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名只能以汉字、字母开头"));
+        } else {
+          vm.checkNameDisabled = false;
+          callback();
         }
-        callback();
-      }
-    };
-    var validatelogUserName = (rule, value, callback) => {
-      var value = vm.log.user_name;
-      if (value === "") {
-        vm.checkNameDisabled = true;
-        callback(new Error("请输入用户名"));
-      } else if (value.length > 16 || value.length < 4) {
-        vm.checkNameDisabled = true;
-        callback(new Error("用户名长度应在5-16字符之间"));
-      } else if (
-        !/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)
-      ) {
-        vm.checkNameDisabled = true;
-        callback(new Error("用户名只能以汉字、字母开头"));
-      } else {
-        vm.checkNameDisabled = false;
-        callback();
-      }
-    };
-    var validatelogPass = (rule, value, callback) => {
-      var value = vm.log.password;
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else if (!/^[a-zA-Z]\w{5,17}$/.test(value)) {
-        callback(
-          new Error(
-            "密码须以字母开头，长度在6~18之间，只能包含字母、数字和下划线"
-          )
-        );
-      } else {
-        if (this.reg.checkPass !== "") {
-          this.$refs.reg.validateField("checkPass");
+      };
+      var validatePass = (rule, value, callback) => {
+        var value = vm.reg.password;
+        if (value === "") {
+          callback(new Error("请输入密码"));
+        } else if (!/^[a-zA-Z]\w{5,17}$/.test(value)) {
+          callback(
+            new Error(
+              "密码须以字母开头，长度在6~18之间，只能包含字母、数字和下划线"
+            )
+          );
+        } else {
+          if (this.reg.checkPass !== "") {
+            this.$refs.reg.validateField("checkPass");
+          }
+          callback();
         }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      var value = vm.reg.checkPass;
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.reg.password) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
-    var validateTel = (rule, value, callback) => {
-      var value = vm.reg.tel;
-      if (value === "") {
-        callback(new Error("请输入手机号码"));
-      } else if (
-        !/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(
-          value
-        )
-      ) {
-        // 手机号码正则匹配更新到2018.1，支持166网段
-        callback(new Error("请输入正确手机号码!"));
-      } else {
-        callback();
-      }
-    };
-    return {
-      logo, // 顶部logo
-      loginVisible: false, // login模态框
-      regVisible: false, // 注册模态框
-      //isLogin: this.$store.state.isLogin, // 是否为已登录状态
-      user_name: "", // 当前用户名
-      nameCanReg: 0, // 输入的用户名是否已注册,1是可以注册，2是已被占用
-      checkNameDisabled: true, // 检查用户名按钮，没填东西不能点
-      loginDisable: true, // 登录按钮，没填完信息不能点
-      log: {
-        user_name: "",
-        password: ""
-      },
-      reg: {
-        user_name: "",
-        password: "",
-        checkPass: "",
-        sex: "",
-        tel: "",
-        avatar: ""
-      },
-      formLabelWidth: "80px",
-      checkLog: {
-        logUserName: [
-          {
+      };
+      var validatelogUserName = (rule, value, callback) => {
+        var value = vm.log.user_name;
+        if (value === "") {
+          vm.checkNameDisabled = true;
+          callback(new Error("请输入用户名"));
+        } else if (value.length > 16 || value.length < 4) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名长度应在5-16字符之间"));
+        } else if (!/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名只能以汉字、字母开头"));
+        } else {
+          vm.checkNameDisabled = false;
+          callback();
+        }
+      };
+      var validatelogPass = (rule, value, callback) => {
+        var value = vm.log.password;
+        if (value === "") {
+          callback(new Error("请输入密码"));
+        } else if (!/^[a-zA-Z]\w{5,17}$/.test(value)) {
+          callback(
+            new Error(
+              "密码须以字母开头，长度在6~18之间，只能包含字母、数字和下划线"
+            )
+          );
+        } else {
+          if (this.reg.checkPass !== "") {
+            this.$refs.reg.validateField("checkPass");
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        var value = vm.reg.checkPass;
+        if (value === "") {
+          callback(new Error("请再次输入密码"));
+        } else if (value !== this.reg.password) {
+          callback(new Error("两次输入密码不一致!"));
+        } else {
+          callback();
+        }
+      };
+      var validateTel = (rule, value, callback) => {
+        var value = vm.reg.tel;
+        if (value === "") {
+          callback(new Error("请输入手机号码"));
+        } else if (!/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(
+            value
+          )) {
+          // 手机号码正则匹配更新到2018.1，支持166网段
+          callback(new Error("请输入正确手机号码!"));
+        } else {
+          callback();
+        }
+      };
+      return {
+        logo, // 顶部logo
+        loginVisible: false, // login模态框
+        regVisible: false, // 注册模态框
+        //isLogin: this.$store.state.isLogin, // 是否为已登录状态
+        user_name: "", // 当前用户名
+        nameCanReg: 0, // 输入的用户名是否已注册,1是可以注册，2是已被占用
+        checkNameDisabled: true, // 检查用户名按钮，没填东西不能点
+        loginDisable: true, // 登录按钮，没填完信息不能点
+        log: {
+          user_name: "",
+          password: "",
+          autoLogin:false
+        },
+        reg: {
+          user_name: "",
+          password: "",
+          checkPass: "",
+          sex: "",
+          tel: "",
+          avatar: ""
+        },
+        formLabelWidth: "80px",
+        checkLog: {
+          logUserName: [{
             required: true,
             validator: validatelogUserName,
             trigger: "blur"
-          }
-        ],
-        logPass: [
-          {
+          }],
+          logPass: [{
             required: true,
             validator: validatelogPass,
             trigger: "blur"
-          }
-        ]
-      },
-      checkReg: {
-        regPass: [
-          {
+          }]
+        },
+        checkReg: {
+          regPass: [{
             required: true,
             validator: validatePass,
             trigger: "blur"
-          }
-        ],
-        checkPass: [
-          {
+          }],
+          checkPass: [{
             required: true,
             validator: validatePass2,
             trigger: "blur"
-          }
-        ],
-        tel: [
-          {
+          }],
+          tel: [{
             required: true,
             validator: validateTel,
             trigger: "blur"
-          }
-        ],
-        regUserName: [
-          {
+          }],
+          regUserName: [{
             required: true,
             validator: validateRegUserName,
             trigger: "change"
-          }
-        ],
-        sex: [
-          {
+          }],
+          sex: [{
             required: true,
             message: "请选择性别",
             trigger: "change"
+          }]
+        }
+      };
+    },
+    components: {},
+    computed: {
+      isLogin() {
+        return this.$store.state.isLogin;
+      },
+      userInfo() {
+        return this.$store.state.user_info;
+      }
+    },
+    created() {
+      var token = getToken();
+      var vm = this;
+      if (token) {
+        getInfo({
+          token: token
+        }).then(res => {
+          this.$message({
+            message: "自动登录",
+            type: "success"
+          });
+          vm.loginVisible = false;
+          vm.$store.commit("toLogin", res.data[0]);
+        });
+      }
+    },
+    methods: {
+      checkNameIfExist() {
+        var vm = this;
+        checkNameExist({
+          name: this.reg.user_name
+        }).then(response => {
+          vm.nameCanReg = response.data;
+        });
+      },
+      regClose() {
+        this.checkNameDisabled = true; // 关闭之后把验证用户名的按钮禁止，内容清空，状态清空
+        var obj = this.reg;
+        for (var key in obj) {
+          obj[key] = "";
+        }
+        this.$refs["reg"].resetFields(); //elementUI中提供此方法清空表单，但是不知道为什么只能清空验证状态，无法清空内容
+      },
+      logClose() {
+        var obj = this.log;
+        for (var key in obj) {
+          obj[key] = "";
+        }
+        this.$refs["log"].resetFields(); //elementUI中提供此方法清空表单，但是不知道为什么只能清空验证状态，无法清空内容
+      },
+      logSubmit(formName) {
+        var vm = this;
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            login(vm.log)
+              .then(response => {
+                var token = response.data.token;
+                if(vm.log.autoLogin){
+                  setToken(token);
+                }
+                getInfo({
+                  token: token
+                }).then(res => {
+                  this.$message({
+                    message: "登录成功",
+                    type: "success"
+                  });
+                  vm.loginVisible = false;
+                  vm.$store.commit("toLogin", res.data[0]);
+                });
+              })
+              .catch(err => {
+                this.$message.error("用户名或密码错误，请重试");
+              });
+          } else {
+            this.$message.error("请正确填写登录信息！");
+            return false;
           }
-        ]
-      }
-    };
-  },
-  components: {},
-  computed: {
-    isLogin() {
-      return this.$store.state.isLogin;
-    },
-    userInfo() {
-      return this.$store.state.user_info;
-    }
-  },
-  created() {
-    var token = getToken();
-    var vm = this;
-    getInfo({
-      token: token
-    }).then(res => {
-      this.$message({
-        message: "自动登录",
-        type: "success"
-      });
-      vm.loginVisible = false;
-      vm.$store.commit("toLogin", res.data[0]);
-    });
-  },
-  methods: {
-    checkNameIfExist() {
-      var vm = this;
-      checkNameExist({
-        name: this.reg.user_name
-      }).then(response => {
-        vm.nameCanReg = response.data;
-      });
-    },
-    regClose() {
-      this.checkNameDisabled = true; // 关闭之后把验证用户名的按钮禁止，内容清空，状态清空
-      var obj = this.reg;
-      for (var key in obj) {
-        obj[key] = "";
-      }
-      this.$refs["reg"].resetFields(); //elementUI中提供此方法清空表单，但是不知道为什么只能清空验证状态，无法清空内容
-    },
-    logClose() {
-      var obj = this.log;
-      for (var key in obj) {
-        obj[key] = "";
-      }
-      this.$refs["log"].resetFields(); //elementUI中提供此方法清空表单，但是不知道为什么只能清空验证状态，无法清空内容
-    },
-    logSubmit(formName) {
-      var vm = this;
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          login(vm.log)
-            .then(response => {
-              var token = response.data.token;
-              getInfo({
-                token: token
-              }).then(res => {
+        });
+      },
+      regSubmit(formName) {
+        var vm = this;
+        if (this.nameCanReg != 1) {
+          this.$message({
+            message: "请先通过用户名检验！",
+            type: "warning"
+          });
+          return false;
+        }
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            register(vm.reg)
+              .then(response => {
                 this.$message({
-                  message: "登录成功",
+                  message: "注册成功",
                   type: "success"
                 });
-                vm.loginVisible = false;
-                vm.$store.commit("toLogin", res.data[0]);
+                vm.regVisible = false;
+              })
+              .catch(err => {
+                this.$message.error("手慢了哦，该用户名已被占用，换一个试试吧");
               });
-            })
-            .catch(err => {
-              this.$message.error("用户名或密码错误，请重试");
-            });
-        } else {
-          this.$message.error("请正确填写登录信息！");
-          return false;
-        }
-      });
-    },
-    regSubmit(formName) {
-      var vm = this;
-      if (this.nameCanReg != 1) {
-        this.$message({
-          message: "请先通过用户名检验！",
-          type: "warning"
+          } else {
+            this.$message.error("请正确填写注册信息！");
+            return false;
+          }
         });
-        return false;
+      },
+      logout() {
+        this.$store.dispatch("LogOut").then(() => {
+          location.reload(); // 为了重新实例化vue-router对象 避免bug
+        });
+      },
+      login() {
+        this.loginVisible = true;
+      },
+      register() {
+        this.regVisible = true;
       }
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          register(vm.reg)
-            .then(response => {
-              this.$message({
-                message: "注册成功",
-                type: "success"
-              });
-              vm.regVisible = false;
-            })
-            .catch(err => {
-              this.$message.error("手慢了哦，该用户名已被占用，换一个试试吧");
-            });
-        } else {
-          this.$message.error("请正确填写注册信息！");
-          return false;
-        }
-      });
-    },
-    logout() {
-      this.$store.dispatch("LogOut").then(() => {
-        location.reload(); // 为了重新实例化vue-router对象 避免bug
-      });
-    },
-    login() {
-      this.loginVisible = true;
-    },
-    register() {
-      this.regVisible = true;
     }
-  }
-};
+  };
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.navbar {
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 0px !important;
-  background-color: #60626b;
-  color: #fff;
-  .avatar-container {
+  .navbar {
+    width: 100%;
     height: 50px;
-    float: right;
-    .avatar-wrapper {
-      cursor: pointer;
-      margin-top: 5px;
-      position: relative;
-      .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-      }
-      .el-icon-caret-bottom {
-        position: absolute;
-        right: -20px;
-        top: 25px;
-        font-size: 12px;
+    line-height: 50px;
+    border-radius: 0px !important;
+    background-color: #60626b;
+    color: #fff;
+    .avatar-container {
+      height: 50px;
+      float: right;
+      .avatar-wrapper {
+        cursor: pointer;
+        margin-top: 5px;
+        position: relative;
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+        }
+        .el-icon-caret-bottom {
+          position: absolute;
+          right: -20px;
+          top: 25px;
+          font-size: 12px;
+        }
       }
     }
   }
-}
-.user-dropdown {
-  width: 300px;
-  img {
-    border-radius: 50%;
-    border: 1px solid #333333;
-    width: 50px;
-    height: 50px;
+
+  .user-dropdown {
+    width: 300px;
+    img {
+      border-radius: 50%;
+      border: 1px solid #333333;
+      width: 50px;
+      height: 50px;
+    }
   }
-}
+
 </style>
