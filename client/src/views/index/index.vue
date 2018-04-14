@@ -26,7 +26,7 @@
               <p class="card-title">{{o.course_name}}</p>
               <p class="card-desp">{{o.course_desp}}</p>
               <div class="bottom clearfix">
-                <time class="time"></time>
+                <span class="price">￥{{o.course_price}}</span>
                 <el-button type="text" class="button">查看详情</el-button>
               </div>
             </div>
@@ -38,7 +38,7 @@
   <el-card class="course">
       <div slot="header" class="clearfix">
         <span>最新资讯</span>
-        <router-link class="read-more" to="/a">查看更多>></router-link>
+        <router-link class="read-more" to="/news">查看更多>></router-link>
       </div>
       <el-row>
         <el-col :span="7" v-for="(o, index) in news" :key="o.id" :offset="index > 0 ? 2 : 0">
@@ -48,7 +48,7 @@
               <p class="card-title">{{o.news_name}}</p>
               <p class="card-desp">{{o.news_desp}}</p>
               <div class="bottom clearfix">
-                <time class="time"></time>
+                <time class="time">{{o.date}}</time>
                 <el-button type="text" class="button">查看详情</el-button>
               </div>
             </div>
@@ -81,6 +81,16 @@ export default {
     this.fetchIndexNews();
   },
   methods: {
+    timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        var h = date.getHours() + ':';
+        var m = date.getMinutes() + ':';
+        var s = date.getSeconds();
+        return Y+M+D+h+m+s;
+    },
     fetchBanner() {
       getBanner().then(response => {
         this.banner = response.data;
@@ -92,8 +102,12 @@ export default {
       })
     },
     fetchIndexNews(){
+      var vm=this
       getIndexNews().then(response=>{
         this.news = response.data;
+        response.data.map((item,index)=>{
+          this.news[index].date=vm.timestampToTime(response.data[index].create_time)
+        })
       })
     }
   },
@@ -136,6 +150,10 @@ export default {
 .course {
   width: 1126px;
   margin: 30px auto 0;
+  .price{
+    font-size: 18px;
+    color: rgb(252, 0, 0);
+  }
   .time {
     font-size: 13px;
     color: #999;

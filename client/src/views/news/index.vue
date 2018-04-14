@@ -22,7 +22,7 @@
               <p class="card-title">{{o.news_name}}</p>
               <p class="card-desp">{{o.news_desp}}</p>
               <div class="bottom clearfix">
-                <time class="time"></time>
+                <time class="time">{{o.date}}</time>
                 <el-button type="text" class="button">查看详情</el-button>
               </div>
             </div>
@@ -61,12 +61,25 @@ export default {
     }
   },
   methods: {
+    timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        var h = date.getHours() + ':';
+        var m = date.getMinutes() + ':';
+        var s = date.getSeconds();
+        return Y+M+D+h+m+s;
+    },
     fetchNews() {
       var vm = this;
       vm.listLoading = true;
       getNewsList().then(response => {
         this.newsRow = [];
         this.news = response.data;
+        response.data.map((item,index)=>{
+          this.news[index].date=vm.timestampToTime(response.data[index].create_time)
+        })
         for (let i = 0; i < this.news.length; i += 3) {
           this.newsRow.push(this.news.slice(i, i + 3)); // 每三个一组，放到同一行
         }
@@ -78,7 +91,6 @@ export default {
       vm.listLoading = true;
       getNewsType().then(response => {
         this.newsType = response.data;
-        console.log(JSON.stringify(this.newsType))
         vm.listLoading = false;
       });
     },

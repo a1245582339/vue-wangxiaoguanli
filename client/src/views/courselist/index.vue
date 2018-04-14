@@ -22,7 +22,7 @@
               <p class="card-title">{{o.course_name}}</p>
               <p class="card-desp">{{o.course_desp}}</p>
               <div class="bottom clearfix">
-                <time class="time"></time>
+                <span class="price">￥{{o.course_price}}</span>
                 <el-button type="text" class="button">查看详情</el-button>
               </div>
             </div>
@@ -141,6 +141,10 @@ export default {
 .course {
   width: 1126px;
   margin: 30px auto 0;
+  .price{
+    font-size: 18px;
+    color: rgb(252, 0, 0);
+  }
   .time {
     font-size: 13px;
     color: #999;

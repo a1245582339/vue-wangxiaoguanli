@@ -6,6 +6,7 @@ module.exports = function(orm, db) {
     page_view: Number,
     news_type_id: Number,
     news_desp:String,
+    create_time:Number,
     cover:String,
     isDel: Number,
     content:String
