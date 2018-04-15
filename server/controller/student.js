@@ -128,3 +128,22 @@ exports.UpdatePassword = function(req,res,next){
   })
   
 }
+
+// 客户端修改头像
+exports.UpdateAvatar = function(req,res,next){
+  var id = req.body.id;
+  var avatar = req.body.avatar
+  req.models.student.find({id:id}).each(function(list){
+    if(list.avatar=='http://localhost:3000/stu_avatar/默认.jpg'){
+      list.balance=list.balance+100
+    }
+    list.avatar = avatar
+  }).save(function(err){
+    if (err) {
+      res.json({ code: -1 });
+    } else {
+      res.json({ code: 20000, title: "更改成功" });
+    }
+  })
+  
+}

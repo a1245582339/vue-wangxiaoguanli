@@ -173,7 +173,8 @@ export default {
         obj[key]=''   // 
       }
     },
-    AvatarChange(file){const name=file.name
+    AvatarChange(file){
+      const name=file.name
       const isJPG = (name.indexOf('.jpg')> -1)||(name.indexOf('.jpeg')> -1)||(name.indexOf('.JPEG')> -1)||(name.indexOf('.JPG')> -1)
       const isPNG = (name.indexOf('.png')> -1)||(name.indexOf('.PNG')> -1)
       const isGIF = (name.indexOf('.gif')> -1)||(name.indexOf('.GIF')> -1)

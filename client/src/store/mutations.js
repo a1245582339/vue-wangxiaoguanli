@@ -9,6 +9,7 @@ function timestampToTime(timestamp) {
     return Y+M+D+h+m+s;
 }
 
+// 登录，把信息存到state里
 export const toLogin = (state,payload) => {
     state.isLogin = true;
     var create_time = timestampToTime(payload.create_time)
@@ -23,4 +24,9 @@ export const toLogin = (state,payload) => {
         sex: payload.sex
     }
     state.user_info = user_info
+};
+
+// 修改头像
+export const changeAvatar = (state,payload) => {
+    state.user_info.avatar=payload
 };

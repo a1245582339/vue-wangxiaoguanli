@@ -2,6 +2,21 @@
 <div>
   <el-form :model="reg" ref="changeInfo" label-width="30px" status-icon :rules="checkReg">
 
+    <el-form-item label="用户头像" :label-width="formLabelWidth">
+           <el-upload
+              class="avatar-uploader"
+              ref="image"
+              :auto-upload="true"
+              action="http://localhost:3000/updateStuAvatar"
+              :show-file-list="false"
+              :on-success="AvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img :src="userInfo.avatar" class="avatar">
+            </el-upload>
+            <span>点击头像更换</span><span style="color:#F56C6C;margin-left:20px" v-if="userInfo.avatar=='http://localhost:3000/stu_avatar/默认.jpg'">首次修改头像，可以获得100积分！</span>
+  </el-form-item>
+
+
     <el-form-item label="用户名" :label-width="formLabelWidth">
         <span>{{userInfo.stu_name}}</span>
     </el-form-item>
@@ -52,7 +67,8 @@
 <script>
   import {
     checkCurrentPassApi,
-    updatePassword
+    updatePassword,
+    updateAvatar
   } from "@/api/me";
   export default {
     data() {
@@ -183,7 +199,7 @@
       };
     },
     created() {
-      console.log(this.$store.state.user_info.stu_id)
+      
     },
     computed: {
       isLogin() {
@@ -246,7 +262,64 @@
         }
         this.$refs["reg"].resetFields(); //elementUI中提供此方法清空表单，但是不知道为什么只能清空验证状态，无法清空内容
       },
+      beforeAvatarUpload(file) {
+        const name=file.name
+        const isJPG = (name.indexOf('.jpg')> -1)||(name.indexOf('.jpeg')> -1)||(name.indexOf('.JPEG')> -1)||(name.indexOf('.JPG')> -1)
+        const isPNG = (name.indexOf('.png')> -1)||(name.indexOf('.PNG')> -1)
+        const isGIF = (name.indexOf('.gif')> -1)||(name.indexOf('.GIF')> -1)
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG&&!isPNG&&!isGIF) {
+          this.$message.error("上传头像图片只能是 JPG,GIF,PNG 格式!");
+          return isJPG
+        }
+        if (!isLt2M) {
+          this.$message.error("上传头像图片大小不能超过 2MB!");
+          return isLt2M
+        }
+      },
+      AvatarSuccess(res, file){
+        updateAvatar({id:this.userInfo.stu_id,avatar:res.data.path}).then(response=>{
+          this.$store.commit('changeAvatar',res.data.path)
+          this.$message({
+            message: "修改成功",
+            type: "success"
+          });
+        })
+      }
     }
   };
 
 </script>
+<style scoped>
+
+.avatar-uploader{
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader img{
+  width: 100px;
+  height: 100px;
+}
+.avatar-uploader:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
