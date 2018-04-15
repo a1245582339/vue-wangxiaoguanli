@@ -43,28 +43,32 @@ export default {
       courseRow: [],
       radio: -1,
       listLoading: false,
-      haveBought:false, // 此课程是否已被当前用户购买，默认为未购买
+      haveBought: false // 此课程是否已被当前用户购买，默认为未购买
     };
   },
   computed: {},
   created() {
     var vm = this;
     var course_id = this.getQueryVariable("courseid");
-    this.fetchCourse(course_id);
-    this.$emit("listenActiveIndex", "course");
-  },
-  computed:{
-    isLogin(){
-      return this.$store.state.isLogin
+    if (!course_id) {
+      this.$router.push("/404");
+    } else {
+      this.fetchCourse(course_id);
+      this.fetchOrder(course_id, this.$store.state.user_info.stu_id);
+      this.$emit("listenActiveIndex", "course");
     }
   },
-  watch:{
-    isLogin(val1,val2){
-      if(val1){
+  computed: {
+    isLogin() {
+      return this.$store.state.isLogin;
+    }
+  },
+  watch: {
+    isLogin(val1, val2) {
+      if (val1) {
         var course_id = this.getQueryVariable("courseid");
         this.fetchOrder(course_id, this.$store.state.user_info.stu_id);
       }
-      
     }
   },
   methods: {
@@ -90,10 +94,10 @@ export default {
       });
     },
     fetchOrder(course_id, stu_id) {
-      var vm = this
-      checkOrder({course_id:course_id, stu_id:stu_id}).then(response=>{
-        vm.haveBought = response.data.haveBought
-      })
+      var vm = this;
+      checkOrder({ course_id: course_id, stu_id: stu_id }).then(response => {
+        vm.haveBought = response.data.haveBought;
+      });
     }
   },
   mounted() {}
