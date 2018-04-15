@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 15/04/2018 00:12:16
+ Date: 15/04/2018 23:44:07
 */
 
 SET NAMES utf8mb4;
@@ -178,7 +178,7 @@ CREATE TABLE `order`  (
   `create_time` bigint(20) NOT NULL,
   `isDel` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order
@@ -186,6 +186,7 @@ CREATE TABLE `order`  (
 INSERT INTO `order` VALUES (1, 1, 1, 20, 1523425871, 1);
 INSERT INTO `order` VALUES (2, 2, 2, 100, 1523425904, 0);
 INSERT INTO `order` VALUES (3, 2, 3, 100, 1523429999, 0);
+INSERT INTO `order` VALUES (4, 2, 5, 0, 1523433333, 0);
 
 -- ----------------------------
 -- Table structure for roles
@@ -214,7 +215,7 @@ CREATE TABLE `stu_token`  (
   `deadline` bigint(255) NOT NULL,
   `stu_id` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 119 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 131 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of stu_token
@@ -273,6 +274,18 @@ INSERT INTO `stu_token` VALUES (115, '1523719275847', 1524324075847, 6);
 INSERT INTO `stu_token` VALUES (116, '1523719443387', 1524324243387, 5);
 INSERT INTO `stu_token` VALUES (117, '1523720040309', 1524324840309, 5);
 INSERT INTO `stu_token` VALUES (118, '1523720051384', 1524324851384, 5);
+INSERT INTO `stu_token` VALUES (119, '1523751229343', 1524356029343, 5);
+INSERT INTO `stu_token` VALUES (120, '1523751260574', 1524356060574, 5);
+INSERT INTO `stu_token` VALUES (121, '1523751307050', 1524356107050, 5);
+INSERT INTO `stu_token` VALUES (122, '1523751393117', 1524356193117, 5);
+INSERT INTO `stu_token` VALUES (123, '1523751443418', 1524356243418, 5);
+INSERT INTO `stu_token` VALUES (124, '1523751752439', 1524356552439, 5);
+INSERT INTO `stu_token` VALUES (125, '1523756642697', 1524361442697, 1);
+INSERT INTO `stu_token` VALUES (126, '1523760517351', 1524365317351, 2);
+INSERT INTO `stu_token` VALUES (127, '1523760907947', 1524365707947, 5);
+INSERT INTO `stu_token` VALUES (128, '1523792918542', 1524397718542, 6);
+INSERT INTO `stu_token` VALUES (129, '1523792998843', 1524397798843, 2);
+INSERT INTO `stu_token` VALUES (130, '1523796038869', 1524400838869, 5);
 
 -- ----------------------------
 -- Table structure for student
@@ -295,12 +308,12 @@ CREATE TABLE `student`  (
 -- ----------------------------
 -- Records of student
 -- ----------------------------
-INSERT INTO `student` VALUES (1, '张3333', '13500000000', 100111, 'http://localhost:3000/stu_avatar/1.jpg', 1523352574, 1, '男', '000000', 0);
-INSERT INTO `student` VALUES (2, '李4444', '15222222222', 100, 'http://localhost:3000/stu_avatar/2.jpg', 1523352614, 1, '男', '000000', 0);
-INSERT INTO `student` VALUES (3, '王5555', '13599999999', 200, 'http://localhost:3000/stu_avatar/stu_avatar152351937983813001.png', 1523352636, 1, '女', '000000', 0);
-INSERT INTO `student` VALUES (4, '赵6666', '18966666666', 0, 'http://localhost:3000/stu_avatar/默认.jpg', 1523352665, 1, '男', '000000', 0);
-INSERT INTO `student` VALUES (5, 'test1', '13512877130', 0, 'http://localhost:3000/stu_avatar/默认.jpg', 1523699878, 0, '男', 'aaa111', 0);
-INSERT INTO `student` VALUES (6, 'test2', '13512877130', 0, 'http://localhost:3000/stu_avatar/默认.jpg', 1523700065, 0, '男', 'aaa111', 0);
+INSERT INTO `student` VALUES (1, '张3333', '13500000000', 100111, 'http://localhost:3000/stu_avatar/1.jpg', 1523352574, 1, '男', 'aaaaaa', 0);
+INSERT INTO `student` VALUES (2, '李4444', '13555555555', 100, 'http://localhost:3000/stu_avatar/2.jpg', 1523352614, 1, '男', 'aaaaaa', 0);
+INSERT INTO `student` VALUES (3, '王5555', '13599999999', 200, 'http://localhost:3000/stu_avatar/stu_avatar152351937983813001.png', 1523352636, 1, '女', 'aaaaaa', 0);
+INSERT INTO `student` VALUES (4, '赵6666', '18966666666', 0, 'http://localhost:3000/stu_avatar/默认.jpg', 1523352665, 1, '男', 'aaaaaa', 0);
+INSERT INTO `student` VALUES (5, 'test1', '13512877130', 10, 'http://localhost:3000/stu_avatar/stu_avatar152379251915915917.png', 1523699878, 0, '男', 'qqqqqq', 0);
+INSERT INTO `student` VALUES (6, 'test2', '13512877130', 10, 'http://localhost:3000/stu_avatar/stu_avatar152379297088716402.gif', 1523700065, 0, '男', 'aaa111', 0);
 INSERT INTO `student` VALUES (7, 'aaaaa', '13555548774', 0, 'a', 1523700099, 0, '男', 'aaaaaa', 0);
 
 -- ----------------------------
