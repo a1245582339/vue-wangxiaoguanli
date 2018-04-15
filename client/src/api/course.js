@@ -24,3 +24,12 @@ export function getCourseByclass(params) {
     params
   })
 }
+
+// 根据课程id获取课程
+export function getCourseById(params) {
+  return request({
+    url: '/getCourseById',
+    method: 'get',
+    params
+  })
+}

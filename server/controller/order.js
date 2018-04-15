@@ -242,3 +242,22 @@ exports.DelOrder = function(req, res, next) {
       }
     });
 };
+ 
+// 客户端获取当前课程是否已被该用户购买
+exports.CheckOrder = function(req, res, next) {
+  var course_id = req.query.course_id;
+  var stu_id = req.query.stu_id;
+  var haveBought=false
+  req.models.order.find({stu_id:3},function(err,list){
+    if(list.length==0){
+      res.json({ code: 20000, data: {haveBought:haveBought} });
+    }else{
+      list.map(item=>{
+        if(item.course_id==course_id){
+          haveBought=true
+        }
+      })
+      res.json({ code: 20000, data: {haveBought:haveBought} });
+    }
+  })
+};

@@ -23,7 +23,7 @@
 
     <el-form-item label="审核状态" :label-width="formLabelWidth">
         <span style="color:#67C23A" v-if="userInfo.ischecked">已审核</span>
-        <span style="color:#F56C6C" v-else>待审核</span>
+        <span style="color:#F56C6C" v-else>待审核<span style="margin-left:30px">通过审核后可获得100积分！</span></span>
     </el-form-item>
 
     <el-form-item label="当前积分" :label-width="formLabelWidth">

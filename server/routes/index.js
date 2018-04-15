@@ -29,12 +29,14 @@ router.get('/getInfo', Client.GetInfo);
 
 // **********************************课程相关****************************************
 
+// 获取课程列表
+router.get('/courseList', Course.CourseList);
+// 根据id获取课程
+router.get('/getCourseById', Course.GetCourseById);
 // 获取课程类型列表
 router.get('/courseClassList', Course.CourseClass);
 // 获取首页课程列表
 router.get('/getIndexCourse', Course.GetIndexCourse);
-// 获取课程列表
-router.get('/courseList', Course.CourseList);
 // 根据课程类型获取课程
 router.get('/getCourseByclass', Course.GetCourseByclass);
 // 删除课程类型
@@ -87,6 +89,8 @@ router.post('/delOrder', Order.DelOrder);
 //获取订单详情
 router.post('/orderPrint',Order.OrderPrint)
 
+// 客户端获取当前课程是否已被该用户购买
+router.get('/checkOrder',Order.CheckOrder)
 
 // ****************************更改学生接口***************************
 

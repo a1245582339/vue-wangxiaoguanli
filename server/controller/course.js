@@ -30,6 +30,21 @@ exports.CourseList = function(req, res, next) {
   });
 };
 
+// 根据id获取课程
+exports.GetCourseById = function(req, res, next) {
+  var id = req.query.id
+  req.models.course.find({ id: id }, function(err, list) {
+    if (err) {
+      res.json({ title: "请求异常", code: -1});
+    } else {
+      req.models.course_class.find({id: list[0].course_class_id}, function(err,_list){
+        list[0].course_class_name=_list[0].course_class_name
+        res.json({title:"课程详情",code:20000,data:list[0]})
+      })
+    }
+  });
+};
+
 // 获取首页课程列表
 exports.GetIndexCourse = function(req, res, next) {
   req.models.course.find({ isDel: 0 }, function(err, list) {

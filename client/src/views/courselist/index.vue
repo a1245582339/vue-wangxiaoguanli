@@ -23,7 +23,7 @@
               <p class="card-desp">{{o.course_desp}}</p>
               <div class="bottom clearfix">
                 <span class="price">￥{{o.course_price}}</span>
-                <el-button type="text" class="button">查看详情</el-button>
+                <el-button type="text" class="button" @click="toDetail(o.id)">查看详情</el-button>
               </div>
             </div>
           </el-card>
@@ -99,6 +99,14 @@ export default {
           }
           vm.listLoading = false;
         });
+      }
+    },
+    toDetail(id){
+      var vm=this
+      for(let i =0;i<vm.course.length;i++){
+        if(vm.course[i].id==id){
+          this.$router.push("/coursedetail?courseid="+id)
+        }
       }
     }
   },
