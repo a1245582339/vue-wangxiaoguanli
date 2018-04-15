@@ -9,9 +9,9 @@ export function checkCurrentPassApi(params) {
 }
 
 // 更改学生
-export function updateStudent(data) {
+export function updatePassword(data) {
   return request({
-    url: '/updateStudent',
+    url: '/updatePassword',
     method: 'post',
     data
   })

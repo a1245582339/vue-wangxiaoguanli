@@ -22,7 +22,6 @@
     <el-form-item label="修改密码" :label-width="formLabelWidth" prop="chanegPass">
       <el-input type="password" v-model="reg.currentPass" auto-complete="off" placeholder="若要修改密码，请输入正确当前密码"></el-input>
       <el-button style="margin-top:10px;" @click="checkCurrentPass">修改密码</el-button>
-      <!-- <el-input type="password" v-model="reg.password" auto-complete="off" placeholder="请输入密码"></el-input> -->
     </el-form-item>
 
     <el-form-item label="手机号" :label-width="formLabelWidth" prop="tel">
@@ -44,7 +43,7 @@
        </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="regVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeStu('reg')">确 定</el-button>
+        <el-button type="primary" @click="submitPass('reg')">确 定</el-button>
       </div>
     </el-dialog>
 </div>
@@ -53,7 +52,7 @@
 <script>
   import {
     checkCurrentPassApi,
-    updateStudent
+    updatePassword
   } from "@/api/me";
   export default {
     data() {
@@ -153,13 +152,10 @@
         formLabelWidth: "80px",
         changePassModelVisiable:false,
         reg: {
-          name:this.$store.state.user_info.stu_name,
+          id:this.$store.state.user_info.id,
           password: "",
           checkPass: "",
           tel: this.$store.state.user_info.tel,
-          avatar: this.$store.state.user_info.avatar,
-          price: this.$store.state.user_info.balance,
-          typeName:this.$store.state.user_info.sex,
           currentPass:""
         },
         checkReg: {
@@ -221,11 +217,11 @@
           this.$message.error('密码错误');
         })
       },
-      changeStu(formName){
+      submitPass(formName){
         var vm= this
         this.$refs[formName].validate(valid => {
           if (valid) {
-            updateStudent({id:vm.userInfo.stu_id,password:vm.reg.password})
+            updatePassword({id:vm.userInfo.stu_id,password:vm.reg.password})
               .then(response => {
                 this.$message({
                   message: "修改成功",
