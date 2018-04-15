@@ -147,3 +147,19 @@ exports.UpdateAvatar = function(req,res,next){
   })
   
 }
+
+// 客户端修改手机号
+exports.UpdateTel = function(req,res,next){
+  var id = req.body.id;
+  var tel = req.body.tel
+  req.models.student.find({id:id}).each(function(list){
+    list.tel = tel
+  }).save(function(err){
+    if (err) {
+      res.json({ code: -1 });
+    } else {
+      res.json({ code: 20000, title: "更改成功" });
+    }
+  })
+  
+}

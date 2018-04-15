@@ -25,3 +25,12 @@ export function updateAvatar(data) {
     data
   })
 }
+
+// 更改学生手机号
+export function updateTel(data) {
+  return request({
+    url: '/updateTel',
+    method: 'post',
+    data
+  })
+}

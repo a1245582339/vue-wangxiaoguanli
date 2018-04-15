@@ -107,6 +107,8 @@ router.get('/checkCurrentPassApi', Student.CheckCurrentPassApi);
 router.post('/updatePassword', Student.UpdatePassword);
 // 客户端修改头像
 router.post('/updateAvatar', Student.UpdateAvatar);
+// 客户端修改手机号
+router.post('/updateTel', Student.UpdateTel);
 // ****************************更改管理员接口***************************
 
 

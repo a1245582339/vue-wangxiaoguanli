@@ -40,9 +40,10 @@
     </el-form-item>
 
     <el-form-item label="手机号" :label-width="formLabelWidth" prop="tel">
-      <el-input v-model="reg.tel" auto-complete="off" placeholder="请输入您的手机号"></el-input>
+      <span>{{userInfo.tel}}</span>
+      <el-input v-model="reg.tel" auto-complete="off" placeholder="请输入您的新手机号"></el-input>
     </el-form-item>
-
+    <el-button style="margin-left:79px;" @click="changetel">修改号码</el-button>
   </el-form>
   
 
@@ -68,27 +69,12 @@
   import {
     checkCurrentPassApi,
     updatePassword,
-    updateAvatar
+    updateAvatar,
+    updateTel
   } from "@/api/me";
   export default {
     data() {
       var vm = this;
-      var validateRegUserName = (rule, value, callback) => {
-        var value = vm.reg.user_name;
-        if (value === "") {
-          vm.checkNameDisabled = true;
-          callback(new Error("请输入用户名"));
-        } else if (value.length > 16 || value.length < 4) {
-          vm.checkNameDisabled = true;
-          callback(new Error("用户名长度应在5-16字符之间"));
-        } else if (!/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)) {
-          vm.checkNameDisabled = true;
-          callback(new Error("用户名只能以汉字、字母开头"));
-        } else {
-          vm.checkNameDisabled = false;
-          callback();
-        }
-      };
       var validatePass = (rule, value, callback) => {
         var value = vm.reg.password;
         if (value === "") {
@@ -103,22 +89,6 @@
           if (this.reg.checkPass !== "") {
             this.$refs.reg.validateField("checkPass");
           }
-          callback();
-        }
-      };
-      var validatelogUserName = (rule, value, callback) => {
-        var value = vm.log.user_name;
-        if (value === "") {
-          vm.checkNameDisabled = true;
-          callback(new Error("请输入用户名"));
-        } else if (value.length > 16 || value.length < 4) {
-          vm.checkNameDisabled = true;
-          callback(new Error("用户名长度应在5-16字符之间"));
-        } else if (!/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)) {
-          vm.checkNameDisabled = true;
-          callback(new Error("用户名只能以汉字、字母开头"));
-        } else {
-          vm.checkNameDisabled = false;
           callback();
         }
       };
@@ -171,7 +141,7 @@
           id:this.$store.state.user_info.id,
           password: "",
           checkPass: "",
-          tel: this.$store.state.user_info.tel,
+          tel: "",
           currentPass:""
         },
         checkReg: {
@@ -186,20 +156,14 @@
             trigger: "blur"
           }],
           tel: [{
-            required: true,
             validator: validateTel,
             trigger: "blur"
-          }],
-          sex: [{
-            required: true,
-            message: "请选择性别",
-            trigger: "change"
           }]
         }
       };
     },
     created() {
-      
+
     },
     computed: {
       isLogin() {
@@ -208,6 +172,9 @@
       userInfo() {
         return this.$store.state.user_info;
       }
+    },
+    watch:{
+      
     },
     methods: {
       // 转换时间戳
@@ -286,6 +253,25 @@
             type: "success"
           });
         })
+      },
+      changetel(){
+        var value = this.reg.tel
+        if(!/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(value)){
+          this.$message({
+            message: "请输入正确手机号",
+            type: "error"
+          });
+          return false
+        } else {
+          updateTel({id:this.userInfo.stu_id,tel:value}).then(response=>{
+            this.$message({
+            message: "手机号修改成功",
+            type: "success"
+          });
+          })
+        }
+        
+        //this.$refs[formName].validateField('tel')
       }
     }
   };
