@@ -51,7 +51,6 @@ export default {
     var vm = this;
     var course_id = this.getQueryVariable("courseid");
     this.fetchCourse(course_id);
-    
     this.$emit("listenActiveIndex", "course");
   },
   computed:{
