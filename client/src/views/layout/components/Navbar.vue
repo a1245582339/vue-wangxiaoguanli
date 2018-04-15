@@ -3,17 +3,38 @@
     <el-menu class="navbar" mode="horizontal">
       <!-- 侧边栏折叠按钮 -->
       <div style="width:1126px;margin:0 auto">
+        <!-- ****************LOGO**************** -->
         <img style="height:40px;width:40px" :src="logo" alt="">
+
+
+        <!-- ****************右侧下拉**************** -->
         <el-dropdown v-if="isLogin" class="avatar-container" trigger="hover">
           <div class="avatar-wrapper">
             <span style="color:#fff;font-size:20px;padding-right:10px;float:left">{{userInfo.stu_name}}</span>
+
             <img class="user-avatar" :src="userInfo.avatar">
           </div>
 
           <el-dropdown-menu class="user-dropdown" slot="dropdown">
             <img :src="userInfo.avatar">
+            <span class="username">{{userInfo.stu_name}}</span>
+            <div class="userinfo-table">
+              <el-form label-width="100px" class="demo-ruleForm" label-position="left">
+                <el-form-item class="table-item" label="积分">
+                  <span>{{userInfo.balance}}</span>
+                </el-form-item>
+                <el-form-item class="table-item" label="审核状态">
+                  <span style="color:#67C23A" v-if="userInfo.ischecked">已审核</span>
+                  <span style="color:#F56C6C" v-else>待审核</span>
+                </el-form-item>
+              </el-form>
+            </div>
 
-            <span @click="logout" style="display:block;">退出登录</span>
+            <!-- 按钮组 -->
+            <el-button-group style="margin-left:30px;margin-top:5px">
+              <el-button @click="toMe">个人中心</el-button>
+              <el-button @click="logout">退出登录</el-button>
+            </el-button-group>
           </el-dropdown-menu>
 
           <!-- <el-dropdown-menu class="user-dropdown" slot="dropdown">
@@ -27,7 +48,7 @@
             </el-dropdown-item>
           </el-dropdown-menu> -->
         </el-dropdown>
-        <!-- 右侧的退出按钮 -->
+
         <div v-else class="avatar-container">
           <div style="margin-top:0" class="avatar-wrapper">
             <span style="margin-right: 20px" @click="login">登录</span>
@@ -222,7 +243,7 @@
         log: {
           user_name: "",
           password: "",
-          autoLogin:false
+          autoLogin: false
         },
         reg: {
           user_name: "",
@@ -285,6 +306,7 @@
     },
     created() {
       var token = getToken();
+
       var vm = this;
       if (token) {
         getInfo({
@@ -330,7 +352,7 @@
             login(vm.log)
               .then(response => {
                 var token = response.data.token;
-                if(vm.log.autoLogin){
+                if (vm.log.autoLogin) {
                   setToken(token);
                 }
                 getInfo({
@@ -381,6 +403,9 @@
           }
         });
       },
+      toMe(){
+        this.$router.push({name:'me'})
+      },
       logout() {
         this.$store.dispatch("LogOut").then(() => {
           location.reload(); // 为了重新实例化vue-router对象 避免bug
@@ -429,11 +454,32 @@
 
   .user-dropdown {
     width: 300px;
+    padding: 20px;
     img {
       border-radius: 50%;
-      border: 1px solid #333333;
+      -moz-box-shadow: 1px 0px 7px #333333;
+      -webkit-box-shadow: 1px 0px 7px #333333;
+      box-shadow: 1px 0px 7px #333333;
       width: 50px;
       height: 50px;
+    }
+    .username {
+      display: inline-block;
+      font-size: 20px;
+      margin-left: 15px;
+      height: 30px;
+      line-height: 30px;
+      vertical-align: 30%;
+      color: #60626b;
+    }
+    .userinfo-table {
+      width: 100%;
+      margin-left: 70px;
+      .table-item {
+        height: 20px;
+        margin-bottom: 20px;
+        color: #60626b;
+      }
     }
   }
 

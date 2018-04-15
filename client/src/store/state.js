@@ -1,6 +1,7 @@
 const state = {
   isLogin: false,
   user_info: {
+    stu_id:-1,
     stu_name: '',
     tel: '',
     balance: 0,

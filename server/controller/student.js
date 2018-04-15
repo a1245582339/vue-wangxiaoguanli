@@ -49,15 +49,16 @@ exports.DelStudent = function(req, res, next) {
 // 修改学生
 exports.UpdateStudent = function(req, res, next) {
   var id = req.body.id;
-  console.log("req.body", req.body);
+  console.log("req.body", req.body.password);
   req.models.student
     .find({ id: id })
     .each(function(list) {
-      list.stu_name = req.body.name;
-      list.balance = req.body.price;
-      list.sex = req.body.typeName;
-      list.tel = req.body.tel;
-      list.avatar=req.body.avatar;
+      // list.stu_name = req.body.name;
+      // list.balance = req.body.price;
+      // list.sex = req.body.typeName;
+      // list.tel = req.body.tel;
+      // list.avatar=req.body.avatar;
+      list.password=req.body.password
       console.log(JSON.stringify(list));
     })
     .save(function(err) {
@@ -98,3 +99,18 @@ exports.UpdateStuAvatar = function(req, res, next) {
     
   });  
 };
+
+// 检验当前密码
+exports.CheckCurrentPassApi = function(req,res,next){
+  console.log(JSON.stringify(req.query))
+  var id = req.query.id;
+  var password = req.query.password
+  req.models.student.find({id:id},function(err,list){
+    if(list[0].password==password){
+      res.json({ code: 20000, title: "密码正确" });
+    }else{
+      res.json({ code: -1, title: "密码错误" });
+    }
+  })
+  
+}

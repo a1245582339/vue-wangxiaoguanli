@@ -1,122 +1,256 @@
 <template>
-  <div class="app-container" v-loading.body="listLoading">
-   <Moduletable :isMe="isMe" :list="list" :label="label" :update-row='updateRow' :currentId="currentId"></Moduletable>
-   <Dialogtable :isMe="isMe" :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
-  
-  </div>
+<div>
+  <el-form :model="reg" ref="changeInfo" label-width="30px" status-icon :rules="checkReg">
 
+    <el-form-item label="用户名" :label-width="formLabelWidth">
+        <span>{{userInfo.stu_name}}</span>
+    </el-form-item>
+
+    <el-form-item label="审核状态" :label-width="formLabelWidth">
+        <span style="color:#67C23A" v-if="userInfo.ischecked">已审核</span>
+        <span style="color:#F56C6C" v-else>待审核</span>
+    </el-form-item>
+
+    <el-form-item label="当前积分" :label-width="formLabelWidth">
+        <span>{{userInfo.balance}}</span>
+    </el-form-item>
+
+    <el-form-item label="性别" :label-width="formLabelWidth">
+        <span>{{userInfo.sex}}</span>
+    </el-form-item>
+
+    <el-form-item label="修改密码" :label-width="formLabelWidth" prop="chanegPass">
+      <el-input type="password" v-model="reg.currentPass" auto-complete="off" placeholder="若要修改密码，请输入正确当前密码"></el-input>
+      <el-button style="margin-top:10px;" @click="checkCurrentPass">修改密码</el-button>
+      <!-- <el-input type="password" v-model="reg.password" auto-complete="off" placeholder="请输入密码"></el-input> -->
+    </el-form-item>
+
+    <el-form-item label="手机号" :label-width="formLabelWidth" prop="tel">
+      <el-input v-model="reg.tel" auto-complete="off" placeholder="请输入您的手机号"></el-input>
+    </el-form-item>
+
+  </el-form>
+  
+
+  <el-dialog width="500px" title="注册" :visible.sync="changePassModelVisiable" center @close="regClose">
+      <el-form :model="reg" ref="reg" label-width="30px" status-icon :rules="checkReg">
+        <el-form-item label="密码" :label-width="formLabelWidth" prop="regPass">
+          <el-input type="password" v-model="reg.password" auto-complete="off" placeholder="请输入密码"></el-input>
+        </el-form-item>
+
+        <el-form-item label="确认密码" :label-width="formLabelWidth" prop="checkPass">
+          <el-input type="password" v-model="reg.checkPass" auto-complete="off" placeholder="请重新输入密码"></el-input>
+        </el-form-item>
+       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="regVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changeStu('reg')">确 定</el-button>
+      </div>
+    </el-dialog>
+</div>
 </template>
 
 <script>
-import {
-  getPersonalAdmin,
-  updateAdmin,
-} from "@/api/admin";
-import Moduletable from "@/components/table/table";
-import Dialogtable from "@/components/tabledialog";
-export default {
-  components: {
-    Moduletable,
-    Dialogtable
-  },
-  data() {
-    return {
-      list: [],
-      type: [],
-      listLoading: true,
-      currentId:'',
-      isMe:true,
-      label: {
-        moudleId: "ID",
-        moduleName: "用户名",
-        moudleTel: "手机号",
-        moudleCreatTime: "创建时间",
-        moudleType: "管理员身份",
-        moudlePassword: "登陆密码"
-      },
-
-      form: {
-        name: "",
-        price: "",
-        coefficient: "",
-        desp: "",
-        oldname: ""
-      }
-    };
-  },
-  created() {
-    this.currentId=this.$store.state.user.id
-    this.fetchData();
-  },
-  methods: {
-    addAdmin(){
-      this.$refs.dial.noshow();
-    },
-    // 转换时间戳
-    timestampToTime(timestamp) {
-      var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      var Y = date.getFullYear() + "-";
-      var M =
-        (date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1)
-          : date.getMonth() + 1) + "-";
-      var D = date.getDate() + " ";
-      var h = date.getHours() + ":";
-      var m = date.getMinutes() + ":";
-      var s = date.getSeconds();
-      return Y + M + D + h + m + s;
-    },
-    // 获取数据
-    fetchData() {
+  import {
+    checkCurrentPassApi,
+    updateStudent
+  } from "@/api/me";
+  export default {
+    data() {
       var vm = this;
-      this.listLoading = true;
-      var data = [];
-      getPersonalAdmin(this.currentId).then(response => {
-        response.data.map((item, index) => {
-          var create_time = vm.timestampToTime(item.create_time);
-          data[index] = {
-            id: item.id,
-            name: item.name,
-            tel: item.tel,
-            create_time: create_time,
-            type: item.roles_name,
-            typeVal: item.roles_id,
-            password: item.password
-          };
-        });
-        vm.list = data;
-        this.listLoading = false;
-      });
+      var validateRegUserName = (rule, value, callback) => {
+        var value = vm.reg.user_name;
+        if (value === "") {
+          vm.checkNameDisabled = true;
+          callback(new Error("请输入用户名"));
+        } else if (value.length > 16 || value.length < 4) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名长度应在5-16字符之间"));
+        } else if (!/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名只能以汉字、字母开头"));
+        } else {
+          vm.checkNameDisabled = false;
+          callback();
+        }
+      };
+      var validatePass = (rule, value, callback) => {
+        var value = vm.reg.password;
+        if (value === "") {
+          callback(new Error("请输入密码"));
+        } else if (!/^[a-zA-Z]\w{5,17}$/.test(value)) {
+          callback(
+            new Error(
+              "密码须以字母开头，长度在6~18之间，只能包含字母、数字和下划线"
+            )
+          );
+        } else {
+          if (this.reg.checkPass !== "") {
+            this.$refs.reg.validateField("checkPass");
+          }
+          callback();
+        }
+      };
+      var validatelogUserName = (rule, value, callback) => {
+        var value = vm.log.user_name;
+        if (value === "") {
+          vm.checkNameDisabled = true;
+          callback(new Error("请输入用户名"));
+        } else if (value.length > 16 || value.length < 4) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名长度应在5-16字符之间"));
+        } else if (!/^[\u4E00-\u9FA5A-Za-z][\u4E00-\u9FA5A-Za-z0-9].{3,14}$/.test(value)) {
+          vm.checkNameDisabled = true;
+          callback(new Error("用户名只能以汉字、字母开头"));
+        } else {
+          vm.checkNameDisabled = false;
+          callback();
+        }
+      };
+      var validatelogPass = (rule, value, callback) => {
+        var value = vm.log.password;
+        if (value === "") {
+          callback(new Error("请输入密码"));
+        } else if (!/^[a-zA-Z]\w{5,17}$/.test(value)) {
+          callback(
+            new Error(
+              "密码须以字母开头，长度在6~18之间，只能包含字母、数字和下划线"
+            )
+          );
+        } else {
+          if (this.reg.checkPass !== "") {
+            this.$refs.reg.validateField("checkPass");
+          }
+          callback();
+        }
+      };
+      var validatePass2 = (rule, value, callback) => {
+        var value = vm.reg.checkPass;
+        if (value === "") {
+          callback(new Error("请再次输入密码"));
+        } else if (value !== this.reg.password) {
+          callback(new Error("两次输入密码不一致!"));
+        } else {
+          callback();
+        }
+      };
+      var validateTel = (rule, value, callback) => {
+        var value = vm.reg.tel;
+        if (value === "") {
+          callback(new Error("请输入手机号码"));
+        } else if (!/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(
+            value
+          )) {
+          // 手机号码正则匹配更新到2018.1，支持166网段
+          callback(new Error("请输入正确手机号码!"));
+        } else {
+          callback();
+        }
+      };
+      return {
+        nameCanReg: 0, // 输入的用户名是否已注册,1是可以注册，2是已被占用
+        checkNameDisabled: true, // 检查用户名按钮，没填东西不能点
+        formLabelWidth: "80px",
+        changePassModelVisiable:false,
+        reg: {
+          name:this.$store.state.user_info.stu_name,
+          password: "",
+          checkPass: "",
+          tel: this.$store.state.user_info.tel,
+          avatar: this.$store.state.user_info.avatar,
+          price: this.$store.state.user_info.balance,
+          typeName:this.$store.state.user_info.sex,
+          currentPass:""
+        },
+        checkReg: {
+          regPass: [{
+            required: true,
+            validator: validatePass,
+            trigger: "blur"
+          }],
+          checkPass: [{
+            required: true,
+            validator: validatePass2,
+            trigger: "blur"
+          }],
+          tel: [{
+            required: true,
+            validator: validateTel,
+            trigger: "blur"
+          }],
+          sex: [{
+            required: true,
+            message: "请选择性别",
+            trigger: "change"
+          }]
+        }
+      };
     },
-    // 修改
-    updateRow(index, rows) {
-      // 获取当前行的内容  rows[index]
-      // console.log(rows[index])
-      
-      this.form.id = rows[index].id;
-      this.form.name = rows[index].name;
-      this.form.typeName = rows[index].type;
-      this.form.type = rows[index].typeVal;
-      this.form.tel = rows[index].tel;
-      this.form.password = rows[index].password;
-      this.$refs.dial.noshow();
-      console.log("执行更改程序");
+    created() {
+      console.log(this.$store.state.user_info.stu_id)
     },
-    commitForm() {
-      // 更改模块的表单提交
-      var timestamp=(Date.parse( new Date()))/1000;
-      this.form.create_time = timestamp
-      let data = this.form;
-      updateAdmin(data).then(response => {
-        console.log("response", response);
-        this.$refs.dial.noshow();
-        this.fetchData();
-        this.$message({
-          message: "修改成功",
-          type: "success"
+    computed: {
+      isLogin() {
+        return this.$store.state.isLogin;
+      },
+      userInfo() {
+        return this.$store.state.user_info;
+      }
+    },
+    methods: {
+      // 转换时间戳
+      timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + "-";
+        var M =
+          (date.getMonth() + 1 < 10 ?
+            "0" + (date.getMonth() + 1) :
+            date.getMonth() + 1) + "-";
+        var D = date.getDate() + " ";
+        var h = date.getHours() + ":";
+        var m = date.getMinutes() + ":";
+        var s = date.getSeconds();
+        return Y + M + D + h + m + s;
+      },
+      checkCurrentPass(){
+        var vm = this;
+        
+        checkCurrentPassApi({id:vm.userInfo.stu_id,password:vm.reg.currentPass}).then(response=>{
+          vm.changePassModelVisiable = true
+        }).catch(err=>{
+          this.$message.error('密码错误');
+        })
+      },
+      changeStu(formName){
+        var vm= this
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            updateStudent({id:vm.userInfo.stu_id,password:vm.reg.password})
+              .then(response => {
+                this.$message({
+                  message: "修改成功",
+                  type: "success"
+                });
+                vm.changePassModelVisiable = false;
+              })
+              .catch(err => {
+                this.$message.error("修改失败");
+              });
+          } else {
+            this.$message.error("请正确填写密码！");
+            return false;
+          }
         });
-      });
+      },
+      regClose() {
+        this.checkNameDisabled = true; // 关闭之后把验证用户名的按钮禁止，内容清空，状态清空
+        var obj = this.reg;
+        for (var key in obj) {
+          obj[key] = "";
+        }
+        this.$refs["reg"].resetFields(); //elementUI中提供此方法清空表单，但是不知道为什么只能清空验证状态，无法清空内容
+      },
     }
-  }
-};
+  };
+
 </script>

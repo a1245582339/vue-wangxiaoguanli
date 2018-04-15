@@ -47,6 +47,10 @@ export const constantRouterMap = [
         path: 'news',
         params: {typeid:'typeid'},
         component: () => import('@/views/news/index'),
+      },{
+        name: 'me',
+        path: 'me',
+        component: () => import('@/views/me/index'),
       }
     ]
   },

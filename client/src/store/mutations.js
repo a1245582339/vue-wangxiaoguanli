@@ -13,6 +13,7 @@ export const toLogin = (state,payload) => {
     state.isLogin = true;
     var create_time = timestampToTime(payload.create_time)
     var user_info = {
+        stu_id: payload.id,
         stu_name: payload.stu_name,
         tel: payload.tel,
         balance: payload.balance,

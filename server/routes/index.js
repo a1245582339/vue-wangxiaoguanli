@@ -101,7 +101,9 @@ router.post('/delStudent', Student.DelStudent);
 router.post('/updateStudent', Student.UpdateStudent);
 // 上传头像
 router.post('/updateStuAvatar', Student.UpdateStuAvatar);
-// ****************************更改学生接口***************************
+// 检验当前密码
+router.get('/checkCurrentPassApi', Student.CheckCurrentPassApi);
+// ****************************更改管理员接口***************************
 
 
 // 获取管理员列表
