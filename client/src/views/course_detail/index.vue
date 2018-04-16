@@ -130,6 +130,13 @@ export default {
       });
     },
     buy() {
+      if(this.userInfo.ischecked==0){
+        this.$message({
+          message: '很抱歉，只有通过审核的用户才可购买课程',
+          type: 'warning'
+        });
+        return false
+      }
       if (this.isLogin) {
         this.dialogVisible = true;
       } else {
