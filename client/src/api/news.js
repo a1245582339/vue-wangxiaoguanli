@@ -35,3 +35,13 @@ export function getNewsById(params) {
     params
   })
 }
+
+// 增加浏览量
+export function addPageView(data) {
+  console.log(data)
+  return request({
+    url: '/addPageView',
+    method: 'post',
+    data
+  })
+}

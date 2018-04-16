@@ -21,6 +21,7 @@
             <el-row class="course-btn">
               <el-button v-if="haveBought" type="primary" @click="play">开始学习</el-button>
               <el-button v-else-if="course.isDel!=1" type="danger" @click="buy">立即购买</el-button>
+              <el-button v-if="!isLogin" type="text">登录后才可购买课程</el-button>
               <el-button v-if="course.isDel==1" type="info" disabled>已下架</el-button>
             </el-row>
             <p class="course-desp">{{course.course_desp}}</p>
@@ -64,7 +65,7 @@ export default {
       course: [],
       listLoading: false,
       haveBought: false, // 此课程是否已被当前用户购买，默认为未购买
-      dialogVisible: false
+      dialogVisible: false,
     };
   },
   computed: {},
@@ -152,6 +153,8 @@ export default {
               message: "恭喜您购买成功，可以点击开始学习观看课程啦",
               type: "success"
             });
+            vm.userInfo.balance = vm.userInfo.balance-vm.course.course_price
+            vm.$store.commit('toLogin',vm.userInfo)
           }
         }
       );

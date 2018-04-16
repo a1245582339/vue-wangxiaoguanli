@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getNewsById } from "@/api/news";
+import { getNewsById, addPageView } from "@/api/news";
 export default {
   name: "news",
   data() {
@@ -39,6 +39,7 @@ export default {
       this.$router.push("/404");
     } else {
       this.fetchNews(news_id);
+      
       this.$emit("listenActiveIndex", "news");
     }
   },
@@ -70,8 +71,18 @@ export default {
       }).then(response => {
         vm.news = response.data;
         vm.listLoading = false;
+        vm.visit(); // 增加浏览量
       });
     },
+    visit(){
+      var vm=this
+      if(vm.userInfo.stu_id){
+        var stu_id = vm.userInfo.stu_id
+      }else{
+        var stu_id = -1
+      }
+      addPageView({news_id:vm.news.id,stu_id:stu_id})
+    }
   },
   mounted() {}
 };

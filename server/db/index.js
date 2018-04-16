@@ -14,6 +14,7 @@ function setup(db, cb) {
   require('./news')(orm, db);
   require('./news_type')(orm, db);
   require('./news_favorite')(orm, db);
+  require('./news_visit_log')(orm, db);
 
   return cb(null, db);
 }

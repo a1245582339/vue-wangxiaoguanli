@@ -94,6 +94,7 @@ exports.UpdateNews = function(req, res, next) {
   var id = req.body.id;
   console.log(JSON.stringify(req.body))
   if (!id) {
+    var create_time = Date.parse(new Date())/1000;
     req.models.news.create(
       {
         news_name: req.body.name,
@@ -101,6 +102,7 @@ exports.UpdateNews = function(req, res, next) {
         news_desp: req.body.desp,
         content: req.body.content,
         cover: req.body.avatar,
+        create_time:create_time,
         page_view:0,
         isDel: 0
       },
@@ -242,3 +244,16 @@ exports.UpdateNewsCover = function(req, res, next) {
     
   });  
 };
+
+exports.AddPageView = function(req,res,next){
+  var news_id=req.body.news_id
+  var stu_id=req.body.stu_id
+  var create_time = Date.parse(new Date())/1000;
+  req.models.news_visit_log.create({
+    news_id:news_id,
+    stu_id:stu_id,
+    create_time:create_time
+  },function(err){
+    res.json({code:20000,title:"访问"})
+  })
+}

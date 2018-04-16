@@ -58,6 +58,8 @@ router.get('/getNewsType', News.GetNewsType);
 router.get('/getNewsList', News.GetNewsList);
 // 根据id获取资讯
 router.get('/getNewsById', News.GetNewsById);
+// 客户端访问增加访问量
+router.post('/addPageView', News.AddPageView);
 // 获取首页资讯列表
 router.get('/getIndexNews', News.GetIndexNews);
 // 获取资讯列表
