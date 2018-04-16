@@ -153,8 +153,7 @@ export default {
               message: "恭喜您购买成功，可以点击开始学习观看课程啦",
               type: "success"
             });
-            vm.userInfo.balance = vm.userInfo.balance-vm.course.course_price
-            vm.$store.commit('toLogin',vm.userInfo)
+            vm.$store.commit('changebalance',vm.userInfo.balance-vm.course.course_price)
           }
         }
       );

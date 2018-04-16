@@ -59,3 +59,11 @@ export function getHTML(params) {
   })
 }
 
+// 获取访问日志
+export function getNewsVisitLog(params) {
+  return request({
+    url: '/getNewsVisitLog',
+    method: 'get',
+    params
+  })
+}

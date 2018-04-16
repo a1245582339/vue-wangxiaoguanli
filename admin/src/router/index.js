@@ -115,6 +115,12 @@ export const constantRouterMap = [
         name: 'news_type',
         component: () => import('@/views/news_type/index'),
         meta: { title: '资讯分类管理', icon: 'table' }
+      },
+      {
+        path: 'news_visit_log',
+        name: 'news_visit_log',
+        component: () => import('@/views/news_visit_log/index'),
+        meta: { title: '资讯访问日志', icon: 'table' }
       }
     ]
   },

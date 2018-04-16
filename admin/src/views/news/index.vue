@@ -31,7 +31,6 @@ export default {
         moduleName: "资讯标题名称",
         moduleDesp: "资讯描述",
         moudleType: "资讯类型",
-        PageView: "访问量",
         content:"文章内容",
         avatar:"封面",
       },
@@ -79,7 +78,6 @@ export default {
           data[index] = {
             id: item.id,
             name: item.news_name,
-            pageView: item.page_view,
             desp: item.news_desp,
             url: item.article_url,
             type: item.news_type_name,

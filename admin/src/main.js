@@ -16,7 +16,9 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import moment from 'moment'
-import VideoPlayer from 'vue-video-player';
+import VideoPlayer from 'vue-video-player'
+
+
 require('video.js/dist/video-js.css');
 require('vue-video-player/src/custom-theme.css');
 
@@ -28,6 +30,10 @@ Vue.filter('date-string', function(value) {
   return moment(value).format('YYYY-MM-DD HH:mm:ss')
 })
 Vue.config.productionTip = false
+
+import echarts from 'echarts'
+
+Vue.prototype.$echarts = echarts
 
 new Vue({
   el: '#app',

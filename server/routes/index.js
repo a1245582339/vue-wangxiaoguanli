@@ -74,6 +74,8 @@ router.post('/updateNews', News.UpdateNews);
 router.post('/updateNewsType', News.UpdateNewsType);
 // 上传资讯封面
 router.post('/updateNewsCover', News.UpdateNewsCover);
+// 获取访问日志
+router.get('/getNewsVisitLog', News.GetNewsVisitLog);
 
 // **********************************首页轮播相关****************************************
 
