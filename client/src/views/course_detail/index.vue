@@ -8,7 +8,7 @@
         <el-breadcrumb-item :to="{ name: 'courselist' , params:{classid:course.course_class_id}}">{{course.course_class_name}}</el-breadcrumb-item>
         <el-breadcrumb-item>{{course.course_name}}</el-breadcrumb-item>
       </el-breadcrumb>
-
+      <!-- ************课程************ -->
       <div class="course-content">
         <img class="course-cover" :src="course.cover" alt="">
         <div class="course-text">
@@ -19,23 +19,46 @@
               <span class="price-val">￥{{course.course_price}}</span>
             </div>
             <el-row class="course-btn">
-              <el-button v-if="haveBought" type="primary">开始学习</el-button>
-              <el-button v-else type="danger">立即购买</el-button>
+              <el-button v-if="haveBought" type="primary" @click="play">开始学习</el-button>
+              <el-button v-else-if="course.isDel!=1" type="danger" @click="buy">立即购买</el-button>
               <el-button v-if="course.isDel==1" type="info" disabled>已下架</el-button>
             </el-row>
             <p class="course-desp">{{course.course_desp}}</p>
           </div>
         </div>
       </div>
+      <!-- ************购买框************ -->
+
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+        <div v-if="userInfo.balance-course.course_price<0">
+          <p style="color:#F56C6C">当前积分{{userInfo.balance}}，积分不足，无法购买</p>
+        </div>
+        <div v-else>
+          <p>确定花费{{course.course_price}}积分购买此课程？</p><br>
+          <p style="color:#67C23A">当前积分{{userInfo.balance}}</p>
+        </div>
+        
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button v-if="userInfo.balance-course.course_price>0" type="primary" @click="confirmBuy">确 定 购 买</el-button>
+        </span>
+      </el-dialog>
+
     </el-card>
+
+    <Vediodialog :vedioUrl="course.video_url" :cover="course.cover" ref="vedio"></Vediodialog>
   </div>
 </template>
 
 <script>
 import { getCourseById } from "@/api/course";
-import { checkOrder } from "@/api/order";
+import { checkOrder, submitOrder } from "@/api/order";
+import Vediodialog from "@/components/vediodialog";
 export default {
   name: "course",
+  components: {
+    Vediodialog
+  },
   data() {
     return {
       course: [],
@@ -43,7 +66,8 @@ export default {
       courseRow: [],
       radio: -1,
       listLoading: false,
-      haveBought: false // 此课程是否已被当前用户购买，默认为未购买
+      haveBought: false, // 此课程是否已被当前用户购买，默认为未购买
+      dialogVisible: false
     };
   },
   computed: {},
@@ -61,6 +85,9 @@ export default {
   computed: {
     isLogin() {
       return this.$store.state.isLogin;
+    },
+    userInfo() {
+      return this.$store.state.user_info;
     }
   },
   watch: {
@@ -95,9 +122,38 @@ export default {
     },
     fetchOrder(course_id, stu_id) {
       var vm = this;
-      checkOrder({ course_id: course_id, stu_id: stu_id }).then(response => {
+      checkOrder({
+        course_id: course_id,
+        stu_id: stu_id
+      }).then(response => {
         vm.haveBought = response.data.haveBought;
       });
+    },
+    buy() {
+      if (this.isLogin) {
+        this.dialogVisible = true;
+      } else {
+      }
+    },
+    confirmBuy() {
+      var vm = this;
+      submitOrder({ course_id: vm.course.id, stu_id: vm.userInfo.stu_id }).then(
+        response => {
+          vm.fetchOrder(vm.course.id, this.$store.state.user_info.stu_id);
+          vm.dialogVisible = false;
+          if (response.status == 1) {
+            this.$message(response.title);
+          } else if (response.status == 2) {
+            this.$message({
+              message: "恭喜您购买成功，可以点击开始学习观看课程啦",
+              type: "success"
+            });
+          }
+        }
+      );
+    },
+    play() {
+      this.$refs.vedio.noshow();
     }
   },
   mounted() {}

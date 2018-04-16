@@ -155,7 +155,6 @@ export default {
     },
     preview(url){
       this.vedioUrl=url
-      console.log('url',url)
       this.$refs.vedio.noshow();
     }
   }

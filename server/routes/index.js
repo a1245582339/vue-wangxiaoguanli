@@ -83,7 +83,7 @@ router.post('/UpdataBanner', Banner.UpdataBanner);
 // 获取订单
 router.get('/orderList',Order.Getorder)
 // 添加订单
-router.post('/addorder',Order.Addorder)
+router.post('/submitOrder',Order.SubmitOrder)
 // 删除订单
 router.post('/delOrder', Order.DelOrder);
 //获取订单详情

@@ -1,7 +1,7 @@
 <template>
     <div>
  <!-- 弹出框***************************************************** -->
-    <el-dialog :before-close="handleClose" title="预览" :visible.sync="dialogFormVisible" center>
+    <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" width="80%" top="100px" center>
        
          <video-player v-cloak class="video-player vjs-custom-skin"
      ref="videoPlayer"
@@ -19,7 +19,8 @@ import VideoPlayer from "vue-video-player";
 
 export default {
   props: {
-    vedioUrl: String
+    vedioUrl: String,
+    cover:String
   },
   computed: {
     playerOptions() {
@@ -39,7 +40,7 @@ export default {
             src: vm.vedioUrl //url地址
           }
         ],
-        poster: "../../static/images/test.jpg", //你的封面地址
+        poster: vm.cover, //你的封面地址
         // width: document.documentElement.clientWidth,
         notSupportedMessage: "此视频暂无法播放，请稍后再试", //允许覆盖Video.js无法播放媒体源时显示的默认信息。
         controlBar: {

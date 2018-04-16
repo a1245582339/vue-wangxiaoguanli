@@ -40,170 +40,62 @@ exports.Getorder = function(req, res, next) {
 };
 
 // 提交订单
-exports.Addorder = function(req, res, next) {
-  console.log(req.body);
-  //  取得的数据都是所选模块的ID数组
-  // 服务器类型
-  var servertype = req.body.servertype,
-    //  人数
-    truePersonNum = req.body.truenum,
-    //  基础模块
-    basemodules = req.body.basemodules,
-    //  可选模块
-    choosemodules = req.body.choosemodules,
-    //  独立子模块
-    ownmodules = req.body.ownmodules;
-
-  // var NumberTime   = 1000555;
-  // var NumberTime = new Date().getTime();
-  var NumberTime = Math.round(new Date());
-  var NumberId = Math.random()
-    .toString()
-    .slice(2, 8);
-
-  // Promise.all([a,b]).then(objArray => )
-  var find = params =>
-    new Promise((resolve, reject) =>
-      req.models.product_info.find(params, function(err, result) {
-        err ? reject(err) : resolve(result);
-      })
-    );
-  // 获取基础模块的价格和系数和
-  var baseMes = Promise.all(basemodules.map(item => find({ id: item }))).then(
-    ret => {
-      return ret.reduce(
-        (acc, current) => {
-          return {
-            ...acc,
-            sum: current[0].price + acc.sum,
-            c: current[0].coefficient + acc.c
-          };
-        },
-        { type: "baseMes", sum: 0, c: 0 }
-      );
+exports.SubmitOrder = function(req, res, next) {
+  var course_id = req.body.course_id;
+  var stu_id = req.body.stu_id;
+  req.models.course.find({ id: course_id }, function(err, list) {
+    // 查询课程，获取课程当前价格
+    if (err) {
+      res.json({ code: -1, title: "查询课程异常" });
     }
-  );
-
-  //获取可选模块的价格和系数和
-  var chooseMes = Promise.all(
-    choosemodules.map(item => find({ id: item }))
-  ).then(ret => {
-    return ret.reduce(
-      (acc, current) => {
-        // 保存模块************
-
-        var order_no = NumberTime,
-          order_id = NumberId,
-          created_at = NumberTime,
-          price = current[0].price,
-          newis_deleted = 0,
-          product_id = current[0].id,
-          name = current[0].name,
-          category_id = current[0].category_id;
-        req.models.order_desp.create(
-          {
-            order_no: order_no,
-            order_id: order_id,
-            price: price,
-            product_id: product_id,
-            is_deleted: newis_deleted,
-            created_at: created_at,
-            name: name,
-            category_id: category_id
-          },
-          function(err) {
-            if (err) {
-              throw err;
-            }
-          }
-        );
-        return {
-          ...acc,
-          sum: current[0].price + acc.sum,
-          c: current[0].coefficient + acc.c
-        };
-      },
-      { type: "chooseMes", sum: 0, c: 0 }
-    );
-  });
-
-  // 获独立自模块的价格和
-  var ownMes = Promise.all(ownmodules.map(item => find({ id: item }))).then(
-    ret => {
-      return ret.reduce(
-        (acc, current) => {
-          // 保存模块************
-
-          var order_no = NumberTime,
-            order_id = NumberId,
-            created_at = NumberTime,
-            price = current[0].price,
-            newis_deleted = 0,
-            product_id = current[0].id,
-            name = current[0].name,
-            category_id = current[0].category_id;
-          req.models.order_desp.create(
-            {
-              order_no: order_no,
-              order_id: order_id,
-              price: price,
-              product_id: product_id,
-              is_deleted: newis_deleted,
-              created_at: created_at,
-              name: name,
-              category_id: category_id
-            },
-            function(err) {
+    console.log(list[0]);
+    if (list[0].isDel == 1) {
+      res.json({ code: -1, title: "已下架" }); // 如果发送请求的时候课程已下架，则无法购买
+    }
+    var price = list[0].course_price;
+    var create_time = Date.parse(new Date())/1000;
+    req.models.order.exists({ stu_id: stu_id, course_id: course_id }, function(
+      err,
+      isExist
+    ) {
+      if (isExist) {
+        // 如果已购买，则无法购买
+        res.json({ code: 20000, title: "您之前已购买过该商品，请刷新页面",status:1});
+      } else {
+        req.models.student.find({ id: stu_id }, function(err, stu) {
+          console.log('stu[0].balance',stu[0].balance,price)
+          stu[0].balance = stu[0].balance - price;
+          if (stu[0].balance >= 0) {
+            // 当发送购买请求时余额充足才可继续购买
+            stu[0].save(function(err) {
               if (err) {
-                throw err;
+                res.json({ code: -1, title: "扣款异常" });
               }
-            }
-          );
-          return {
-            ...acc,
-            sum: current[0].price + acc.sum,
-            c: current[0].coefficient + acc.c
-          };
-        },
-        { type: "ownMes", sum: 0, c: 0 }
-      );
-    }
-  );
-
-  // 最后的价格计算
-  Promise.all([baseMes, chooseMes, ownMes]).then(result => {
-    console.log("result=>>>", result);
-    let A = result[0].sum + result[1].sum;
-    let B = result[0].c + result[1].c;
-    let C = truePersonNum;
-    let ownTotalprices = result[2].sum;
-
-    // 将订单存到数据库中order
-    let totalPrices = A + B * C + ownTotalprices + servertype;
-
-    req.models.order.create(
-      {
-        order_no: NumberTime,
-        created_at: NumberTime,
-        user_id: NumberId,
-        real_name: "测试时间戳",
-        total: totalPrices,
-        is_deleted: 0,
-        quantity: truePersonNum
-      },
-      function(err) {
-        if (err) {
-          throw err;
-        }
+              req.models.order.create(
+                {
+                  stu_id: stu_id,
+                  course_id: course_id,
+                  spend: price,
+                  create_time: create_time,
+                  isDel: 0
+                },
+                function(err, result) {
+                  if (err) {      // 如果订单创建发生异常，为该用户退款
+                    stu[0].balance = stu[0].balance + price;
+                    stu[0].save(function(err){
+                      res.json({ code: -1, title: "创建订单异常且退款失败" });
+                    })
+                    res.json({ code: -1, title: "创建订单异常" });
+                  }
+                  res.json({ code: 20000, title: "购买成功" ,status:2});
+                }
+              );
+            });
+          } else {
+            res.json({ code: -1, title: "余额不足" });
+          }
+        });
       }
-    );
-
-    console.log("总价格=>>>", totalPrices);
-    res.json({
-      code: 20000,
-      title: "订单提交成功",
-      sum: totalPrices,
-      order_no: NumberTime
     });
   });
 };
@@ -242,22 +134,22 @@ exports.DelOrder = function(req, res, next) {
       }
     });
 };
- 
+
 // 客户端获取当前课程是否已被该用户购买
 exports.CheckOrder = function(req, res, next) {
   var course_id = req.query.course_id;
   var stu_id = req.query.stu_id;
-  var haveBought=false
-  req.models.order.find({stu_id:3},function(err,list){
-    if(list.length==0){
-      res.json({ code: 20000, data: {haveBought:haveBought} });
-    }else{
-      list.map(item=>{
-        if(item.course_id==course_id){
-          haveBought=true
+  var haveBought = false;
+  req.models.order.find({ stu_id: stu_id }, function(err, list) {
+    if (list.length == 0) {
+      res.json({ code: 20000, data: { haveBought: haveBought } });
+    } else {
+      list.map(item => {
+        if (item.course_id == course_id) {
+          haveBought = true;
         }
-      })
-      res.json({ code: 20000, data: {haveBought:haveBought} });
+      });
+      res.json({ code: 20000, data: { haveBought: haveBought } });
     }
-  })
+  });
 };
