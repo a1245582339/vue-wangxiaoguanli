@@ -10,6 +10,6 @@ const state = {
     ischecked: 0,
     sex: ''
   }
-};
+}
 
-export default state;
+export default state

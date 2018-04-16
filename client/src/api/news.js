@@ -26,3 +26,12 @@ export function getNewsBytype(params) {
     params
   })
 }
+
+// 根据资讯id获取资讯
+export function getNewsById(params) {
+  return request({
+    url: '/getNewsById',
+    method: 'get',
+    params
+  })
+}

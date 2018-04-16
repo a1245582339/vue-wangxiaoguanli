@@ -56,6 +56,8 @@ router.post('/updateCourseCover', Course.UpdateCourseCover);
 router.get('/getNewsType', News.GetNewsType);
 // 获取资讯列表
 router.get('/getNewsList', News.GetNewsList);
+// 根据id获取资讯
+router.get('/getNewsById', News.GetNewsById);
 // 获取首页资讯列表
 router.get('/getIndexNews', News.GetIndexNews);
 // 获取资讯列表
@@ -86,7 +88,7 @@ router.get('/orderList',Order.Getorder)
 router.post('/submitOrder',Order.SubmitOrder)
 // 删除订单
 router.post('/delOrder', Order.DelOrder);
-//获取订单详情
+// 获取订单详情
 router.post('/orderPrint',Order.OrderPrint)
 
 // 客户端获取当前课程是否已被该用户购买

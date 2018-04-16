@@ -3,7 +3,7 @@
     <div class="block">
       <el-carousel trigger="click" height="633px">
         <el-carousel-item v-for="item in banner" :key="item.id">
-          <router-link class="banner" to='/a'>
+          <router-link class="banner" :to='"/coursedetail?courseid="+item.id'>
             <img :src="item.cover" alt="">
               <div class="banner-title">
                 <h3>{{item.course_name}}</h3>
@@ -27,7 +27,7 @@
               <p class="card-desp">{{o.course_desp}}</p>
               <div class="bottom clearfix">
                 <span class="price">￥{{o.course_price}}</span>
-                <el-button type="text" class="button">查看详情</el-button>
+                <el-button type="text" class="button" @click="toDetail(o.id)">查看详情</el-button>
               </div>
             </div>
           </el-card>
@@ -93,7 +93,7 @@ export default {
     },
     fetchBanner() {
       getBanner().then(response => {
-        this.banner = response.data;
+        this.banner = response.data;        
       });
     },
     fetchIndexCourse(){
@@ -109,6 +109,14 @@ export default {
           this.news[index].date=vm.timestampToTime(response.data[index].create_time)
         })
       })
+    },
+    toDetail(id){
+      var vm=this
+      for(let i =0;i<vm.course.length;i++){
+        if(vm.course[i].id==id){
+          this.$router.push("/coursedetail?courseid="+id)
+        }
+      }
     }
   },
   mounted() {}
@@ -145,7 +153,7 @@ export default {
 }
 .read-more{
   float: right;
-  color: #0366d6
+  color: #409EFF
 }
 .course {
   width: 1126px;

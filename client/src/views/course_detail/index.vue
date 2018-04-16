@@ -62,9 +62,6 @@ export default {
   data() {
     return {
       course: [],
-      courseClass: [],
-      courseRow: [],
-      radio: -1,
       listLoading: false,
       haveBought: false, // 此课程是否已被当前用户购买，默认为未购买
       dialogVisible: false

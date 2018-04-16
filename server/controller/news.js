@@ -30,6 +30,21 @@ exports.GetNewsList = function(req, res, next) {
   });
 };
 
+// 根据id获取资讯
+exports.GetNewsById = function(req, res, next) {
+  var id = req.query.id
+  req.models.news.find({ id: id }, function(err, list) {
+    if (err) {
+      res.json({ title: "请求异常", code: -1});
+    } else {
+      req.models.news_type.find({id: list[0].news_type_id}, function(err,_list){
+        list[0].news_type_name=_list[0].news_type_name
+        res.json({title:"资讯详情",code:20000,data:list[0]})
+      })
+    }
+  });
+};
+
 // 根据资讯类型获取资讯
 exports.GetNewsBytype = function(req, res, next) {
   var id=req.query.id

@@ -45,15 +45,20 @@ export const constantRouterMap = [
       {
         name: 'coursedetail',
         path: 'coursedetail',
-        //params: {classid:'classid'},
         component: () => import('@/views/course_detail/index'),
       },
       {
         name: 'news',
         path: 'news',
-        params: {typeid:'typeid'},
+        params: { typeid: 'typeid' },
         component: () => import('@/views/news/index'),
-      },{
+      },
+      {
+        name: 'newsdetail',
+        path: 'newsdetail',
+        component: () => import('@/views/news_detail/index'),
+      },
+      {
         name: 'me',
         path: 'me',
         component: () => import('@/views/me/index'),

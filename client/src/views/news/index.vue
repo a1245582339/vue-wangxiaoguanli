@@ -23,7 +23,7 @@
               <p class="card-desp">{{o.news_desp}}</p>
               <div class="bottom clearfix">
                 <time class="time">{{o.date}}</time>
-                <el-button type="text" class="button">查看详情</el-button>
+                <el-button type="text" class="button" @click="toDetail(o.id)">查看详情</el-button>
               </div>
             </div>
           </el-card>
@@ -123,6 +123,14 @@ export default {
           }
           vm.listLoading = false;
         });
+      }
+    },
+    toDetail(id){
+      var vm=this
+      for(let i =0;i<vm.news.length;i++){
+        if(vm.news[i].id==id){
+          this.$router.push("/newsdetail?newsid="+id)
+        }
       }
     }
   },
