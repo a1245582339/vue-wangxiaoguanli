@@ -48,7 +48,6 @@ exports.SubmitOrder = function(req, res, next) {
     if (err) {
       res.json({ code: -1, title: "查询课程异常" });
     }
-    console.log(list[0]);
     if (list[0].isDel == 1) {
       res.json({ code: -1, title: "已下架" }); // 如果发送请求的时候课程已下架，则无法购买
     }
@@ -63,7 +62,6 @@ exports.SubmitOrder = function(req, res, next) {
         res.json({ code: 20000, title: "您之前已购买过该商品，请刷新页面",status:1});
       } else {
         req.models.student.find({ id: stu_id }, function(err, stu) {
-          console.log('stu[0].balance',stu[0].balance,price)
           stu[0].balance = stu[0].balance - price;
           if (stu[0].balance >= 0) {
             // 当发送购买请求时余额充足才可继续购买
