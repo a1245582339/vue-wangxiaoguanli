@@ -24,7 +24,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "vue": "2.5.10",
-    "vue-echarts": "^3.0.7",
+    "vue-echarts-v3": "^1.0.19",
     "vue-router": "3.0.1",
     "vue-video-player": "^5.0.2",
     "vuex": "3.0.1"

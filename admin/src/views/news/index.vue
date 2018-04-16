@@ -65,8 +65,9 @@ export default {
             name:item.news_type_name
           }
         })
+        vm.type=arr;
       });
-      this.type=arr;
+      
     },
     // 获取数据
     fetchData() {

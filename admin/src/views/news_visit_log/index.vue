@@ -1,86 +1,85 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
-    <echarts :options="line"></echarts>
+    <IEcharts class="echart" :option="bar"></IEcharts>
+    <IEcharts class="echart" :option="line"></IEcharts>
   </div>
 
 </template>
 
 <script>
-import { getNewsVisitLog } from "@/api/news";
-import echarts from "vue-echarts/components/ECharts";
+import { getNewsVisitLog, getNewsType, getNewsList } from "@/api/news";
+import IEcharts from "vue-echarts-v3/src/lite.js";
 export default {
   components: {
-    echarts
+    IEcharts
   },
   data() {
-    let data = [];
-    for (let i = 0; i <= 360; i++) {
-      let t = i / 180 * Math.PI;
-      let r = Math.sin(2 * t) * Math.cos(2 * t);
-      data.push([r, i]);
-    }
     return {
+      news: [],
       listLoading: false,
-      line: {
+      bar: {
         title: {
-          text: "折线图堆叠"
+          text: "历史一周资讯访问量折线图"
         },
-        tooltip: {
-          trigger: "axis"
-        },
-        legend: {
-          data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"]
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
+        tooltip: {},
         xAxis: {
+          name: "一周日期",
           type: "category",
-          boundaryGap: false,
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+          data: []
         },
         yAxis: {
-          type: "value"
+          name: "访问量",
+          type: "value",
+          data: []
         },
         series: [
           {
-            name: "邮件营销",
-            type: "line",
-            stack: "总量",
-            data: [120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-            name: "联盟广告",
-            type: "line",
-            stack: "总量",
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: "视频广告",
-            type: "line",
-            stack: "总量",
-            data: [150, 232, 201, 154, 190, 330, 410]
-          },
-          {
-            name: "直接访问",
-            type: "line",
-            stack: "总量",
-            data: [320, 332, 301, 334, 390, 330, 320]
-          },
-          {
-            name: "搜索引擎",
-            type: "line",
-            stack: "总量",
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
+            name: "Sales",
+            type: "bar",
+            data: []
           }
+        ]
+      },
+      line: {
+        title: {
+          text: "历史一周资讯访问量折线图"
+        },
+        legend: {
+          show:true,
+          data:[]
+        },
+        tooltip: {},
+        xAxis: {
+          name: "资讯名称",
+          type: "category",
+          data: []
+        },
+        yAxis: {
+          name: "访问量",
+          type: "value",
+          data: []
+        },
+        series: [
+          // {
+          //   name: "邮件营销",
+          //   type: "line",
+          //   stack: "总量",
+          //   areaStyle: { normal: {} },
+          //   data: [120, 132, 101, 134, 90, 230, 210]
+          // },
+          // {
+          //   name: "搜索引擎",
+          //   type: "line",
+          //   stack: "总量",
+          //   label: {
+          //     normal: {
+          //       show: true,
+          //       position: "top"
+          //     }
+          //   },
+          //   areaStyle: { normal: {} },
+          //   data: [820, 932, 901, 934, 1290, 1330, 1320]
+          // }
         ]
       }
     };
@@ -89,20 +88,86 @@ export default {
     this.fetchData();
   },
   methods: {
-    // 添加新资讯
-    addNews() {
-      this.$refs.dial.noshow();
+    getDateArr(){
+      var timestamp = Date.parse(new Date())
+      var day1 = this.timestampToTime(timestamp-518400000)
+      var day2 = this.timestampToTime(timestamp-432000000)
+      var day3 = this.timestampToTime(timestamp-345600000)
+      var day4 = this.timestampToTime(timestamp-259200000)
+      var day5 = this.timestampToTime(timestamp-172800000)
+      var day6 = this.timestampToTime(timestamp-86400000)
+      var day7 = this.timestampToTime(timestamp)
+      var dateArr = [day1,day2,day3,day4,day5,day6,day7]
+      return dateArr // 获取过去七天的日期（含今天）
+    },
+    timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        return Y+M+D;
     },
     // 获取数据
     fetchData() {
       var vm = this;
       this.listLoading = true;
-      getNewsVisitLog({ duration: 604800 }).then(response => {
-        //一周秒值
-        console.log(response.data);
-        vm.listLoading = false;
+      getNewsType().then(response => {
+        getNewsList().then(response => {
+          var barxAxis = [];
+          for(let i=0;i<response.data.length;i++){
+              vm.line.series.push({name:'',type: "line",tack: "总量",areaStyle: { normal: {} },stack: "总量",data: [0, 0, 0, 0, 0, 0, 0]})
+            }
+          response.data.map((item, index) => {
+            var data = response.data;
+            vm.news = data;
+            data.map((item, index) => {
+              item.view_count = 0; //  给资讯的初始浏览量设置为0
+              barxAxis[index] = item.news_name; // 给横轴加刻度
+              vm.line.series[index].name = item.news_name   // 折线图的name
+            });
+          });
+          vm.bar.xAxis.data = barxAxis; // 第一个柱状图的x轴
+          vm.line.xAxis.data = vm.getDateArr(); // 第二个，折线图的x轴
+          getNewsVisitLog({ duration: 604800 }).then(response => {
+            //一周秒值
+            var data = response.data;
+            data.map((item, index) => {
+              for(let i=-1;i<6;i++){
+                if(Math.floor((Date.parse(new Date())/1000-item.create_time)/86400)==(i+1)){
+                  console.log(i+1)  // i+1表示这是几天以前
+                  vm.line.series.map(o=>{
+                    if(o.name==item.news_info.news_name){
+                      o.data.reverse()
+                      o.data[i]+=1
+                      o.data.reverse()
+                    }
+                  })
+                  break
+                }
+              }
+              vm.news.map((o, i) => {
+                if (item.news_info.news_name == o.news_name) {
+                  o.view_count += 1;
+                }
+              });
+            });
+            var view_count = [];
+            vm.news.map((item, index) => {
+              view_count[index] = item.view_count;
+            });
+            vm.bar.series[0].data = view_count;
+            vm.listLoading = false;
+          });
+        });
       });
     }
   }
 };
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.echart {
+  width: 1000px !important;
+  height: 300px !important;
+}
+</style>
