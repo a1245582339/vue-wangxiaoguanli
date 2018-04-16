@@ -142,7 +142,6 @@ export default {
                       o.data.reverse()
                     }
                   })
-                  break
                 }
               }
               vm.news.map((o, i) => {
