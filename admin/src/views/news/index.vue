@@ -87,6 +87,7 @@ export default {
             avatar: item.cover
           };
         });
+        console.log(JSON.stringify(data))
         vm.list=data;
         this.listLoading = false;
       });

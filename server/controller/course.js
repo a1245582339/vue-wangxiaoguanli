@@ -91,6 +91,7 @@ exports.DelCourse = function(req, res, next) {
 // 修改课程(新增和修改用的同一个接口，通过id判断)
 exports.UpdateCourse = function(req, res, next) {
   var id = req.body.id;
+  console.log(JSON.stringify(req.body))
   if (!id) {
     req.models.course.create(
       {
@@ -98,7 +99,8 @@ exports.UpdateCourse = function(req, res, next) {
         course_price: req.body.price,
         course_desp: req.body.desp,
         course_class_id: req.body.type,
-        video_url: req.body.url,
+        video_url: 'http://localhost:3000/vedio/js.mp4',
+        isBanner:0,
         cover: req.body.avatar,
         isDel: 0
       },

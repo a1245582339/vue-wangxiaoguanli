@@ -23,7 +23,7 @@ export default {
         },
         tooltip: {},
         xAxis: {
-          name: "一周日期",
+          name: "资讯名称",
           type: "category",
           data: []
         },
@@ -50,7 +50,7 @@ export default {
         },
         tooltip: {},
         xAxis: {
-          name: "资讯名称",
+          name: "一周日期",
           type: "category",
           data: []
         },
@@ -134,14 +134,14 @@ export default {
             data.map((item, index) => {
               for(let i=-1;i<6;i++){
                 if(Math.floor((Date.parse(new Date())/1000-item.create_time)/86400)==(i+1)){
-                  console.log(i+1)  // i+1表示这是几天以前
                   vm.line.series.map(o=>{
                     if(o.name==item.news_info.news_name){
                       o.data.reverse()
-                      o.data[i]+=1
+                      o.data[i+1]+=1
                       o.data.reverse()
                     }
                   })
+                  console.log(JSON.stringify(vm.line.series))
                 }
               }
               vm.news.map((o, i) => {
