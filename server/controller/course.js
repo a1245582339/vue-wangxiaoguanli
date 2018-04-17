@@ -99,7 +99,7 @@ exports.UpdateCourse = function(req, res, next) {
         course_price: req.body.price,
         course_desp: req.body.desp,
         course_class_id: req.body.type,
-        video_url: url,
+        video_url: req.body.url,
         isBanner:0,
         cover: req.body.avatar,
         isDel: 0
