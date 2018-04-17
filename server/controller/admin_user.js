@@ -32,8 +32,7 @@ exports.Logout = function(req, res, next) {
 };
 
 exports.Userinfo = function(req, res, next) {
-    //console.log('req+++++',req.query.token)
-    req.models.token.find({ token: req.query.token },function(err, list){
+    req.models.admin_token.find({ token: req.query.token },function(err, list){
         if(err){
             throw err
         }else{

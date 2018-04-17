@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 17/04/2018 22:59:44
+ Date: 18/04/2018 07:17:02
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `admin_user`  (
   `avatar` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `password` varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `create_time` bigint(15) NOT NULL,
-  `isDel` int(11) NOT NULL,
+  `isDel` int(2) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci COMMENT = '产品明细' ROW_FORMAT = Dynamic;
 
@@ -100,18 +100,21 @@ CREATE TABLE `course_favorite`  (
   `create_time` bigint(20) NOT NULL,
   `isDel` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of course_favorite
 -- ----------------------------
 INSERT INTO `course_favorite` VALUES (1, 1, 2, 1523524612, 1);
 INSERT INTO `course_favorite` VALUES (2, 1, 2, 1523529999, 1);
-INSERT INTO `course_favorite` VALUES (3, 6, 2, 1523533333, 0);
-INSERT INTO `course_favorite` VALUES (4, 6, 1, 1523599999, 0);
+INSERT INTO `course_favorite` VALUES (3, 6, 2, 1523533333, 1);
+INSERT INTO `course_favorite` VALUES (4, 6, 2, 1523599999, 1);
 INSERT INTO `course_favorite` VALUES (5, 2, 2, 1523954061, 0);
 INSERT INTO `course_favorite` VALUES (6, 3, 2, 1523954371, 0);
 INSERT INTO `course_favorite` VALUES (7, 1, 2, 1523954396, 1);
+INSERT INTO `course_favorite` VALUES (8, 6, 2, 1523978298, 1);
+INSERT INTO `course_favorite` VALUES (9, 6, 2, 1523978302, 0);
+INSERT INTO `course_favorite` VALUES (10, 2, 3, 1523978366, 0);
 
 -- ----------------------------
 -- Table structure for news
@@ -133,7 +136,7 @@ CREATE TABLE `news`  (
 -- ----------------------------
 -- Records of news
 -- ----------------------------
-INSERT INTO `news` VALUES (1, '科大讯飞AIUI项目总监丁瑞：打造属于你的AI交互产品', '随着人工智能时代的快速到来，智能交互产品已经越来越多的进入千家万户。AI人机交互的痛点在哪里？如何打造一款属于你的AI交互产品呢？', 1, 50, 1523380273, 'http://localhost:3000/news_cover/news_cover152352402362410631.jpg', 0, '<h1 style=\"text-align: center;\">Welcome to the TinyMCE demo!</h1><p style=\"text-align: center; font-size: 15px;\"><img title=\"TinyMCE Logo\" src=\"//www.tinymce.com/images/glyph-tinymce@2x.png\" alt=\"TinyMCE Logo\" width=\"110\" height=\"97\" /><ul>\n        <li>Our <a href=\"//www.tinymce.com/docs/\">documentation</a> is a great resource for learning how to configure TinyMCE.</li><li>Have a specific question? Visit the <a href=\"https://community.tinymce.com/forum/\">Community Forum</a>.</li><li>We also offer enterprise grade support as part of <a href=\"https://tinymce.com/pricing\">TinyMCE premium subscriptions</a>.</li>\n      </ul>');
+INSERT INTO `news` VALUES (1, '科大讯飞AIUI项目总监丁瑞：打造属于你的AI交互产品', '随着人工智能时代的快速到来，智能交互产品已经越来越多的进入千家万户。AI人机交互的痛点在哪里？如何打造一款属于你的AI交互产品呢？', 1, 50, 1523380273, 'http://localhost:3000/news_cover/news_cover152352402362410631.jpg', 0, '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n<p>我是</p>\n</body>\n</html>');
 INSERT INTO `news` VALUES (2, '测试测试', '这个是测试用的', 1, 0, 1523480273, 'http://localhost:3000/news_cover/news_cover152352405649318122.jpeg', 0, '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n<h1 align=\"center\"><b>测</b><i>试</i><u>富</u><strike>文</strike><font color=\"#993300\">本</font><font style=\"background-color: #ffff99;\">编</font><sub>辑</sub><sup>器</sup></h1>\n</body>\n</html>');
 INSERT INTO `news` VALUES (3, 'nodejs超牛逼', 'nodejs超牛逼', 1, 0, 1523680273, 'http://localhost:3000/news_cover/news_cover152352845244715554.jpeg', 0, '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n<h1 align=\"center\">nodejs超牛逼</h1>\n</body>\n</html>');
 INSERT INTO `news` VALUES (4, 'qwe', 'ewq', 1, 0, 1523928784, 'http://localhost:3000/news_cover/news_cover152392878444715864.png', 0, '<!DOCTYPE html>\n<html>\n<head>\n</head>\n<body>\n<p>qwe</p>\n</body>\n</html>');
@@ -292,7 +295,7 @@ CREATE TABLE `stu_token`  (
   `deadline` bigint(255) NOT NULL,
   `stu_id` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 141 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 144 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of stu_token
@@ -373,6 +376,9 @@ INSERT INTO `stu_token` VALUES (137, '1523935454188', 1524540254188, 5);
 INSERT INTO `stu_token` VALUES (138, '1523935981705', 1524540781705, 5);
 INSERT INTO `stu_token` VALUES (139, '1523944553052', 1524549353052, 1);
 INSERT INTO `stu_token` VALUES (140, '1523945422050', 1524550222050, 2);
+INSERT INTO `stu_token` VALUES (141, '1523977642926', 1524582442926, 1);
+INSERT INTO `stu_token` VALUES (142, '1523978297560', 1524583097560, 2);
+INSERT INTO `stu_token` VALUES (143, '1523978363103', 1524583163103, 3);
 
 -- ----------------------------
 -- Table structure for student
@@ -401,7 +407,7 @@ INSERT INTO `student` VALUES (3, '王5555', '13599999999', 200, 'http://localhos
 INSERT INTO `student` VALUES (4, '赵6666', '18966666666', 0, 'http://localhost:3000/stu_avatar/默认.jpg', 1523352665, 1, '男', 'aaaaaa', 0);
 INSERT INTO `student` VALUES (5, 'test1', '13512877130', 988758, 'http://localhost:3000/stu_avatar/stu_avatar152379251915915917.png', 1523699878, 1, '男', 'qqqqqq', 0);
 INSERT INTO `student` VALUES (6, 'test2', '13512877130', 10, 'http://localhost:3000/stu_avatar/stu_avatar152379297088716402.gif', 1523700065, 0, '男', 'aaa111', 0);
-INSERT INTO `student` VALUES (7, 'aaaaa', '13555548774', 0, 'a', 1523700099, 0, '男', 'aaaaaa', 0);
+INSERT INTO `student` VALUES (7, 'aaaaa', '13555548774', 0, 'http://localhost:3000/stu_avatar/stu_avatar152397960624011002.png', 1523700099, 0, '男', 'aaaaaa', 0);
 
 -- ----------------------------
 -- Table structure for token
@@ -413,7 +419,7 @@ CREATE TABLE `token`  (
   `deadline` bigint(255) NOT NULL,
   `admin_id` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 72 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of token
@@ -484,5 +490,6 @@ INSERT INTO `token` VALUES (67, '1523927631793', 1524532431793, 1);
 INSERT INTO `token` VALUES (68, '1523961182521', 1524565982521, 1);
 INSERT INTO `token` VALUES (69, '1523962107820', 1524566907820, 1);
 INSERT INTO `token` VALUES (70, '1523975679310', 1524580479310, 1);
+INSERT INTO `token` VALUES (71, '1523980202856', 1524585002856, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

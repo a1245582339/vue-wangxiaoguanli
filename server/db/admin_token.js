@@ -1,6 +1,6 @@
 // token
 module.exports = function(orm, db) {
-    var token = db.define("token", {
+    var admin_token = db.define("admin_token", {
       id: Number,
       token: String,
       deadline:Number,

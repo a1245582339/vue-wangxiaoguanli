@@ -4,7 +4,7 @@ var connection = null;
 function setup(db, cb) {
   require('./order')(orm, db);
   require('./admin_user')(orm, db);
-  require('./token')(orm, db);
+  require('./admin_token')(orm, db);
   require('./stu_token')(orm, db);
   require('./roles')(orm, db);
   require('./course')(orm, db);
