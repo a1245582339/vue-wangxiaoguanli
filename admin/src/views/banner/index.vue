@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top:50px;margin-left:50px;width:1000px">
     <div class="dndList">
       <div class="dndList-list" :style="{width:width1}">
         <h3>{{list1Title}}</h3>
@@ -46,15 +46,14 @@ export default {
     return {
       list1: [],
       list2: [],
-      list1Title: "list1",
-      list2Title: "list2",
-      width1: "48%",
-      width2: "48%"
+      list1Title: "课程列表",
+      list2Title: "轮播列表",
+      width1: "30%",
+      width2: "30%"
     };
   },
   methods: {
     onchange() {
-      console.log(this.filterList2)
       this.filterList2.map(item =>{
         item.isBanner = 1
       })
@@ -96,18 +95,6 @@ export default {
     },
     isNotInList2(v) {
       return this.list2.every(k => v.id !== k.id);
-    },
-    deleteEle(ele) {
-      for (const item of this.list1) {
-        if (item.id === ele.id) {
-          const index = this.list1.indexOf(item);
-          this.list1.splice(index, 1);
-          break;
-        }
-      }
-      if (this.isNotInList2(ele)) {
-        this.list2.unshift(ele);
-      }
     }
   }
 };

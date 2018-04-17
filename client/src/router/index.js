@@ -86,26 +86,26 @@ export default new Router({
 
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
-export const asyncRouterMap = [
-  {
-    path: '/admin',
-    component: Layout,
-    redirect: '/admin/index',
-    meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员','管理员'] }, // 页面需要的权限
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/admin/index'),
-        name: 'admin_change',
-        meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员'] }
-      },
-      {
-        path: 'me',
-        component: () => import('@/views/me/index'),
-        name: 'Me',
-        meta: { title: '个人管理', icon: 'form' }
-      }
-    ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
-]
+// export const asyncRouterMap = [
+//   {
+//     path: '/admin',
+//     component: Layout,
+//     redirect: '/admin/index',
+//     meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员','管理员'] }, // 页面需要的权限
+//     children: [
+//       {
+//         path: 'index',
+//         component: () => import('@/views/admin/index'),
+//         name: 'admin_change',
+//         meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员'] }
+//       },
+//       {
+//         path: 'me',
+//         component: () => import('@/views/me/index'),
+//         name: 'Me',
+//         meta: { title: '个人管理', icon: 'form' }
+//       }
+//     ]
+//   },
+//   { path: '*', redirect: '/404', hidden: true }
+// ]

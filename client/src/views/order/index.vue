@@ -37,7 +37,7 @@ export default {
     var vm = this
     this.$emit('listenActiveIndex','order')
     this.listLoading=true
-    setTimeout(function(){vm.checkLogin()},500)
+    setTimeout(function(){vm.checkLogin()},1000)
     
   },
   computed: {
