@@ -121,6 +121,7 @@ exports.UpdateCourse = function(req, res, next) {
         list.course_class_id = req.body.type;
         list.video_url = req.body.url;
         list.cover = req.body.avatar;
+        list.isBanner =req.body.isBanner;
       })
       .save(function(err) {
         if (err) {

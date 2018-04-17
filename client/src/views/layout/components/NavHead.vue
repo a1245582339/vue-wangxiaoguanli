@@ -20,9 +20,9 @@
     <el-menu-item class="navitem" v-for="(item,index) in newsType" :key="item.id" :index="index+'3'" :route="{name:'news',params:{typeid:item.id}}">{{item.news_type_name}}</el-menu-item>
   </el-submenu>
 
-  <el-menu-item index="4">消息中心</el-menu-item>
+  <el-menu-item index="me" :route="{name:'me'}">个人资料</el-menu-item>
 
-  <el-menu-item index="5"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+  <el-menu-item index="order" :route="{name:'order'}">订单管理</el-menu-item>
 </el-menu>
 </div>
 </template>

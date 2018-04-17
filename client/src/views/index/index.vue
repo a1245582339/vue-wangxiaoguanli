@@ -27,7 +27,7 @@
               <p class="card-desp">{{o.course_desp}}</p>
               <div class="bottom clearfix">
                 <span class="price">￥{{o.course_price}}</span>
-                <el-button type="text" class="button" @click="toDetail(o.id)">查看详情</el-button>
+                <el-button type="text" class="button" @click="toCourseDetail(o.id)">查看详情</el-button>
               </div>
             </div>
           </el-card>
@@ -38,7 +38,7 @@
   <el-card class="course">
       <div slot="header" class="clearfix">
         <span>最新资讯</span>
-        <router-link class="read-more" to="/news">查看更多>></router-link>
+        <router-link class="read-more" :to="{name:'news'}">查看更多>></router-link>
       </div>
       <el-row>
         <el-col :span="7" v-for="(o, index) in news" :key="o.id" :offset="index > 0 ? 2 : 0">
@@ -49,7 +49,7 @@
               <p class="card-desp">{{o.news_desp}}</p>
               <div class="bottom clearfix">
                 <time class="time">{{o.date}}</time>
-                <el-button type="text" class="button">查看详情</el-button>
+                <el-button type="text" class="button" @click="toNewsDetail(o.id)">查看详情</el-button>
               </div>
             </div>
           </el-card>
@@ -110,11 +110,19 @@ export default {
         })
       })
     },
-    toDetail(id){
+    toCourseDetail(id){
       var vm=this
       for(let i =0;i<vm.course.length;i++){
         if(vm.course[i].id==id){
           this.$router.push("/coursedetail?courseid="+id)
+        }
+      }
+    },
+    toNewsDetail(id){
+      var vm=this
+      for(let i =0;i<vm.news.length;i++){
+        if(vm.news[i].id==id){
+          this.$router.push("/newsdetail?newsid="+id)
         }
       }
     }

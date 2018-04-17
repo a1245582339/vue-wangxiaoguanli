@@ -5,8 +5,6 @@
       <div style="width:1126px;margin:0 auto">
         <!-- ****************LOGO**************** -->
         <img style="height:40px;width:40px" :src="logo" alt="">
-
-
         <!-- ****************右侧下拉**************** -->
         <el-dropdown v-if="isLogin" class="avatar-container" trigger="hover">
           <div class="avatar-wrapper">
@@ -18,6 +16,7 @@
           <el-dropdown-menu class="user-dropdown" slot="dropdown">
             <img :src="userInfo.avatar">
             <span class="username">{{userInfo.stu_name}}</span>
+            <el-button style="position:relative;top:-13px;left:10px" type="warning" icon="el-icon-star-off" size="mini" @click="toFav" round>收藏夹</el-button>
             <div class="userinfo-table">
               <el-form label-width="100px" class="demo-ruleForm" label-position="left">
                 <el-form-item class="table-item" label="积分">
@@ -37,16 +36,6 @@
             </el-button-group>
           </el-dropdown-menu>
 
-          <!-- <el-dropdown-menu class="user-dropdown" slot="dropdown">
-            <router-link class="inlineBlock" to="/">
-              <el-dropdown-item>
-                返回首页
-              </el-dropdown-item>
-            </router-link>
-            <el-dropdown-item divided>
-              <span @click="logout" style="display:block;">退出登录</span>
-            </el-dropdown-item>
-          </el-dropdown-menu> -->
         </el-dropdown>
 
         <div v-else class="avatar-container">
@@ -405,6 +394,9 @@
       },
       toMe(){
         this.$router.push({name:'me'})
+      },
+      toFav(){
+        this.$router.push({name:'favorite'})
       },
       logout() {
         this.$store.dispatch("LogOut").then(() => {

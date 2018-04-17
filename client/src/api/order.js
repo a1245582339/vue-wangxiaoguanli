@@ -16,3 +16,21 @@ export function submitOrder(data) {
     data
   })
 }
+
+// 通过学生id获取订单列表
+export function getOrderByStuId(params) {
+  return request({
+    url: '/getOrderByStuId',
+    method: 'get',
+    params
+  })
+}
+
+// 删除订单
+export function delOrder(data) {
+  return request({
+    url: "/delOrder",
+    method: "post",
+    data: { data }
+  });
+}

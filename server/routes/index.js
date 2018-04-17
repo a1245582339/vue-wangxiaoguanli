@@ -97,6 +97,8 @@ router.post('/orderPrint',Order.OrderPrint)
 
 // 客户端获取当前课程是否已被该用户购买
 router.get('/checkOrder',Order.CheckOrder)
+// 通过学生id获取订单列表
+router.get('/getOrderByStuId',Order.GetOrderByStuId)
 
 // ****************************更改学生接口***************************
 
@@ -142,7 +144,14 @@ router.post('/updateAdminAvatar', Admin.UpdateAdminAvatar);
 router.get('/courseFavorite', Favorites.CourseFavorite);
 // 获取资讯收藏夹列表
 router.get('/newsFavorite', Favorites.NewsFavorite);
-
+// 根据id获取课程收藏夹
+router.get('/getCourseFavoriteById', Favorites.GetCourseFavoriteById);
+// 根据id获取资讯收藏夹
+router.get('/getNewsFavoriteById', Favorites.GetNewsFavoriteById);
+// 删除课程收藏夹记录
+router.post('/delCourseFav', Favorites.DelCourseFav);
+// 删除资讯收藏夹记录
+router.post('/delNewsFav', Favorites.DelNewsFav);
 
 // 添加模块项*****************************
 

@@ -87,7 +87,8 @@ export default {
             url: item.video_url,
             type: item.course_class_name,
             typeVal: item.course_class_id,
-            avatar: item.cover
+            avatar: item.cover,
+            isBanner:item.isBanner
           };
         });
         vm.list=data;
@@ -136,6 +137,8 @@ export default {
       this.form.url = rows[index].url;
       this.form.desp = rows[index].desp;
       this.form.avatar = rows[index].avatar;
+      this.form.avatar = rows[index].avatar;
+      this.form.isBanner = rows[index].isBanner;
       this.$refs.dial.noshow();
       console.log("执行更改程序");
     },

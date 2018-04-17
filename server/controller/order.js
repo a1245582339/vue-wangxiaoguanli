@@ -138,7 +138,13 @@ exports.CheckOrder = function(req, res, next) {
   var course_id = req.query.course_id;
   var stu_id = req.query.stu_id;
   var haveBought = false;
-  req.models.order.find({ stu_id: stu_id }, function(err, list) {
+  req.models.order.find({ stu_id: stu_id }, function(err, _list) {
+    var list=[];
+    _list.map((item,index)=>{
+      if(item.isDel==0){
+        list.push(item)       // 如果该订单已被删除，则过滤掉该订单
+      }
+    })
     if (list.length == 0) {
       res.json({ code: 20000, data: { haveBought: haveBought } });
     } else {
@@ -151,3 +157,35 @@ exports.CheckOrder = function(req, res, next) {
     }
   });
 };
+
+exports.GetOrderByStuId = function(req,res,next){
+  var stu_id = req.query.stu_id
+  req.models.order.find({stu_id:stu_id},function(err,_list){
+    var list=[];
+    _list.map((item,index)=>{
+      if(item.isDel==0){
+        list.push(item)       // 如果该订单已被删除，则过滤掉该订单
+      }
+    })
+    console.log(JSON.stringify(list))
+    var findcourse = params =>new Promise((resolve, reject) =>
+        req.models.course.find(params, function(err, result) {
+          err ? reject(err) : resolve(result);
+        })
+      );
+    var course_name = Promise.all(
+      list.map(item => findcourse({ id: item.course_id }))
+    ).then(res => {
+      return res;
+    });
+
+    Promise.all([course_name]).then(result => {
+      
+      result[0].map((item, index) => {
+        list[index].course_name = item[0].course_name;
+      });
+
+      res.json({ code: 20000, title: "订单列表", data: list.reverse() });
+    });
+  })
+}

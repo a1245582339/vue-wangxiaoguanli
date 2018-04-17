@@ -4,6 +4,7 @@ module.exports = function(orm, db) {
     id: Number,
     news_id: Number,
     stu_id: Number,
-    create_time: Number
+    create_time: Number,
+    isDel:Number
   })
 };
