@@ -11,6 +11,7 @@
       </el-table-column>
       <el-table-column label="操作">
       <template slot-scope="scope">
+        <el-button @click="toCourse(scope.row.id)" type="primary" size="mini">查看</el-button>
         <el-button
           size="mini"
           type="danger"
@@ -89,7 +90,7 @@ export default {
     deleteRow(index, rows) {
       let data = rows.id; //删除
       var vm = this;
-      this.$confirm("是否确定将该订单删除？", "提示", {
+      this.$confirm("是否确定将该订单删除？注意！删除后将无法观看购买的课程！！！", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -116,7 +117,10 @@ export default {
             message: "已取消删除"
           });
         });
-    }
+    },
+    toCourse(id){
+      this.$router.push('/coursedetail?courseid='+id)
+    },
   }
 };
 </script>

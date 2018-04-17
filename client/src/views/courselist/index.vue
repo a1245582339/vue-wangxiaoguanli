@@ -92,8 +92,8 @@ export default {
             this.courseRow = [];
           } else {
             this.course = response.data;
+            this.courseRow = [];
             for (let i = 0; i < this.course.length; i += 3) {
-              this.courseRow = [];
               this.courseRow.push(this.course.slice(i, i + 3)); // 每三个一组，放到同一行
             }
           }

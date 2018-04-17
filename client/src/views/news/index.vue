@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import { getCourse, getCourseByclass } from "@/api/course";
 import { getNewsList, getNewsBytype } from "@/api/news";
 import { getNewsType } from "@/api/type";
 
@@ -108,18 +107,22 @@ export default {
       } else {
         getNewsBytype({ id: id }).then(response => {
           if (response.data.length == 0) {
-            this.newsRow = [];
+            vm.newsRow = [];
           } else {
-            this.news = response.data;
+            vm.news = response.data;
+            console.log(JSON.stringify(vm.news))
             response.data.map((item, index) => {
-              this.news[index].date = vm.timestampToTime(
+              vm.news[index].date = vm.timestampToTime(
                 response.data[index].create_time
               );
             });
+            vm.newsRow = [];
             for (let i = 0; i < this.news.length; i += 3) {
-              this.newsRow = [];
-              this.newsRow.push(this.news.slice(i, i + 3)); // 每三个一组，放到同一行
+              
+              vm.newsRow.push(this.news.slice(i, i + 3)); // 每三个一组，放到同一行
+              console.log(i)
             }
+            console.log(JSON.stringify(vm.newsRow))
           }
           vm.listLoading = false;
         });

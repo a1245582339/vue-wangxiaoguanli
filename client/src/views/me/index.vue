@@ -177,7 +177,7 @@ export default {
     this.listLoading = true;
     setTimeout(function() {
       vm.checkLogin();
-    }, 500);
+    }, 1000);
   },
   computed: {
     userInfo() {

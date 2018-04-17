@@ -3,10 +3,10 @@
     <h1 style="">收藏夹</h1>
     <el-tabs type="border-card" @tab-click="handleClick">
       <el-tab-pane label="课程">
-        <Moduletable :label="'课程名称'" :tableData="courseData" :delete-row='deleteRow'></Moduletable>
+        <Moduletable :label="'课程名称'" :tableData="courseData" :delete-row='deleteRow' :toLink='toLink'></Moduletable>
       </el-tab-pane>
       <el-tab-pane label="资讯">
-        <Moduletable :label="'资讯标题'" :tableData="newsData" :delete-row='deleteRow'></Moduletable>
+        <Moduletable :label="'资讯标题'" :tableData="newsData" :delete-row='deleteRow' :toLink='toLink'></Moduletable>
       </el-tab-pane>
     </el-tabs>
 
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-  
   import {
     getCourseFavoriteById,
     getNewsFavoriteById,
@@ -112,7 +111,7 @@
         });
       },
       // 删除模块
-      deleteRow(index, rows,label) {
+      deleteRow(index, rows, label) {
         console.log(label)
         let id = rows.id; //删除
         var vm = this;
@@ -122,43 +121,41 @@
             type: "warning"
           })
           .then(() => {
-            if(label =="课程名称"){
-              delCourseFav({id:id}).then(response => {
-              if (response.code == 20000) {
-                vm.courseData.splice(index, 1);
-                this.$message({
-                  message: "删除成功",
-                  type: "success"
-                });
-              } else {
-                this.$message({
-                  message: "删除失败",
-                  type: "success"
-                });
-              }
-            });
-            }else if(label =="资讯标题"){
-              delNewsFav({id:id}).then(response => {
-              if (response.code == 20000) {
-                vm.newsData.splice(index, 1);
-                this.$message({
-                  message: "删除成功",
-                  type: "success"
-                });
-              } else {
-                this.$message({
-                  message: "删除失败",
-                  type: "success"
-                });
-              }
-            });
+            if (label == "课程名称") {
+              delCourseFav({
+                id: id
+              }).then(response => {
+                if (response.code == 20000) {
+                  vm.courseData.splice(index, 1);
+                  this.$message({
+                    message: "删除成功",
+                    type: "success"
+                  });
+                } else {
+                  this.$message({
+                    message: "删除失败",
+                    type: "success"
+                  });
+                }
+              });
+            } else if (label == "资讯标题") {
+              delNewsFav({
+                id: id
+              }).then(response => {
+                if (response.code == 20000) {
+                  vm.newsData.splice(index, 1);
+                  this.$message({
+                    message: "删除成功",
+                    type: "success"
+                  });
+                } else {
+                  this.$message({
+                    message: "删除失败",
+                    type: "success"
+                  });
+                }
+              });
             }
-
-
-            
-
-
-
           })
           .catch(() => {
             this.$message({
@@ -166,7 +163,15 @@
               message: "已取消删除"
             });
           });
-      }
+      },
+      toLink(id, label) {
+        if (label == "课程名称") {
+          this.$router.push('/coursedetail?courseid=' + id)
+        } else if(label == "资讯标题") {
+          this.$router.push('/newsdetail?newsid=' + id)
+        }
+
+      },
     }
   };
 
