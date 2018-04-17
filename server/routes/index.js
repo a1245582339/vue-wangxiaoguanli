@@ -49,6 +49,8 @@ router.post('/updateCourse', Course.UpdateCourse);
 router.post('/updateCourseClass', Course.UpdateCourseClass);
 // 上传课程封面
 router.post('/updateCourseCover', Course.UpdateCourseCover);
+// 修改首页轮播图
+router.post('/updateBanner', Course.UpdateBanner);
 
 // **********************************资讯相关****************************************
 

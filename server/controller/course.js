@@ -244,3 +244,23 @@ exports.UpdateCourseCover = function(req, res, next) {
     
   });  
 };
+
+// 修改首页轮播图
+exports.UpdateBanner=function(req,res,title){
+  var data = req.body.data
+  req.models.course.find({isDel:0}).each(function(list){
+    console.log('list',list)
+    data.map(item =>{
+      if(item.id == list.id){
+        list.isBanner = item.isBanner
+      }
+    })
+    console.log('list',list)
+  }).save(function(err){
+    if(err){
+      res.json({ code: -1, title: "修改失败" });
+    }
+    res.json({ code: 20000, title: "修改成功" });
+  })
+}
+

@@ -31,3 +31,12 @@ export function delCourseClass(data) {
     data: { data }
   })
 }
+// 修改轮播图
+export function updateBanner(data) {
+  return request({
+    url: '/updateBanner',
+    method: 'post',
+    data: data
+  })
+}
+
