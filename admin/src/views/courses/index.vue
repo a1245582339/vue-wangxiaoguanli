@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
    <el-button type="primary" plain @click="addCourse">添加课程</el-button>
-   <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow' :preview='preview'></Moduletable>
+   <Moduletable :list="list" :label="label" :update-row='updateRow' :form="form" :delete-row='deleteRow' :preview='preview'  @commitform='commitForm'></Moduletable>
    <Dialogtable :actionUrl="actionUrl" :list="list" :type="type" :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
    <Vediodialog :vedioUrl="vedioUrl" ref="vedio"></Vediodialog>
   
@@ -36,7 +36,8 @@ export default {
         moudlePrice: "课程价格",
         moudleType: "课程类型",
         avatar:"封面",
-        canPreview:true
+        canPreview:true,
+        vedio:"上传视频"
       },
 
       form: {
@@ -159,7 +160,29 @@ export default {
     preview(url){
       this.vedioUrl=url
       this.$refs.vedio.noshow();
-    }
+    },
+
+
+      VedioChange(file) {
+        const name = file.name
+        const isMP4 = (name.indexOf('.MP4') > -1) || (name.indexOf('.mp4') > -1) 
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isMP4) {
+          this.$message.error("上传视频只能是 JPG,GIF,PNG 格式!");
+          return isMP4
+        }
+        if (!isLt2M) {
+          this.$message.error("上传视频大小不能超过 2MB!");
+          return isLt2M
+        }
+        this.vedioUrl = file.url
+        this.vedioChange = true // 如果视频发生更改，将它改为true
+      },
+      handleVedioSuccess(res, file) {
+        this.form.url = res.data.path
+        this.$emit("commitform");
+      }
   }
 };
 </script>

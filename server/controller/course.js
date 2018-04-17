@@ -245,6 +245,36 @@ exports.UpdateCourseCover = function(req, res, next) {
   });  
 };
 
+// 上传视频
+exports.UpdateCourseVedio = function(req, res, next) {
+  var form = new formidable.IncomingForm(); //创建上传表单
+  form.encoding = "utf-8"; //设置编辑
+  form.uploadDir = "public/vedio"; //设置上传目录
+  form.keepExtensions = true; //保留后缀
+  form.maxFieldsSize = 20 * 1024 * 1024; //文件大小 k
+  form.parse(req,function(err, fields, files){ 
+    if(err) {  
+        res.send(err);  
+        return;  
+    }  
+    
+    var extraName='.'+files.file.path.split('.')[1]
+    var randomName = 'vedio'+(new Date()).getTime()+ parseInt(Math.random() * 8999 +10000);
+
+    var newName=randomName+extraName
+    var newpath =  'public/vedio/'+newName;
+    var oldpath =  files.file.path
+    fs.rename(oldpath,newpath,function(err){
+      if(err){
+            console.error("改名失败"+err);
+      }
+      var resPath = 'http://localhost:3000/vedio/'+newName
+      res.json({ code: 20000, title: "上传成功",data:{path:resPath} });
+    });
+    
+  });  
+};
+
 // 修改首页轮播图
 exports.UpdateBanner=function(req,res,title){
   var data = req.body.data
