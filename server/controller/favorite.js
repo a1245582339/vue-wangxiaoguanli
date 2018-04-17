@@ -123,7 +123,7 @@ exports.GetCourseFavoriteById = function(req, res, next) {
         result[1].map((item, index) => {
           list[index].stu_name = item[0].stu_name;
         });
-        res.json({ code: 20000, title: "课程收藏夹", data: list });
+        res.json({ code: 20000, title: "课程收藏夹", data: list.reverse() });
       });
     }
   });
@@ -170,7 +170,7 @@ exports.GetNewsFavoriteById = function(req, res, next) {
         result[1].map((item, index) => {
           list[index].stu_name = item[0].stu_name;
         });
-        res.json({ code: 20000, title: "课程收藏夹", data: list });
+        res.json({ code: 20000, title: "资讯收藏夹", data: list.reverse() });
       });
     }
   });
@@ -247,6 +247,62 @@ exports.CancelCourseFav = function(req,res,next){
   var stu_id = req.body.stu_id
   var course_id = req.body.course_id
   req.models.course_favorite.find({course_id:course_id}).each(function(list){
+    if(list.stu_id = stu_id){
+      list.isDel = 1
+    }
+  }).save(function(err){
+    if(err){
+      res.json({ code: -1, title: "请求异常" });
+    }else{
+      res.json({ code: 20000, title: "取消成功" });
+    }
+  })
+}
+
+
+// 客户端检查资讯是否被收藏，并返回被收藏量
+exports.CheckNewsFav = function(req,res,next){
+  var stu_id = req.query.stu_id
+  var news_id = req.query.news_id
+  req.models.news_favorite.exists({stu_id:stu_id,news_id:news_id,isDel:0},function(err,exist){
+    req.models.news_favorite.count({news_id:news_id,isDel:0},function(err,count){
+      if(err){
+        res.json({code:-1,title:"请求异常"})
+      }else{
+        res.json({code:20000,data:{exist:exist,count:count}})
+      }
+    })
+  })
+}
+
+// 资讯添加收藏
+exports.AddNewsFav = function(req,res,next){
+  var stu_id = req.body.stu_id
+  var news_id = req.body.news_id
+  req.models.news_favorite.exists({stu_id:stu_id,news_id:news_id,isDel:0},function(err,exist){
+    if(exist){
+      res.json({code:20000,title:"重复请求"})
+    }else{
+      var create_time = Date.parse(new Date()) / 1000;
+      req.models.news_favorite.create({
+        news_id:news_id,
+        stu_id:stu_id,
+        create_time:create_time,
+        isDel:0
+      },function(err){
+        if (err) {
+          throw err;
+        }
+        res.json({ code: 20000, title: "添加成功" });
+      })
+    }
+  })
+}
+// 资讯取消收藏
+exports.CancelNewsFav = function(req,res,next){
+  var stu_id = req.body.stu_id
+  var news_id = req.body.news_id
+  req.models.news_favorite.find({news_id:news_id}).each(function(list){
     if(list.stu_id = stu_id){
       list.isDel = 1
     }

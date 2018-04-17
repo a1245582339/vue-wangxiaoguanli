@@ -160,6 +160,13 @@ router.post('/addCourseFav', Favorites.AddCourseFav);
 // 课程取消收藏
 router.post('/cancelCourseFav', Favorites.CancelCourseFav);
 
+// 客户端检查资讯是否被收藏，并返回被收藏量
+router.get('/checkNewsFav', Favorites.CheckNewsFav);
+// 资讯添加收藏
+router.post('/addNewsFav', Favorites.AddNewsFav);
+// 资讯取消收藏
+router.post('/cancelNewsFav', Favorites.CancelNewsFav);
+
 // 添加模块项*****************************
 
 module.exports = router;

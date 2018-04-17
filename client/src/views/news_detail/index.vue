@@ -10,10 +10,22 @@
       </el-breadcrumb>
       <!-- ************资讯************ -->
       <div class="news">
-          <h1 class="news-title">{{news.news_name}}</h1>
-          <p class="news-desp">简介：{{news.news_desp}}</p>
-          <img class="news-cover" :src="news.cover" alt="">
-          <div v-html="news.content"></div>
+        <h1 class="news-title">{{news.news_name}}</h1>
+        <div v-if="isLogin" class="fav">
+          <span @click="cancelFav" style="cursor: pointer;" v-if="haveFav">
+            <span style="color:#f7ba2a" class="el-icon-star-on"></span>
+            <span style="color:#303133;font-size:14px;"> 已收藏</span>
+          </span>
+          <span @click="addFav" style="cursor: pointer;" v-else>
+            <span style="color:#f7ba2a" class="el-icon-star-off"></span>
+            <span style="color:#303133;font-size:14px;"> 收藏</span>
+
+          </span>
+          <span style="color:#909399;font-size:14px;">收藏量：{{favCount}}</span>
+        </div>
+        <p class="news-desp">简介：{{news.news_desp}}</p>
+        <img class="news-cover" :src="news.cover" alt="">
+        <div v-html="news.content"></div>
       </div>
 
     </el-card>
@@ -23,15 +35,25 @@
 
 <script>
 import { getNewsById, addPageView } from "@/api/news";
+import { checkNewsFav,addNewsFav,cancelNewsFav } from "@/api/favorite";
 export default {
   name: "news",
   data() {
     return {
       news: [],
       listLoading: false,
+      haveFav: false,
+      favCount: 0
     };
   },
-  computed: {},
+  watch: {
+    isLogin(val1, val2) {
+      if (val1) {
+        var news_id = this.getQueryVariable("newsid");
+        this.fetchFav(news_id, this.$store.state.user_info.stu_id);
+      }
+    }
+  },
   created() {
     var vm = this;
     var news_id = this.getQueryVariable("newsid");
@@ -39,7 +61,7 @@ export default {
       this.$router.push("/404");
     } else {
       this.fetchNews(news_id);
-      
+
       this.$emit("listenActiveIndex", "news");
     }
   },
@@ -74,14 +96,57 @@ export default {
         vm.visit(); // 增加浏览量
       });
     },
-    visit(){
-      var vm=this
-      if(vm.userInfo.stu_id){
-        var stu_id = vm.userInfo.stu_id
-      }else{
-        var stu_id = -1
+    visit() {
+      var vm = this;
+      if (vm.userInfo.stu_id) {
+        var stu_id = vm.userInfo.stu_id;
+      } else {
+        var stu_id = -1;
       }
-      addPageView({news_id:vm.news.id,stu_id:stu_id})
+      addPageView({
+        news_id: vm.news.id,
+        stu_id: stu_id
+      });
+    },
+    fetchFav(news_id, stu_id) {
+      var vm = this;
+      checkNewsFav({
+        news_id: news_id,
+        stu_id: stu_id
+      }).then(response => {
+        vm.haveFav = response.data.exist;
+        vm.favCount = response.data.count;
+      });
+    },
+    addFav() {
+      var vm = this;
+      var news_id = this.getQueryVariable("newsid");
+      var stu_id = this.$store.state.user_info.stu_id;
+      addNewsFav({ news_id: news_id, stu_id: stu_id }).then(response => {
+        vm.haveFav = true;
+        if (response.title == "添加成功") {
+          vm.favCount++;
+        }
+        this.$message({
+          message: "添加收藏成功",
+          type: "success"
+        });
+      });
+    },
+    cancelFav() {
+      var vm = this;
+      var news_id = this.getQueryVariable("newsid");
+      var stu_id = this.$store.state.user_info.stu_id;
+      cancelNewsFav({ news_id: news_id, stu_id: stu_id }).then(response => {
+        vm.haveFav = false;
+        if (response.title == "取消成功") {
+          vm.favCount--;
+        }
+        this.$message({
+          message: "取消收藏成功",
+          type: "success"
+        });
+      });
     }
   },
   mounted() {}
@@ -89,21 +154,24 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.news{
+.news {
   margin-top: 50px;
-  .news-title{
+  .news-title {
     text-align: center;
   }
-  .news-desp{
+  .news-desp {
     color: #606266;
-    font-size: 14px
+    font-size: 14px;
   }
-  .news-cover{
+  .news-cover {
     display: block;
     width: 500px;
     height: 300px;
-    margin: 0 auto
+    margin: 0 auto;
+  }
+  .fav {
+    width: 140px;
+    margin: 10px 0 10px;
   }
 }
-
 </style>

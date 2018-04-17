@@ -74,3 +74,31 @@ export function cancelCourseFav(data) {
     data
   })
 }
+
+
+// 检查资讯是否被收藏，并返回被收藏量
+export function checkNewsFav(params) {
+  return request({
+    url: '/checkNewsFav',
+    method: 'get',
+    params
+  })
+}
+
+// 资讯添加收藏
+export function addNewsFav(data) {
+  return request({
+    url: '/addNewsFav',
+    method: 'post',
+    data
+  })
+}
+
+// 资讯取消收藏
+export function cancelNewsFav(data) {
+  return request({
+    url: '/cancelNewsFav',
+    method: 'post',
+    data
+  })
+}

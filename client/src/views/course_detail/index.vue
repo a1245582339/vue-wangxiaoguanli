@@ -206,7 +206,7 @@ export default {
       var course_id = this.getQueryVariable("courseid");
       var stu_id = this.$store.state.user_info.stu_id
       cancelCourseFav({course_id: course_id,stu_id: stu_id}).then(response=>{
-        vm.haveFav = true
+        vm.haveFav = false
         if(response.title == "取消成功"){
           vm.favCount--
         }
