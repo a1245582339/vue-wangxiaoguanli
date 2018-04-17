@@ -179,9 +179,7 @@ exports.GetNewsFavoriteById = function(req, res, next) {
 // 删除课程收藏夹记录
 exports.DelCourseFav = function(req,res,next){
   var id = req.body.id;
-  console.log(JSON.stringify(req.body))
   req.models.course_favorite.find({id:id}).each(function(list){
-    console.log(list)
     list.isDel = 1
   }).save(function(err){
     if(err){
@@ -202,6 +200,61 @@ exports.DelNewsFav = function(req,res,next){
       res.json({code:-1})
     }else{
       res.json({ code: 20000, title: "删除成功" });
+    }
+  })
+}
+
+// 客户端检查课程是否被收藏，并返回被收藏量
+exports.CheckCourseFav = function(req,res,next){
+  var stu_id = req.query.stu_id
+  var course_id = req.query.course_id
+  req.models.course_favorite.exists({stu_id:stu_id,course_id:course_id,isDel:0},function(err,exist){
+    req.models.course_favorite.count({course_id:course_id,isDel:0},function(err,count){
+      if(err){
+        res.json({code:-1,title:"请求异常"})
+      }else{
+        res.json({code:20000,data:{exist:exist,count:count}})
+      }
+    })
+  })
+}
+
+// 课程添加收藏
+exports.AddCourseFav = function(req,res,next){
+  var stu_id = req.body.stu_id
+  var course_id = req.body.course_id
+  req.models.course_favorite.exists({stu_id:stu_id,course_id:course_id,isDel:0},function(err,exist){
+    if(exist){
+      res.json({code:20000,title:"重复请求"})
+    }else{
+      var create_time = Date.parse(new Date()) / 1000;
+      req.models.course_favorite.create({
+        course_id:course_id,
+        stu_id:stu_id,
+        create_time:create_time,
+        isDel:0
+      },function(err){
+        if (err) {
+          throw err;
+        }
+        res.json({ code: 20000, title: "添加成功" });
+      })
+    }
+  })
+}
+// 课程取消收藏
+exports.CancelCourseFav = function(req,res,next){
+  var stu_id = req.body.stu_id
+  var course_id = req.body.course_id
+  req.models.course_favorite.find({course_id:course_id}).each(function(list){
+    if(list.stu_id = stu_id){
+      list.isDel = 1
+    }
+  }).save(function(err){
+    if(err){
+      res.json({ code: -1, title: "请求异常" });
+    }else{
+      res.json({ code: 20000, title: "取消成功" });
     }
   })
 }

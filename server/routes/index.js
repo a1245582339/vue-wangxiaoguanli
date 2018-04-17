@@ -153,6 +153,13 @@ router.post('/delCourseFav', Favorites.DelCourseFav);
 // 删除资讯收藏夹记录
 router.post('/delNewsFav', Favorites.DelNewsFav);
 
+// 客户端检查课程是否被收藏，并返回被收藏量
+router.get('/checkCourseFav', Favorites.CheckCourseFav);
+// 课程添加收藏
+router.post('/addCourseFav', Favorites.AddCourseFav);
+// 课程取消收藏
+router.post('/cancelCourseFav', Favorites.CancelCourseFav);
+
 // 添加模块项*****************************
 
 module.exports = router;

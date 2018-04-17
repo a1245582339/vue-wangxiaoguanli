@@ -13,7 +13,17 @@
         <img class="course-cover" :src="course.cover" alt="">
         <div class="course-text">
           <div class="text">
-            <h1>{{course.course_name}}</h1>
+            <h1 style="margin:0">{{course.course_name}} </h1>
+            <div v-if="isLogin" class="fav">
+              <span @click="cancelFav" style="cursor: pointer;" v-if="haveFav">
+                <span style="color:#f7ba2a" class="el-icon-star-on"></span><span style="color:#303133;font-size:14px;"> 已收藏</span>
+              </span>
+              <span @click="addFav" style="cursor: pointer;" v-else>
+                <span style="color:#f7ba2a" class="el-icon-star-off"></span><span style="color:#303133;font-size:14px;"> 收藏</span>
+                
+              </span>
+              <span style="color:#909399;font-size:14px;">收藏量：{{favCount}}</span>
+            </div>
             <div class="price">
               <span>价 格</span>
               <span class="price-val">￥{{course.course_price}}</span>
@@ -54,6 +64,7 @@
 <script>
 import { getCourseById } from "@/api/course";
 import { checkOrder, submitOrder } from "@/api/order";
+import { checkCourseFav,addCourseFav,cancelCourseFav } from "@/api/favorite";
 import Vediodialog from "@/components/vediodialog";
 export default {
   name: "course",
@@ -66,6 +77,8 @@ export default {
       listLoading: false,
       haveBought: false, // 此课程是否已被当前用户购买，默认为未购买
       dialogVisible: false,
+      haveFav:false,
+      favCount:0
     };
   },
   computed: {},
@@ -77,6 +90,7 @@ export default {
     } else {
       this.fetchCourse(course_id);
       this.fetchOrder(course_id, this.$store.state.user_info.stu_id);
+      this.fetchFav(course_id, this.$store.state.user_info.stu_id)
       this.$emit("listenActiveIndex", "course");
     }
   },
@@ -93,6 +107,7 @@ export default {
       if (val1) {
         var course_id = this.getQueryVariable("courseid");
         this.fetchOrder(course_id, this.$store.state.user_info.stu_id);
+        this.fetchFav(course_id, this.$store.state.user_info.stu_id)
       }
     }
   },
@@ -127,13 +142,23 @@ export default {
         vm.haveBought = response.data.haveBought;
       });
     },
+    fetchFav(course_id, stu_id) {
+      var vm = this;
+      checkCourseFav({
+        course_id: course_id,
+        stu_id: stu_id
+      }).then(response => {
+        vm.haveFav = response.data.exist
+        vm.favCount = response.data.count;
+      });
+    },
     buy() {
-      if(this.userInfo.ischecked==0){
+      if (this.userInfo.ischecked == 0) {
         this.$message({
-          message: '很抱歉，只有通过审核的用户才可购买课程',
-          type: 'warning'
+          message: "很抱歉，只有通过审核的用户才可购买课程",
+          type: "warning"
         });
-        return false
+        return false;
       }
       if (this.isLogin) {
         this.dialogVisible = true;
@@ -153,10 +178,43 @@ export default {
               message: "恭喜您购买成功，可以点击开始学习观看课程啦",
               type: "success"
             });
-            vm.$store.commit('changebalance',vm.userInfo.balance-vm.course.course_price)
+            vm.$store.commit(
+              "changebalance",
+              vm.userInfo.balance - vm.course.course_price
+            );
           }
         }
       );
+    },
+    addFav(){
+      var vm = this
+      var course_id = this.getQueryVariable("courseid");
+      var stu_id = this.$store.state.user_info.stu_id
+      addCourseFav({course_id: course_id,stu_id: stu_id}).then(response=>{
+        vm.haveFav = true
+        if(response.title == "添加成功"){
+          vm.favCount++
+        }
+        this.$message({
+          message: '添加收藏成功',
+          type: 'success'
+        });
+      })
+    },
+    cancelFav(){
+      var vm = this
+      var course_id = this.getQueryVariable("courseid");
+      var stu_id = this.$store.state.user_info.stu_id
+      cancelCourseFav({course_id: course_id,stu_id: stu_id}).then(response=>{
+        vm.haveFav = true
+        if(response.title == "取消成功"){
+          vm.favCount--
+        }
+        this.$message({
+          message: '取消收藏成功',
+          type: 'success'
+        });
+      })
     },
     play() {
       this.$refs.vedio.noshow();
@@ -176,6 +234,11 @@ export default {
   .course-text {
     float: right;
     width: 500px;
+    .fav {
+      width: 140px;
+      margin: 10px 0 10px;
+    }
+
     .text {
       float: left;
       .price {

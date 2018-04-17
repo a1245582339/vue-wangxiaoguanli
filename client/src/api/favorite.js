@@ -48,3 +48,29 @@ export function delNewsFav(data) {
   })
 }
 
+// 检查课程是否被收藏，并返回被收藏量
+export function checkCourseFav(params) {
+  return request({
+    url: '/checkCourseFav',
+    method: 'get',
+    params
+  })
+}
+
+// 课程添加收藏
+export function addCourseFav(data) {
+  return request({
+    url: '/addCourseFav',
+    method: 'post',
+    data
+  })
+}
+
+// 课程取消收藏
+export function cancelCourseFav(data) {
+  return request({
+    url: '/cancelCourseFav',
+    method: 'post',
+    data
+  })
+}
