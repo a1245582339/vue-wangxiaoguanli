@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 17/04/2018 22:48:58
+ Date: 17/04/2018 22:59:44
 */
 
 SET NAMES utf8mb4;
@@ -55,7 +55,7 @@ CREATE TABLE `course`  (
   `course_desp` varchar(225) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `isDel` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of course
@@ -66,6 +66,8 @@ INSERT INTO `course` VALUES (3, 'html', 0, 1, 'http://localhost:3000/vedio/vedio
 INSERT INTO `course` VALUES (4, '数据结构', 24, 2, 'http://localhost:3000/vedio/vedio152397617088112780.mp4', 0, 'http://localhost:3000/course_cover/course_cover152352236540513063.jpeg', '数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。', 0);
 INSERT INTO `course` VALUES (5, 'JAVA', 10, 3, 'http://localhost:3000/vedio/vedio152397614592018017.mp4', 0, 'http://localhost:3000/course_cover/course_cover152352214380215349.jpg', 'Java是一门面向对象编程语言，不仅吸收了C++语言的各种优点，还摒弃了C++里难以理解的多继承、指针等概念，因此Java语言具有功能强大和简单易用两个特征。Java语言作为静态面向对象编程语言的代表，极好地实现了面向对象理论，允许程序员以优雅的思维方式进行复杂的编程', 0);
 INSERT INTO `course` VALUES (6, 'test1', 9999, 3, 'http://localhost:3000/vedio/vedio152397647219416210.mp4', 0, 'http://localhost:3000/course_cover/course_cover152392861158111747.png', 'ewq', 0);
+INSERT INTO `course` VALUES (7, '数据结构test2', 222, 2, 'http://localhost:3000/vedio/vedio152397703474311345.mp4', 0, 'http://localhost:3000/course_cover/course_cover152397662395813785.jpeg', '数据结构test2', 0);
+INSERT INTO `course` VALUES (8, '大数据', 999, 2, 'http://localhost:3000/vedio/vedio152397708770218165.mp4', 0, 'http://localhost:3000/course_cover/course_cover152397691908614293.jpg', '大数据', 0);
 
 -- ----------------------------
 -- Table structure for course_class
