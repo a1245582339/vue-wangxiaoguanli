@@ -108,21 +108,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="label.vedio" align="center" :label="label.vedio">
-        <template slot-scope="scope">
-          <el-upload
-          class="vedio-uploader"
-          :auto-upload="true"
-          :show-file-list="true"
-          :on-success="VedioSuccess"
-          :on-change="vedioChange"
-          action="http://127.0.0.1:3000/updateCourseVedio">
-          <el-button size="small" type="primary">点击上传视频</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传mp4文件</div>
-</el-upload>
-        </template>
-      </el-table-column>
-
        <el-table-column v-if="label.moudleCheck" align="center"  :label="label.moudleCheck">
         <template slot-scope="scope">
           <el-button
@@ -160,24 +145,7 @@ export default {
     };
   },
   methods:{
-    vedioChange(file){
-      const name=file.name
-      const isMP4 = (name.indexOf('.mp4')> -1)||(name.indexOf('.MP4')> -1)
-      const isLt10M = file.size / 1024 / 1024 < 10;
-
-      if (!isMP4) {
-        this.$message.error("上传视频只能是 MP4 格式!");
-        return isMP4
-      }
-      if (!isLt10M) {
-        this.$message.error("上传视频大小不能超过 10MB!");
-        return isLt10M
-      }
-    },
-    VedioSuccess(res, file) {
-      //this.form.url=res.data.url
-      //this.$emit("commitform");
-    }
+    
   }
 };
 </script>

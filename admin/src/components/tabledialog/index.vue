@@ -57,7 +57,24 @@
             <div v-html="form.content"></div>
            <tinymce :height="300" v-model="form.content"></tinymce>
          </el-form-item>
-         
+         <!-- ***********************上传视频****************************** -->
+          <el-form-item v-if="label.vedio" :label="label.vedio" :label-width="formLabelWidth">
+            <el-upload
+            class="vedio-uploader"
+            ref="vedio"
+            :auto-upload="false"
+            :show-file-list="true"
+            :on-success="VedioSuccess"
+            :on-change="vedioChangeCallback"
+            :limit="1"
+            action="http://127.0.0.1:3000/updateCourseVedio">
+              <el-button size="small" type="primary">点击上传视频</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传mp4文件</div>
+            </el-upload>
+          </el-form-item>
+
+
+
        </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="noshow()">取 消</el-button>
@@ -140,6 +157,7 @@ export default {
       isdisabled: true,
       imageUrl: '',
       imageChange:false,
+      vedioChange:false,
       rules: {
         name: [{ validator: checkName, trigger: "change" }],
         desp: [{ validator: checkDesp, trigger: "change" }],
@@ -153,12 +171,17 @@ export default {
       this.dialogFormVisible = !this.dialogFormVisible;
     },
     commitForm() {
-      if(this.imageChange){
+      if(this.imageChange&&this.vedioChange){
         this.$refs.image.submit();  // 如果图片有更改，则在上传成功的回调中
+      }else if(this.imageChange){
+       this.$refs.image.submit();
+      }else if(this.vedioChange){
+        console.log("只传视频")
+        this.$refs.vedio.submit();
       }else{
-        this.$emit("commitform");
+      this.$emit("commitform");
       }
-      
+       
     },
     changeType() {
       this.form.type = this.typeValue;
@@ -192,9 +215,31 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.form.avatar=res.data.path
-      
-      console.log(this.imageChange)
+      if(this.vedioChange){
+         this.$refs.vedio.submit();
+      }else{
+        this.$emit("commitform");
+      }
+    },
+    vedioChangeCallback(file){
+      const name=file.name
+      const isMP4 = (name.indexOf('.mp4')> -1)||(name.indexOf('.MP4')> -1)
+      const isLt10M = file.size / 1024 / 1024 < 30;
+
+      if (!isMP4) {
+        this.$message.error("上传视频只能是 MP4 格式!");
+        return isMP4
+      }
+      if (!isLt10M) {
+        this.$message.error("上传视频大小不能超过 10MB!");
+        return isLt10M
+      }
+      this.vedioChange=true
+    },
+    VedioSuccess(res, file) {
+      this.form.url=res.data.path
       this.$emit("commitform");
+      this.$refs.vedio.clearFiles();
     }
     
   },
