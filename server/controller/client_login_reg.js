@@ -123,7 +123,8 @@ exports.GetInfo = function (req, res, next) {
 exports.CheckIfSigned = function(req,res,next){
   var stu_id=req.query.stu_id
   req.models.sign.find({stu_id:stu_id},function(err,list){
-    var current_time = Math.floor(Date.parse(new Date())/86400000);
+    var current_time = Math.floor(((new Date().getTime())+28800000)/86400000);
+    console.log(current_time,(new Date().getTime())/86400000,new Date().getTime())
     if(list.length==0||list[list.length-1].sign_time!=current_time){
       res.json({code:20000,data:{haveSign:false}})
     }else{
@@ -135,7 +136,8 @@ exports.CheckIfSigned = function(req,res,next){
 exports.SignIn = function(req,res,next){
   var stu_id=req.body.stu_id
   req.models.sign.find({stu_id:stu_id},function(err,list){
-    var current_time = Math.floor(Date.parse(new Date())/86400000);
+    var current_time = Math.floor(((new Date().getTime())+28800000)/86400000);
+    
     if(list.length==0||list[list.length-1].sign_time!=current_time){
       req.models.sign.create({stu_id:stu_id,sign_time:current_time},function(err){
         if(err){
