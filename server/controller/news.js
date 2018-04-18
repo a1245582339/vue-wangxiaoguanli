@@ -36,13 +36,17 @@ exports.GetNewsById = function(req, res, next) {
     if (err) {
       res.json({ title: "请求异常", code: -1 });
     } else {
-      req.models.news_type.find({ id: list[0].news_type_id }, function(
-        err,
-        _list
-      ) {
-        list[0].news_type_name = _list[0].news_type_name;
-        res.json({ title: "资讯详情", code: 20000, data: list[0] });
-      });
+      if(list.length == 0){
+        res.json({title:"无此资讯",code:-1,data:{message:'无此资讯'}})
+      }else{
+        req.models.news_type.find({ id: list[0].news_type_id }, function(
+          err,
+          _list
+        ) {
+          list[0].news_type_name = _list[0].news_type_name;
+          res.json({ title: "资讯详情", code: 20000, data: list[0] });
+        });
+      }
     }
   });
 };

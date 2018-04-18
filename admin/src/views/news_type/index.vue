@@ -2,7 +2,7 @@
   <div class="app-container" v-loading.body="listLoading">
    <el-button type="primary" plain @click="addType">添加资讯类型</el-button>
    <Moduletable :list="list" :label="label" :update-row='updateRow' :delete-row='deleteRow'></Moduletable>
-   <Dialogtable :list="list"  :form="form" :label="label" ref="dial" @commitform='commitForm'></Dialogtable>
+   <Dialogtable :list="list"  :form="form" :label="label" ref="add" @commitform='commitForm'></Dialogtable>
 
   
   </div>
@@ -111,7 +111,7 @@ export default {
       // console.log(rows[index])
       this.form.id = rows[index].id;
       this.form.name = rows[index].name;
-      this.$refs.dial.noshow();
+      this.$refs.add.noshow();
       console.log("执行更改程序");
     },
     commitForm() {
@@ -120,7 +120,7 @@ export default {
       let data = this.form;
 
       updateNewsType(data).then(response => {
-        this.$refs.dial.noshow();
+        this.$refs.add.noshow();
         this.fetchData();
         this.$message({
           message: "修改成功",

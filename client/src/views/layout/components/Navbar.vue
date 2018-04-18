@@ -29,6 +29,8 @@
               </el-form>
             </div>
 
+  <el-button v-if="!haveSign" style="display:block;margin:0 auto" type="warning" @click="sign">每日签到</el-button>
+   <el-button v-else style="display:block;margin:0 auto" type="info" disabled>今日已签到</el-button>
             <!-- 按钮组 -->
             <el-button-group style="margin-left:30px;margin-top:5px">
               <el-button @click="toMe">个人中心</el-button>
@@ -121,7 +123,9 @@
     checkNameExist,
     register,
     login,
-    getInfo
+    getInfo,
+    checkIfSigned,
+    signIn
   } from "@/api/loginAndReg";
   import {
     setToken,
@@ -229,6 +233,7 @@
         nameCanReg: 0, // 输入的用户名是否已注册,1是可以注册，2是已被占用
         checkNameDisabled: true, // 检查用户名按钮，没填东西不能点
         loginDisable: true, // 登录按钮，没填完信息不能点
+        haveSign:false,
         log: {
           user_name: "",
           password: "",
@@ -307,6 +312,9 @@
           });
           vm.loginVisible = false;
           vm.$store.commit("toLogin", res.data[0]);
+          checkIfSigned({stu_id:res.data[0].id}).then(response=>{
+            vm.haveSign = response.data.haveSign
+          })
         });
       }
     },
@@ -353,6 +361,9 @@
                   });
                   vm.loginVisible = false;
                   vm.$store.commit("toLogin", res.data[0]);
+                  checkIfSigned({stu_id:res.data[0].id}).then(response=>{
+                    vm.haveSign = response.data.haveSign
+                  })
                 });
               })
               .catch(err => {
@@ -408,6 +419,17 @@
       },
       register() {
         this.regVisible = true;
+      },
+      sign(){
+        var vm = this
+        signIn({stu_id:vm.userInfo.stu_id}).then(response=>{
+          vm.haveSign = false
+          vm.$store.commit('changebalance',50)
+          this.$message({
+          message: '签到成功！  积分+50',
+          type: 'success'
+        });
+        })
       }
     }
   };

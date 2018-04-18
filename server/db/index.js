@@ -11,6 +11,7 @@ function setup(db, cb) {
   require('./course_class')(orm, db);
   require('./course_favorite')(orm, db);
   require('./student')(orm, db);
+  require('./sign')(orm, db);
   require('./news')(orm, db);
   require('./news_type')(orm, db);
   require('./news_favorite')(orm, db);

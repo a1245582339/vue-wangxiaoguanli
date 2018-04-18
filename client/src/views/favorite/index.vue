@@ -76,7 +76,7 @@
         return Y + M + D + h + m + s;
       },
       handleClick(tab) {
-        console.log(tab);
+
       },
       // 获取数据
       fetchData() {
@@ -90,6 +90,7 @@
           var data = [];
           order.map((item, index) => {
             data[index] = item;
+            data[index].itemid = item.course_id
             data[index].time = vm.timestampToTime(item.create_time);
             data[index].name = item.course_name
           });
@@ -103,6 +104,7 @@
           var data = [];
           order.map((item, index) => {
             data[index] = item;
+            data[index].itemid = item.news_id
             data[index].time = vm.timestampToTime(item.create_time);
             data[index].name = item.news_name
           });

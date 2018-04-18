@@ -94,6 +94,8 @@ export default {
         vm.news = response.data;
         vm.listLoading = false;
         vm.visit(); // 增加浏览量
+      }).catch(err =>{
+        vm.$router.push('/404')
       });
     },
     visit() {

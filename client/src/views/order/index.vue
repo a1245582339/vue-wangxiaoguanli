@@ -11,7 +11,7 @@
       </el-table-column>
       <el-table-column label="操作">
       <template slot-scope="scope">
-        <el-button @click="toCourse(scope.row.id)" type="primary" size="mini">查看</el-button>
+        <el-button @click="toCourse(scope.row.course_id)" type="primary" size="mini">查看</el-button>
         <el-button
           size="mini"
           type="danger"

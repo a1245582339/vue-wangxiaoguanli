@@ -19,6 +19,7 @@ exports.CheckStudent = function(req, res, next) {
     .find({ id: id })
     .each(function(list) {
       list.ischecked = 1;
+      list.balance+=100
     })
     .save(function(err) {
       if (err) {

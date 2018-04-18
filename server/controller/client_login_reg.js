@@ -119,3 +119,40 @@ exports.GetInfo = function (req, res, next) {
     })
   })
 }
+
+exports.CheckIfSigned = function(req,res,next){
+  var stu_id=req.query.stu_id
+  req.models.sign.find({stu_id:stu_id},function(err,list){
+    var current_time = Math.floor(Date.parse(new Date())/86400000);
+    if(list.length==0||list[list.length-1].sign_time!=current_time){
+      res.json({code:20000,data:{haveSign:false}})
+    }else{
+      res.json({code:20000,data:{haveSign:true}})
+    }
+  })
+}
+
+exports.SignIn = function(req,res,next){
+  var stu_id=req.body.stu_id
+  req.models.sign.find({stu_id:stu_id},function(err,list){
+    var current_time = Math.floor(Date.parse(new Date())/86400000);
+    if(list.length==0||list[list.length-1].sign_time!=current_time){
+      req.models.sign.create({stu_id:stu_id,sign_time:current_time},function(err){
+        if(err){
+          res.json({code:-1,data:{message:'签到失败'}})
+        }else{
+          req.models.student.find({id:stu_id}).each(function(_list){
+            _list.balance+=50
+          }).save(function(err){
+            if(err){
+              res.json({code:-1,data:{message:'增加积分失败'}})
+            }
+            res.json({code:20000,title:'签到成功'})
+          })
+        }
+      })
+    }else{
+      res.json({code:-1,data:{message:'签到失败'}})
+    }
+  })
+}

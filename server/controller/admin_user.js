@@ -11,7 +11,7 @@ exports.Login = function(req, res, next) {
       var timestamp = new Date().getTime();
       var deadline = timestamp+604800000;
       var admin_id = list[0].id
-      req.models.token.create(
+      req.models.admin_token.create(
         { token: timestamp, deadline: deadline, admin_id: admin_id},
         function(err) {
           if (err) {

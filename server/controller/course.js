@@ -37,10 +37,14 @@ exports.GetCourseById = function(req, res, next) {
     if (err) {
       res.json({ title: "请求异常", code: -1});
     } else {
-      req.models.course_class.find({id: list[0].course_class_id}, function(err,_list){
-        list[0].course_class_name=_list[0].course_class_name
-        res.json({title:"课程详情",code:20000,data:list[0]})
-      })
+      if(list.length == 0){
+        res.json({title:"无此课程",code:-1,data:{message:'无此课程'}})
+      }else{
+        req.models.course_class.find({id: list[0].course_class_id}, function(err,_list){
+          list[0].course_class_name=_list[0].course_class_name
+          res.json({title:"课程详情",code:20000,data:list[0]})
+        })
+      }
     }
   });
 };
@@ -91,7 +95,6 @@ exports.DelCourse = function(req, res, next) {
 // 修改课程(新增和修改用的同一个接口，通过id判断)
 exports.UpdateCourse = function(req, res, next) {
   var id = req.body.id;
-  console.log(JSON.stringify(req.body))
   if (!id) {
     req.models.course.create(
       {
@@ -279,13 +282,11 @@ exports.UpdateCourseVedio = function(req, res, next) {
 exports.UpdateBanner=function(req,res,title){
   var data = req.body.data
   req.models.course.find({isDel:0}).each(function(list){
-    console.log('list',list)
     data.map(item =>{
       if(item.id == list.id){
         list.isBanner = item.isBanner
       }
     })
-    console.log('list',list)
   }).save(function(err){
     if(err){
       res.json({ code: -1, title: "修改失败" });

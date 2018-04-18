@@ -53,7 +53,7 @@ exports.SubmitOrder = function(req, res, next) {
     }
     var price = list[0].course_price;
     var create_time = Date.parse(new Date())/1000;
-    req.models.order.exists({ stu_id: stu_id, course_id: course_id }, function(
+    req.models.order.exists({ stu_id: stu_id, course_id: course_id,isDel :0 }, function(
       err,
       isExist
     ) {

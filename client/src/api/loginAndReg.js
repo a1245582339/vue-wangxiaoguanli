@@ -33,3 +33,21 @@ export function getInfo(params) {
     params
   })
 }
+
+// 验证当天是否已签到
+export function checkIfSigned(params) {
+  return request({
+    url: '/checkIfSigned',
+    method: 'get',
+    params
+  })
+}
+
+// 签到
+export function signIn(data) {
+  return request({
+    url: '/signIn',
+    method: 'post',
+    data
+  })
+}

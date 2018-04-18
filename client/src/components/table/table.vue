@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column label="操作">
       <template slot-scope="scope">
-        <el-button @click="toLink(scope.row.id,label)" type="primary" size="mini">查看</el-button>
+        <el-button @click="toLink(scope.row.itemid,label)" type="primary" size="mini">查看</el-button>
         <el-button
           size="mini"
           type="danger"

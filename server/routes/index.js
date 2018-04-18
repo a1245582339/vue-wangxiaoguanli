@@ -25,7 +25,8 @@ router.get('/checkNameExist', Client.CheckNameExist);
 router.post('/login',Client.Login);
 router.post('/register', Client.Register);
 router.get('/getInfo', Client.GetInfo);
-
+router.get('/checkIfSigned',  Client.CheckIfSigned)
+router.post('/SignIn', Client.SignIn);
 
 // **********************************课程相关****************************************
 

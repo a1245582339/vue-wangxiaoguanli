@@ -131,6 +131,8 @@ export default {
       }).then(response => {
         vm.course = response.data;
         vm.listLoading = false;
+      }).catch(err =>{
+        vm.$router.push('/404')
       });
     },
     fetchOrder(course_id, stu_id) {
@@ -140,7 +142,7 @@ export default {
         stu_id: stu_id
       }).then(response => {
         vm.haveBought = response.data.haveBought;
-      });
+      })
     },
     fetchFav(course_id, stu_id) {
       var vm = this;

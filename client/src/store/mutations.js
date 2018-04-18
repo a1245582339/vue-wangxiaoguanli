@@ -36,5 +36,5 @@ export const changeAvatar = (state, payload) => {
 
 // 变更积分
 export const changebalance = (state, payload) => {
-  state.user_info.balance = payload;
+  state.user_info.balance += payload;
 };
