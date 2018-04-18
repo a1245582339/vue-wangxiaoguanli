@@ -79,28 +79,7 @@ export default {
           name: "访问量",
           type: "value"
         },
-        series: [
-          // {
-          //   name: "邮件营销",
-          //   type: "line",
-          //   stack: "总量",
-          //   areaStyle: { normal: {} },
-          //   data: [120, 132, 101, 134, 90, 230, 210]
-          // },
-          // {
-          //   name: "搜索引擎",
-          //   type: "line",
-          //   stack: "总量",
-          //   label: {
-          //     normal: {
-          //       show: true,
-          //       position: "top"
-          //     }
-          //   },
-          //   areaStyle: { normal: {} },
-          //   data: [820, 932, 901, 934, 1290, 1330, 1320]
-          // }
-        ]
+        series: []
       }
     };
   },
@@ -164,7 +143,7 @@ export default {
               for (let i = -1; i < 6; i++) {
                 if (
                   Math.floor(
-                    (Date.parse(new Date()) / 1000 - item.create_time) / 86400
+                    (((new Date().getTime())+28800000) / 1000 - item.create_time) / 86400
                   ) ==
                   i + 1
                 ) {
@@ -175,7 +154,6 @@ export default {
                       o.data.reverse();
                     }
                   });
-                  console.log(JSON.stringify(vm.line.series));
                 }
               }
               vm.news.map((o, i) => {
