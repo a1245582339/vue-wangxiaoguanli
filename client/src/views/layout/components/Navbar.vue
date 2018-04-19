@@ -423,7 +423,7 @@
       sign(){
         var vm = this
         signIn({stu_id:vm.userInfo.stu_id}).then(response=>{
-          vm.haveSign = false
+          vm.haveSign = true
           vm.$store.commit('changebalance',50)
           this.$message({
           message: '签到成功！  积分+50',
