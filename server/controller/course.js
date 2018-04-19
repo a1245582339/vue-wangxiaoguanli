@@ -182,7 +182,7 @@ exports.DelCourseClass=function(req,res,next){
       if(err){
         res.json({ code: -1 });
       }
-      res.json({ code: 20000 },);
+      res.json({ code: 20000 });
      })
   })
 }
