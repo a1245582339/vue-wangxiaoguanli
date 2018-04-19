@@ -60,13 +60,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/order/order',
     name: 'Order',
-    meta: { title: '订单管理', icon: 'tree' },
+    meta: { title: '订单管理', icon: 'money' },
     children: [
       {
         path: 'order',
         name: 'Order',
         component: () => import('@/views/order/index'),
-        meta: { title: '订单管理', icon: 'table' }
+        meta: { title: '订单管理', icon: 'money' }
       }
     ]
   },
@@ -75,25 +75,25 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/courses/courses_edit',
     name: 'Courses',
-    meta: { title: '课程管理', icon: 'tree' },
+    meta: { title: '课程管理', icon: 'component' },
     children: [
       {
         path: 'courses_edit',
         name: 'courses_edit',
         component: () => import('@/views/courses/index'),
-        meta: { title: '课程管理', icon: 'table' }
-      },
-      {
-        path: 'banner',
-        name: 'banner',
-        component: () => import('@/views/banner/index'),
-        meta: { title: '首页轮播课程', icon: 'table' }
+        meta: { title: '课程管理', icon: 'component' }
       },
       {
         path: 'courses_class',
         name: 'courses_class',
         component: () => import('@/views/courses_class/index'),
-        meta: { title: '课程分类管理', icon: 'table' }
+        meta: { title: '课程分类管理', icon: 'component' }
+      },
+      {
+        path: 'banner',
+        name: 'banner',
+        component: () => import('@/views/banner/index'),
+        meta: { title: '首页轮播课程', icon: 'excel' }
       }
     ]
   },
@@ -102,25 +102,25 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/news/news_edit',
     name: 'News',
-    meta: { title: '资讯管理', icon: 'tree' },
+    meta: { title: '资讯管理', icon: 'documentation' },
     children: [
       {
         path: 'news_edit',
         name: 'news_edit',
         component: () => import('@/views/news/index'),
-        meta: { title: '资讯管理', icon: 'table' }
+        meta: { title: '资讯管理', icon: 'documentation' }
       },
       {
         path: 'news_type',
         name: 'news_type',
         component: () => import('@/views/news_type/index'),
-        meta: { title: '资讯分类管理', icon: 'table' }
+        meta: { title: '资讯分类管理', icon: 'documentation' }
       },
       {
         path: 'news_visit_log',
         name: 'news_visit_log',
         component: () => import('@/views/news_visit_log/index'),
-        meta: { title: '资讯访问日志', icon: 'table' }
+        meta: { title: '资讯访问日志', icon: 'chart' }
       }
     ]
   },
@@ -129,13 +129,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/student/student',
     name: 'Student',
-    meta: { title: '学生信息管理', icon: 'tree' },
+    meta: { title: '学生信息管理', icon: 'peoples' },
     children: [
       {
         path: 'student',
         name: 'student',
         component: () => import('@/views/student/index'),
-        meta: { title: '学生信息', icon: 'table' }
+        meta: { title: '学生信息', icon: 'peoples' }
       }
     ]
   },
@@ -144,61 +144,22 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/favorite/courses_favorite',
     name: 'Favorite',
-    meta: { title: '收藏夹管理', icon: 'tree' },
+    meta: { title: '收藏夹管理', icon: 'star' },
     children: [
       {
         path: 'courses_favorite',
         name: 'courses_favorite',
         component: () => import('@/views/courses_favorite/index'),
-        meta: { title: '课程收藏夹', icon: 'table' }
+        meta: { title: '课程收藏夹', icon: 'star' }
       },
       {
         path: 'news_favorite',
         name: 'news_favorite',
         component: () => import('@/views/news_favorite/index'),
-        meta: { title: '资讯收藏夹', icon: 'table' }
+        meta: { title: '资讯收藏夹', icon: 'star' }
       }
     ]
   }
-  // {
-  //   path: '/table',
-  //   component: Layout,
-  //   redirect: '/example/table1',
-  //   name: 'Example',
-  //   meta: { title: '模块分类', icon: 'tree' },
-  //   children: [
-  //     {
-  //       path: 'table1',
-  //       name: 'Tablebase',
-  //       component: () => import('@/views/table/index'),
-  //       meta: { title: '平台基础模块', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'table2',
-  //       name: 'Tablechoose',
-  //       component: () => import('@/views/table1/index'),
-  //       meta: { title: '可选模块组件', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'table3',
-  //       name: 'Tableown',
-  //       component: () => import('@/views/table2/index'),
-  //       meta: { title: '独立子产品', icon: 'table' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/list',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: () => import('@/views/table3/index'),
-  //       meta: { title: '订单列表', icon: 'form' }
-  //     }
-  //   ]
-  // }
 ]
 
 export default new Router({
@@ -214,19 +175,19 @@ export const asyncRouterMap = [
     path: '/admin',
     component: Layout,
     redirect: '/admin/index',
-    meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员','管理员'] }, // 页面需要的权限
+    meta: { title: '管理员管理', icon: 'lock', roles: ['超级管理员','管理员'] }, // 页面需要的权限
     children: [
       {
         path: 'index',
         component: () => import('@/views/admin/index'),
         name: 'admin_change',
-        meta: { title: '管理员管理', icon: 'form', roles: ['超级管理员'] }
+        meta: { title: '管理员管理', icon: 'lock', roles: ['超级管理员'] }
       },
       {
         path: 'me',
         component: () => import('@/views/me/index'),
         name: 'Me',
-        meta: { title: '个人管理', icon: 'form' }
+        meta: { title: '个人管理', icon: 'user' }
       }
     ]
   },

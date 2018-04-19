@@ -1,5 +1,7 @@
 <template>
   <div style="margin-top:50px;margin-left:50px;width:1000px">
+    <el-button type="primary" @click="submit">提交</el-button>
+    <p>将需要设置为轮播的课程拖拽至右侧</p>
     <div class="dndList">
       <div class="dndList-list" :style="{width:width1}">
         <h3>{{list1Title}}</h3>
@@ -20,7 +22,7 @@
         </draggable>
       </div>
     </div>
-    <el-button type="primary" @click="submit">提交</el-button>
+    
   </div>
 
 </template>
